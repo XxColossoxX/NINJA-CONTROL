@@ -1,0 +1,21 @@
+{
+  "name": "Ninja Control",
+  "short_name": "Ninja",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#14b8a6",
+  "description": "Sistema de controle de ponto Ninja Control",
+  "icons": [
+    {
+      "src": "assets/img/ninjaLogo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/img/ninjaLogo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

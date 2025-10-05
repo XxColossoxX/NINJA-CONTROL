@@ -1,0 +1,84 @@
+.alert-animate-in {
+    animation: alertUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.alert-animate-out {
+    animation: alertDown 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes alertUp {
+    0% {
+        opacity: 0;
+        transform: translateY(40px) scale(0.95);
+    }
+    80% {
+        opacity: 1;
+        transform: translateY(-10px) scale(1.05);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes alertDown {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(40px) scale(0.95);
+    }
+}
+
+/* Animação para o welcome-message */
+#welcome-message {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.3s cubic-bezier(0.4,0,0.2,1), transform 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+#welcome-message.entrada {
+  opacity: 1;
+  transform: scale(1);
+}
+#welcome-message.saida {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+/* Responsividade para modais em telas pequenas */
+@media (max-width: 640px) {
+  #form-modal > div,
+  #camera-modal > div {
+    width: 95vw !important;
+    min-width: unset !important;
+    max-width: 99vw !important;
+    padding: 1rem !important;
+    flex-direction: column !important;
+  }
+  #camera-modal > div {
+    padding: 0.5rem !important;
+  }
+  #camera-modal .w-1\/2,
+  #camera-modal .pl-6 {
+    width: 100% !important;
+    padding-left: 0 !important;
+    margin-bottom: 1rem;
+  }
+  #form-modal .w-1\/2 {
+    width: 100% !important;
+  }
+  #camera-modal .w-64,
+  #camera-modal .h-64 {
+    width: 60vw !important;
+    height: 60vw !important;
+    max-width: 90vw !important;
+    max-height: 90vw !important;
+  }
+  #camera-modal h2,
+  #form-modal h2 {
+    font-size: 1.1rem !important;
+  }
+}
+

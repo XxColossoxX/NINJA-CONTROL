@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "sqlite3": "^5.1.7",
+    "tailwind": "^4.0.0"
+  },
+  "name": "root",
+  "version": "1.0.0",
+  "description": "instalar o servidor para rodar os codigos do banco",
+  "main": "index.js",
+  "devDependencies": {
+    "tailwindcss": "^4.1.7"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
