@@ -139,7 +139,7 @@ async function locAtual() {
 };
 
 function getEndereco(latitude, longitude) {
-    const apiKey = 'AIzaSyDwpxfS7AptP74paz0S889G-uy4hE9bJV4';
+    const apiKey = '';
     const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
     let endereco = {
         numero: '',
