@@ -1,13 +1,6 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['funcionario_id'])) {
-    header('Location: ../loginFuncionario/loginFuncionario.php');
-    exit;
-}
-require_once('../../assets/components/background.php');
-require_once('../../assets/components/headerFuncionario.php');
-
 $idFuncionario = $_SESSION['funcionario_id'];
 $nomeFuncionario = isset($_SESSION['funcionario_nome']) ? $_SESSION['funcionario_nome'] : '';
 $faceIdFuncionario = isset($_SESSION['funcionario_faceid']) ? $_SESSION['funcionario_faceid'] : '';
@@ -18,62 +11,95 @@ $nomeEmpresa = isset($_SESSION['empresa_razao_fantasia']) ? $_SESSION['empresa_r
 $dataNascimentoFuncionario = isset($_SESSION['funcionario_data_nascimento']) ? $_SESSION['funcionario_data_nascimento'] : 'Data de Nascimento'; // Trocar para valor real depois
 $localizacaoEmpresa = isset($_SESSION['empresa_loc']) ? $_SESSION['empresa_loc'] : '';
 
+if (!isset($_SESSION['funcionario_nome'])) {
+    header('Location: ../loginFuncionario/loginFuncionario.php');
+    exit;
+}
+
+if (!isset($_SESSION['funcionario_id'])) {
+    header('Location: ../loginFuncionario/loginFuncionario.php');
+    exit;
+}
+require_once('../../assets/components/background.php');
+require_once('../../assets/components/headerFuncionario.php');
+
 ?>
 
-<div class="min-h-screen flex flex-col items-center justify-center">
-    <div class="w-full max-w-6xl bg-white rounded-2xl shadow-2xl p-0 md:mt-8 mt-2 flex flex-col md:flex-row">
+<div class="min-h-screen flex flex-col items-center justify-center px-4">
+    <div class="w-full max-w-6xl bg-white rounded-2xl shadow-2xl p-0 mt-4 flex flex-col md:flex-row">
 
         <!-- Header do modal -->
         <div class="w-full md:w-1/2 flex flex-col justify-start md:p-4 p-2 border-b md:border-b-0 md:border-r border-gray-200">
-            <!-- Header mobile: imagem à esquerda, texto à direita -->
-            <div class="md:hidden flex items-center gap-2 mb-2">
-                <img id="imgFuncionario" src="<?php echo $fotoFuncionario; ?>" alt="Foto do Funcionário" style="width:48px;height:48px;border-radius:9999px;object-fit:cover;border:2px solid #14b8a6;">
-                <span class="font-bold text-base text-center text-gray-800 flex-1">SEJA MUITO BEM VINDO!<br><?php echo htmlspecialchars($nomeFuncionario); ?></span>
+
+            <!-- Header mobile -->
+            <div class="md:hidden flex items-center gap-2 mb-4">
+                <img id="imgFuncionario" src="<?php echo $fotoFuncionario; ?>" alt="Foto do Funcionário"
+                     class="w-12 h-12 rounded-full object-cover border-2 border-teal-500">
+                <span class="font-bold text-base text-center text-gray-800 flex-1">
+                    SEJA MUITO BEM VINDO!<br><?php echo htmlspecialchars($nomeFuncionario); ?>
+                </span>
             </div>
+
             <!-- Header desktop -->
-            <h2 class="hidden md:block text-xl font-bold text-gray-800 text-center md:mt-5 md:mb-14 mt-2 mb-2">SEJA MUITO BEM VINDO!<br><?php echo htmlspecialchars($nomeFuncionario); ?></h2>
+            <h2 class="hidden md:block text-xl font-bold text-gray-800 text-center mt-4 mb-10">
+                SEJA MUITO BEM VINDO!<br><?php echo htmlspecialchars($nomeFuncionario); ?>
+            </h2>
+
             <div class="flex flex-col items-center">
-                <img src="<?php echo $fotoFuncionario; ?>" alt="Foto do Funcionário" class="w-24 h-24 rounded-full border-4 border-primary object-cover mb-0 md:block hidden">
-                <div class="hidden md:block bg-gray-100 rounded-3xl md:p-12 p-2 w-full max-w-6xl flex flex-col md:mb-6 mb-2 md:mt-5 mt-2" id="card-dados-funcionario">
-                    <div class="flex flex-col md:gap-6 gap-2">
-                        <div class="grid grid-cols-2 items-center mb-4 gap-x-8 gap-y-2">
+                <img src="<?php echo $fotoFuncionario; ?>" alt="Foto do Funcionário"
+                     class="w-24 h-24 rounded-full border-4 border-primary object-cover mb-4 hidden md:block">
+
+                <div class="hidden md:block bg-gray-100 rounded-3xl md:p-8 p-4 w-full mb-6 mt-4" id="card-dados-funcionario">
+                    <div class="flex flex-col gap-4">
+                        <!-- Nome -->
+                        <div class="grid grid-cols-2 items-center gap-x-6">
                             <div class="flex items-center min-w-[180px]">
                                 <i class="fas fa-user mr-3 text-gray-500 text-2xl"></i>
                                 <span class="text-lg text-gray-500 font-semibold">Nome:</span>
                             </div>
-                            <span class="text-2xl font-bold text-gray-700 text-left break-words whitespace-nowrap overflow-hidden text-ellipsis min-w-[220px]"><?php echo htmlspecialchars($nomeFuncionario); ?></span>
+                            <span class="text-2xl font-bold text-gray-700 truncate min-w-[220px]"><?php echo htmlspecialchars($nomeFuncionario); ?></span>
                         </div>
-                        <div class="grid grid-cols-2 items-center mb-4 gap-x-8 gap-y-2">
+
+                        <!-- Empresa -->
+                        <div class="grid grid-cols-2 items-center gap-x-6">
                             <div class="flex items-center min-w-[180px]">
                                 <i class="fas fa-building mr-3 text-gray-500 text-2xl"></i>
                                 <span class="text-lg text-gray-500 font-semibold">Empresa:</span>
                             </div>
-                            <span class="text-xl text-gray-700 text-left break-words whitespace-nowrap overflow-hidden text-ellipsis min-w-[220px]"><?php echo htmlspecialchars($nomeEmpresa); ?></span>
+                            <span class="text-xl text-gray-700 truncate min-w-[220px]"><?php echo htmlspecialchars($nomeEmpresa); ?></span>
                         </div>
-                        <div class="grid grid-cols-2 items-center mb-4 gap-x-8 gap-y-2">
+
+                        <!-- RG -->
+                        <div class="grid grid-cols-2 items-center gap-x-6">
                             <div class="flex items-center min-w-[180px]">
                                 <i class="fas fa-id-card mr-3 text-gray-500 text-2xl"></i>
                                 <span class="text-lg text-gray-500 font-semibold">RG:</span>
                             </div>
-                            <span class="text-xl text-gray-700 text-left break-words whitespace-nowrap overflow-hidden text-ellipsis min-w-[220px]"><?php echo htmlspecialchars($rgFuncionario); ?></span>
+                            <span class="text-xl text-gray-700 truncate min-w-[220px]"><?php echo htmlspecialchars($rgFuncionario); ?></span>
                         </div>
-                        <div class="grid grid-cols-2 items-center mb-4 gap-x-8 gap-y-2">
+
+                        <!-- CPF -->
+                        <div class="grid grid-cols-2 items-center gap-x-6">
                             <div class="flex items-center min-w-[180px]">
                                 <i class="fas fa-address-card mr-3 text-gray-500 text-2xl"></i>
                                 <span class="text-lg text-gray-500 font-semibold">CPF:</span>
                             </div>
-                            <span class="text-xl text-gray-700 text-left break-words whitespace-nowrap overflow-hidden text-ellipsis min-w-[220px]"><?php echo htmlspecialchars($cpfFuncionario); ?></span>
+                            <span class="text-xl text-gray-700 truncate min-w-[220px]"><?php echo htmlspecialchars($cpfFuncionario); ?></span>
                         </div>
-                        <div class="grid grid-cols-2 items-center mb-4 gap-x-8 gap-y-2">
+
+                        <!-- Nascimento -->
+                        <div class="grid grid-cols-2 items-center gap-x-6">
                             <div class="flex items-center min-w-[180px]">
                                 <i class="fas fa-calendar-alt mr-3 text-gray-500 text-2xl"></i>
                                 <span class="text-lg text-gray-500 font-semibold">Nascimento:</span>
                             </div>
-                            <span class="text-xl text-gray-700 text-left break-words whitespace-nowrap overflow-hidden text-ellipsis min-w-[220px]"><?php echo htmlspecialchars($dataNascimentoFuncionario); ?></span>
+                            <span class="text-xl text-gray-700 truncate min-w-[220px]"><?php echo htmlspecialchars($dataNascimentoFuncionario); ?></span>
                         </div>
                     </div>
                 </div>
-                <button class="md:hidden bg-gray-200 text-teal-700 font-semibold px-2 py-1 rounded-lg mt-2" id="btn-mais-info">
+
+                <!-- Botão mobile -->
+                <button class="md:hidden bg-gray-200 text-teal-700 font-semibold px-3 py-1 rounded-lg mt-4" id="btn-mais-info">
                     <i class="fas fa-info-circle mr-2"></i> Mais informações do funcionário
                 </button>
             </div>
@@ -81,12 +107,18 @@ $localizacaoEmpresa = isset($_SESSION['empresa_loc']) ? $_SESSION['empresa_loc']
 
         <!-- Conteúdo do modal -->
         <div class="w-full md:w-1/2 flex flex-col justify-center md:p-4 p-2">
-            <div class="mb-8">
-                <h2 class="hidden md:block text-2xl font-extrabold text-teal-700 text-center md:mb-6 mb-2 tracking-wide uppercase">PAINEL REGISTRO PONTO</h2>
+
+            <!-- Título -->
+            <div class="mb-6">
+                <h2 class="hidden md:block text-2xl font-extrabold text-teal-700 text-center mb-4 uppercase tracking-wide">
+                    PAINEL REGISTRO PONTO
+                </h2>
             </div>
-            <div class="md:mb-4 mb-2">
-                <h3 class="text-lg font-bold md:mb-2 mb-1">Últimos registros</h3>
-                <div class="grid grid-cols-2 md:gap-2 gap-1">
+
+            <!-- Últimos registros -->
+            <div class="mb-6">
+                <h3 class="text-lg font-bold mb-3">Últimos registros</h3>
+                <div class="grid grid-cols-2 gap-4">
                     <div class="bg-gray-100 rounded-lg p-2 flex flex-col items-center">
                         <i class="fas fa-sign-in-alt text-green-600 text-xl mb-1"></i>
                         <span class="font-bold text-green-600">08:00</span>
@@ -113,30 +145,43 @@ $localizacaoEmpresa = isset($_SESSION['empresa_loc']) ? $_SESSION['empresa_loc']
                     </div>
                 </div>
             </div>
-            <div class="md:mb-4 mb-2">
-                <label class="block text-gray-700 text-sm font-bold md:mb-2 mb-1" for="localizacao">Localização Atual</label>
-                <div class="flex items-center bg-gray-100 rounded-lg md:p-2 p-1">
+
+            <!-- Localização -->
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="localizacao">Localização Atual</label>
+                <div class="flex items-center bg-gray-100 rounded-lg p-2">
                     <i class="fas fa-map-marker-alt text-teal-600 text-xl mr-2"></i>
-                    <input id="inputLocalizacao" type="text" value="" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-100" readonly>
+                    <input id="inputLocalizacao" type="text" value=""
+                           class="w-full bg-gray-100 border-none outline-none text-gray-700 text-sm" readonly>
                 </div>
             </div>
-            <div class="flex justify-center md:mt-8 mt-2 md:mb-2 mb-1">
-                <button id="btnBaterPonto" class="bg-teal-600 hover:bg-teal-700 text-white font-bold md:py-3 py-2 md:px-6 px-3 rounded-lg text-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+
+            <!-- Botão bater ponto -->
+            <div class="flex justify-center mt-6 mb-4">
+                <button id="btnBaterPonto"
+                        class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
                     <i class="fas fa-fingerprint mr-2"></i> BATER PONTO
                 </button>
             </div>
-            <div class="text-xs text-gray-400 text-center md:mt-2 mt-1">
+
+            <!-- Rodapé -->
+            <div class="text-xs text-gray-400 text-center">
                 Ninja Control - Direitos Reservados
             </div>
+
             <div id="welcome-message" class="mt-6 text-green-500 font-bold hidden">
-                Bem-vindo, <span id="welcome-nome"></span>!
+                Bem-vindo,
             </div>
-            <div id="alert-box" class="hidden fixed top-12 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-md text-white">
+
+            <!-- Alerta flutuante -->
+            <div id="alert-box" class="hidden fixed top-12 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-md text-white bg-green-500 shadow-lg z-50">
                 <span id="alert-message"></span>
             </div>
-        </div>
-    </div>
-</div>
+
+        </div> <!-- Fim da coluna direita -->
+    </div> <!-- Fim do container principal -->
+</div> <!-- Fim do wrapper geral -->
+
 
 <!-- Modal mobile -->
 

@@ -56,7 +56,7 @@ $('#toggleSenhaFuncionario').on('click', function() {
         if (res.data.success) {
             // Login bem-sucedido, redireciona para o dashboard
             console.log(res.data.message, "success");
-            window.location.href = `../../../views/pontoFuncionario/pontoFuncionario.php?id:${res.data.data.ID_FUNCIONARIO}`;
+            window.location.href = `../../../views/pontoFuncionario/pontoFuncionario.php?`;
         } else {
             // Exibe mensagem de erro
             showAlert(res.data.error);

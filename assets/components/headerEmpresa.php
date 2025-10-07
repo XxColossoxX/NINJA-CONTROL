@@ -198,7 +198,7 @@
                     <!-- Itens principais -->
                     <div class="space-y-4">
                         <li>
-                            <a href="#" class="flex items-center gap-2 hover:text-gray-500">
+                            <a href="../../views/pontoEmpresa/pontoEmpresa.php" class="flex items-center gap-2 hover:text-gray-500">
                                 <i class="fas fa-clock"></i> REGISTRAR PONTO 
                             </a>
                         </li>
