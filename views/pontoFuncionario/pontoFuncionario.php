@@ -26,7 +26,7 @@ require_once('../../assets/components/headerFuncionario.php');
 ?>
 
 <div class="min-h-screen flex flex-col items-center justify-center px-4">
-    <div class="w-full max-w-6xl bg-white rounded-2xl shadow-2xl p-0 mt-4 flex flex-col md:flex-row">
+    <div class="w-full max-w-6xl bg-slate-900  rounded-2xl shadow-2xl p-0 mt-4 flex flex-col md:flex-row">
 
         <!-- Header do modal -->
         <div class="w-full md:w-1/2 flex flex-col justify-start md:p-4 p-2 border-b md:border-b-0 md:border-r border-gray-200">

@@ -119,7 +119,8 @@ async function capturarRosto(fotoBanco, fotoAtual){
     }
 
     const distance = faceapi.euclideanDistance(det1.descriptor, det2.descriptor)
-    distance <= 0.35 ? await efetuarPonto() : (showAlert('Rosto não reconhecido!','error'), loaderM("", false));
+    let precisao = 0;
+    distance <= 0.35 ? await efetuarPonto(distance) : ((precisao = 100 - (distance * 100)) , (precisao = precisao.toFixed(2)), (showAlert(`Rosto não detectado! ${precisao}% de ser o funcionário selecionado.`,'error')), loaderM("", false));
     console.log('Distância:', distance  )
 
     $('#btn-fechar-ponto').click(); // Fecha o modal
@@ -151,7 +152,7 @@ async function carregaFuncionarios() {
         // Popular lista do dropdown personalizado
         const dropdownList = document.getElementById('dropdownList');
         dropdownList.innerHTML = funcionarios.map((f, i) => `
-            <div class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-teal-50" data-index="${i}">
+            <div class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-cyan-700" data-index="${i}">
                 <img src="${f.foto}" alt="Foto" class="w-6 h-6 rounded-full">
                 <span>${f.nome}</span>
             </div>
@@ -185,8 +186,11 @@ async function carregaFuncionarios() {
     }
 }
 
-async function efetuarPonto() {
-    showAlert('Ponto registrado com sucesso!', 'success');
+async function efetuarPonto(distance) {
+    let precisao = distance * 100;
+    precisao = 100 - precisao;
+    precisao = precisao.toFixed(2);
+    showAlert(`Ponto registrado com sucesso! ${precisao}% de Precisão!`, 'success');
     loaderM("", false);
 }
 

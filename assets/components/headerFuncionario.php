@@ -183,7 +183,7 @@
     
 <!-- Navbar -->
 <nav class="header-funcionario">
-    <div class="container mx-auto px-4 py-3 flex items-center justify-between relative">
+    <div class="container mx-auto px-4 py-3 flex items-center justify-between relative bg-slate-900 text-white">
         <!-- Logo -->
         <div class="flex items-center text-lg font-bold">
             <img id="ninja-img" class="w-10 mr-2" src="../../assets/img/ninjaLogo.png" alt="Ninja Control" />

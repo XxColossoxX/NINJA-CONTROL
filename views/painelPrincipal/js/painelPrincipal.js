@@ -267,19 +267,18 @@ async function preencheTabela(res) {
         const primeiroNome = func.NOME_FUNCIONARIO.split(" ")[0];
 
         const conteudo = `
-            <tr class="border-b border-gray-200 hover:bg-blue-50 transition-all">
+            <tr class="border-b bg-slate-800 text-white font-bold border-cyan-200 hover:bg-cyan-700 transition-all">
                 <td class="px-2 py-2 text-center align-middle" style="min-width:56px; width:56px;">
-                    <button class="info-icon icon-btn inline-flex items-center justify-center w-9 h-9 bg-gray-100 hover:bg-blue-200 text-blue-600 text-base rounded-full transition" data-id="${func.ID_FUNCIONARIO}" title="Mais informações">
+                    <button class="info-icon icon-btn inline-flex items-center justify-center w-9 h-9 bg-cyan-100 hover:bg-blue-200 text-blue-600 text-base rounded-full transition" data-id="${func.ID_FUNCIONARIO}" title="Mais informações">
                         <i class="fas fa-info-circle"></i>
                     </button>
                 </td>
-
 
                 <!-- Imagem + Nome -->
                 <td class="px-2 py-2 sm:px-4 sm:py-2">
                     <div class="flex items-center gap-3">
                         <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-blue-300 bg-center bg-cover shadow-md" style="background-image: url('${func.FACEID}');"></div>
-                        <span class="font-semibold text-gray-800 text-base sm:text-lg">
+                        <span class="font-bold text-white text-base sm:text-lg">
                             <span class="block sm:hidden">${primeiroNome}</span>
                             <span class="hidden sm:block">${func.NOME_FUNCIONARIO}</span>
                         </span>
@@ -287,7 +286,7 @@ async function preencheTabela(res) {
                 </td>
 
                 <!-- CPF (visível apenas no desktop) -->
-                <td class="hidden md:table-cell px-2 py-2 text-center text-gray-600">${func.CPF}</td>
+                <td class="hidden md:table-cell px-2 py-2 text-center text-white font-bold">${func.CPF}</td>
 
                 <!-- Botão Editar -->
                 <td class="px-2 py-2 text-center">
@@ -326,17 +325,17 @@ $(document).on("click", ".info-icon", async function () {
     // Cria modal
     const modal = `
         <div id="modal-info-funcionario" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-            <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-md relative animate-fade-in">
-                <button id="close-modal-info" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-xl"><i class="fas fa-times"></i></button>
+            <div class="bg-slate-900 rounded-xl shadow-lg p-6 w-full max-w-md relative animate-fade-in">
+                <button id="close-modal-info" class="absolute top-2 right-2 text-white hover:text-red-500 text-xl"><i class="fas fa-times"></i></button>
                 <div class="flex flex-col items-center gap-3">
-                    <div class="w-24 h-24 rounded-full border-4 border-blue-300 bg-center bg-cover mb-2" style="background-image: url('${f.FACEID}');"></div>
-                    <h2 class="text-xl font-bold text-blue-700 mb-1">${f.NOME_FUNCIONARIO}</h2>
-                    <div class="w-full flex flex-col gap-2 text-gray-700">
-                        <div><i class="fas fa-id-card mr-2 text-blue-500"></i> <b>CPF:</b> ${f.CPF}</div>
-                        <div><i class="fas fa-address-card mr-2 text-blue-500"></i> <b>RG:</b> ${f.RG}</div>
-                        <div><i class="fas fa-calendar-alt mr-2 text-blue-500"></i> <b>Nascimento:</b> ${f.DATA_NASCIMENTO}</div>
-                        ${f.TEL_FUNCIONARIO ? `<div><i class='fas fa-phone mr-2 text-blue-500'></i> <b>Telefone:</b> ${f.TEL_FUNCIONARIO}</div>` : ''}
-                        ${f.EMAIL_FUNCIONARIO ? `<div><i class='fas fa-envelope mr-2 text-blue-500'></i> <b>Email:</b> ${f.EMAIL_FUNCIONARIO}</div>` : ''}
+                    <div class="w-24 h-24 rounded-full border-4 border-cyan-300 bg-center bg-cover mb-2" style="background-image: url('${f.FACEID}');"></div>
+                    <h2 class="text-xl font-bold text-cyan-400 mb-1">${f.NOME_FUNCIONARIO}</h2>
+                    <div class="w-full flex flex-col gap-2 text-white">
+                        <div><i class="fas fa-id-card mr-2 text-cyan-500"></i> <b>CPF:</b> ${f.CPF}</div>
+                        <div><i class="fas fa-address-card mr-2 text-cyan-500"></i> <b>RG:</b> ${f.RG}</div>
+                        <div><i class="fas fa-calendar-alt mr-2 text-cyan-500"></i> <b>Nascimento:</b> ${f.DATA_NASCIMENTO}</div>
+                        ${f.TEL_FUNCIONARIO ? `<div><i class='fas fa-phone mr-2 text-cyan-500'></i> <b>Telefone:</b> ${f.TEL_FUNCIONARIO}</div>` : ''}
+                        ${f.EMAIL_FUNCIONARIO ? `<div><i class='fas fa-envelope mr-2 text-cyan-500'></i> <b>Email:</b> ${f.EMAIL_FUNCIONARIO}</div>` : ''}
                     </div>
                 </div>
             </div>

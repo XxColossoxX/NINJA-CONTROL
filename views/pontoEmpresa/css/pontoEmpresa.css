@@ -130,7 +130,7 @@
     height: 48px;
     border-radius: 9999px;
     object-fit: cover;
-    border: 3px solid #14b8a6;
+    border: 3px solid #06B6D4;
   }
   #header-funcionario-mobile .nome {
     font-size: 1.1rem;
@@ -237,7 +237,7 @@
   height: 200px;
   border-radius: 50%;
   box-shadow: 
-    0 0 0 4px #14b8a6 inset;
+    0 0 0 4px #06B6D4 inset;
   animation: pulse-ring 2.5s infinite;
   background: transparent;
 }
@@ -245,10 +245,16 @@
 @keyframes pulse-ring {
   0%, 100% {
     box-shadow:
-      0 0 0 4px #14b8a6 inset;
+      0 0 0 4px #06B6D4 inset;
   }
   50% {
     box-shadow:
-      0 0 0 7px #14b8a6 inset;
+      0 0 0 7px #06B6D4 inset;
   }
 }
+
+img.icon-color {
+  filter: brightness(0) invert(1);
+}
+
+
