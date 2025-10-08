@@ -39,47 +39,116 @@ require_once('assets/components/background.php')
         });
       }
     </script>
+
+    <style>
+        /* Animações de entrada e saída */
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOutUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+        }
+
+        /* Classes utilitárias */
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .fade-out-up {
+            animation: fadeOutUp 0.8s ease-in forwards;
+        }
+
+    @media (min-width: 640px) {
+        #login-system2 {
+            height: 520px !important; /* aumenta no desktop */
+            max-width: 420px !important; /* mais largo em telas maiores */
+        }
+    }
+
+    @media (max-width: 639px) {
+        #login-system2 {
+            height: 360px !important; /* reduz no mobile */
+            max-width: 320px !important;
+        }
+    }
+    </style>
 </head>
     <!-- Mensagem de Boas-Vindas -->
-    <div id="welcome-message" class="welcome-message text-center">
+    <div id="welcome-message" class="welcome-message text-center opacity-0 translate-y-10">
         <p class="text-lg sm:text-2xl md:text-3xl text-white mb-3">SEJA BEM-VINDO(A)</p>
-        <h1 class="text-2xl sm:text-4xl md:text-5xl text-white font-sans font-bold"><strong>NINJA CONTROL</strong></h1>
+        <h1 class="text-2xl sm:text-4xl md:text-5xl text-white font-sans font-bold">
+            <strong>NINJA CONTROL</strong>
+        </h1>
     </div>
 
-    <!-- Imagem com animação -->
-    <div id="animacaoCena" class="animacaoCena hidden">
-        <img id="ninja-img" class="mx-auto w-60" src="../assets/img/ninjaLogo.png" alt="Ninja Control">
-    </div>
+    <div id="login-system2"
+        class="hidden w-full max-w-sm sm:max-w-md rounded-3xl shadow-2xl relative mx-auto overflow-hidden"
+        style="height: 400px; 
+            background-image: url('/../../assets/img/saibaFoto.png'); 
+            background-size: cover; 
+            background-position: center top; 
+            background-repeat: no-repeat;">
 
-    <div id="login-system2" class="hidden">
-        <img id="ninja-img" class="mx-auto w-20" src="../assets/img/ninjaLogo.png" alt="Ninja Control">
-        <h1 class="text-center text-white font-bold text-3xl mb-2">NINJA CONTROL</h1>
-        <div id="login-system" class="w-[90%] sm:w-96 bg-white bg-opacity-90 shadow-xl rounded-2xl p-4 sm:p-8 hidden mx-auto">
-            <!-- Botões -->
-            <div class="flex flex-col space-y-3">
-                <a href="views/loginFuncionario/loginFuncionario.php" class="bgBtn w-[95%] sm:w-full bg-gray-700 text-white py-2 sm:py-3 rounded-md text-center transition sm:hover:scale-110 mx-auto block">
-                <STRONG>FUNCIONÁRIO</STRONG> <i class="fas fa-arrow-right ml-2"></i>
-                </a>
-                <a href="views/loginEmpresa/loginEmpresa.php" class="bgBtn w-[95%] sm:w-full bg-gray-700 text-white py-2 sm:py-3 rounded-md text-center transition sm:hover:scale-110 mx-auto block">
-                <STRONG>EMPRESA</STRONG> <i class="fas fa-arrow-right ml-2"></i>
-                </a>
-            </div>
+        <!-- Overlay escuro suave -->
+        <div class="absolute inset-0 bg-black/30 rounded-3xl"></div>
+
+        <!-- Botões dentro da imagem -->
+        <div class="absolute bottom-5 left-1/2 transform -translate-x-1/2 px-5 flex flex-col gap-3 w-11/12 sm:w-9/12">
+
+            <!-- Botão Funcionário -->
+            <a href="views/loginFuncionario/loginFuncionario.php"
+            class="w-full text-center font-semibold py-2.5 sm:py-3 rounded-xl text-base sm:text-lg
+                    text-[#3BA3E6] border border-[#3BA3E6] hover:bg-[#3BA3E6] hover:text-white 
+                    transition-all duration-300 ease-in-out shadow-md
+                    flex justify-center items-center backdrop-blur-sm">
+                SOU FUNCIONÁRIO
+            </a>
+
+            <!-- Botão Empresa -->
+            <a href="views/loginEmpresa/loginEmpresa.php"
+            class="w-full text-center font-semibold py-2.5 sm:py-3 rounded-xl text-base sm:text-lg
+                    text-[#3BA3E6] border border-[#3BA3E6] hover:bg-[#3BA3E6] hover:text-white 
+                    transition-all duration-300 ease-in-out shadow-md
+                    flex justify-center items-center backdrop-blur-sm">
+                SOU EMPRESA
+            </a>
         </div>
     </div>
 
     <script>
-        setTimeout(() => {
-            document.getElementById("welcome-message").classList.add("hidden");
+        // Seleciona a div
+        const welcome = document.getElementById('welcome-message');
 
-            document.getElementById("animacaoCena").classList.remove("hidden");
-            document.getElementById("ninja-img").classList.add("ninja-image-animate");
-        }, 2000);
+        // Adiciona animação de entrada
+        window.addEventListener('load', () => {
+            welcome.classList.add('fade-in-up');
+        });
 
+        // Exemplo de animação de saída após 3 segundos
         setTimeout(() => {
-            document.getElementById("animacaoCena").classList.add("hidden");
-            document.getElementById("login-system").classList.remove("hidden");
-            document.getElementById("login-system2").classList.remove("hidden");
-        }, 4000);    
+            welcome.classList.remove('fade-in-up');
+            welcome.classList.add('fade-out-up');
+            setTimeout(() => {
+                welcome.style.display = 'none';
+                document.getElementById('login-system2').classList.remove('hidden');
+                document.getElementById('login-system').classList.remove('hidden');
+            }, 800); // Tempo da animação de saída
+        }, 3000); 
     </script>
 
 </body>

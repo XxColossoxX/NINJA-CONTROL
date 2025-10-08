@@ -16,19 +16,28 @@ require_once('../../assets/components/headerEmpresa.php');
         <div class="w-full md:w-1/2 flex flex-col justify-start md:p-4 p-2 border-b md:border-b-0 md:border-r border-cyan-400">
 
         <!-- Header mobile -->
-        <div class="md:hidden flex items-center gap-2 mb-2 pl-1">
-            <img id="imgFuncionario" src="/../../assets/img/iconDefault.png" alt="Foto do Funcionário"
+        <div class="md:hidden flex items-center justify-center gap-2 mb-2 pl-1">
+            <img id="imgFuncionario" 
+                src="/../../assets/img/iconDefault.png" 
+                alt="Foto do Funcionário"
                 class="w-8 h-8 rounded-full object-cover border-2 border-cyan-500 ml-1">
-            <span class="font-bold text-sm text-white">
-                SEJA MUITO BEM VINDO!<br>
+            
+            <span class="font-bold text-sm text-white flex items-center gap-2">
+                SEJA MUITO BEM VINDO!
+                <img id="ninja-img" 
+                    class="w-8" 
+                    src="../../assets/img/ninjaLogo.png" 
+                    alt="Ninja Control" />
             </span>
         </div>
 
 
             <!-- Header desktop -->
-            <h2 class="hidden md:block text-xl font-bold text-white text-center mt-4 mb-10">
-                SEJA MUITO BEM VINDO!<br>
-            </h2>
+            <div class="hidden md:block relative text-center mt-4 mb-10">
+                <h2 class="text-xl font-bold text-white">
+                    SEJA MUITO BEM VINDO!
+                </h2>
+            </div>
 
             <div class="flex flex-col items-center">
                 <img id="imgFuncionarioDesk" src="/../../assets/img/iconDefault.png" alt="Foto do Funcionário"

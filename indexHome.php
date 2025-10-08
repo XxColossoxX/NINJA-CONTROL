@@ -79,22 +79,62 @@
 </head>
 <body class="font-sans text-white">
 
-    <!-- Header -->
+    <!-- Header com Menu Hamburger -->
     <header class="bg-slate-900/80 fixed w-full z-10 top-0 backdrop-blur-md shadow-md">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                <img src="assets/img/ninjaLogo.png" alt="Logo Ninja" class="w-10 h-10">
-                <span class="text-white font-bold tracking-wide text-xl sm:text-2xl md:text-2xl">Ninja Control</span>
+        <div class="max-w-7xl mx-auto px-4 py-2 sm:py-3 flex items-center justify-between">
+            <!-- Logo e Nome -->
+            <div class="flex items-center gap-3">
+                <img src="assets/img/ninjaLogo.png" alt="Logo Ninja" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full shadow-md">
+                <span class="text-white font-sans font-extrabold tracking-tight text-lg sm:text-xl md:text-2xl drop-shadow-sm">
+                    Ninja Control
+                </span>
             </div>
-            <nav>
-                <ul class="flex gap-4 sm:gap-6 text-white font-semibold text-base sm:text-lg md:text-lg flex-wrap">
+
+            <!-- Menu Desktop -->
+            <nav class="hidden sm:flex">
+                <ul class="flex gap-6 text-white font-sans font-semibold text-base md:text-lg">
                     <li><a href="#home" class="hover:text-cyan-400 transition">Home</a></li>
                     <li><a href="#sobre" class="hover:text-cyan-400 transition">Sobre Nós</a></li>
                     <li><a href="#contato" class="hover:text-cyan-400 transition">Contato</a></li>
+                    <li><a href="/../../index.php" class="hover:text-cyan-400 transition">Entrar</a></li>
+                    <li><a href="/../../index.php" class="hover:text-cyan-400 transition">Cadastrar</a></li>
                 </ul>
             </nav>
+
+            <!-- Hamburger Mobile -->
+            <div class="sm:hidden">
+                <button id="menu-btn" class="text-white focus:outline-none">
+                    <!-- ícone hamburger -->
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
         </div>
+
+        <!-- Menu Mobile -->
+        <div id="mobile-menu" class="hidden sm:hidden bg-slate-900/95">
+            <ul class="flex flex-col gap-3 p-4 text-white font-sans font-semibold text-base">
+                <li><a href="#home" class="hover:text-cyan-400 transition">Home</a></li>
+                <li><a href="#sobre" class="hover:text-cyan-400 transition">Sobre Nós</a></li>
+                <li><a href="#contato" class="hover:text-cyan-400 transition">Contato</a></li>
+                <li><a href="/../../index.php" class="hover:text-cyan-400 transition">Entrar</a></li>
+                <li><a href="/../../index.php" class="hover:text-cyan-400 transition">Cadastrar</a></li>
+            </ul>
+        </div>
+
+        <script>
+            // Toggle menu mobile
+            const btn = document.getElementById('menu-btn');
+            const menu = document.getElementById('mobile-menu');
+
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+        </script>
     </header>
+
 
     <!-- Home / Hero -->
     <section id="home" class="hero-section flex items-center justify-start pt-32 pb-32 px-8 min-h-screen">
@@ -108,8 +148,8 @@
                 O <span class="font-bold text-cyan-400">Ninja Control</span> é a solução inovadora para gestão de ponto, trazendo tecnologia, segurança e praticidade para empresas e funcionários.
             </p>
             <div class="flex gap-4 flex-wrap">
-                <a href="#sobre" class="px-8 py-3 bg-cyan-500 hover:bg-cyan-600 rounded-full font-bold shadow-lg glow-box transition">Saiba Mais</a>
-                <a href="#contato" class="px-8 py-3 bg-slate-800/70 hover:bg-slate-900/80 border border-cyan-500 rounded-full font-bold shadow-lg glow-box transition">Contato</a>
+                <a href="/../../index.php" class="px-8 py-3 bg-cyan-500 hover:bg-cyan-600 rounded-full font-bold shadow-lg glow-box transition">Entrar</a>
+                <a href="/../../index.php" class="px-8 py-3 bg-slate-800/70 hover:bg-slate-900/80 border border-cyan-500 rounded-full font-bold shadow-lg glow-box transition">Cadastrar</a>
             </div>
         </div>
     </section>
@@ -160,14 +200,14 @@
       <div class="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
           <!-- Imagem 1 (horizontal - maior) -->
           <div class="flex justify-center bg-slate-800/80 rounded-2xl overflow-hidden glow-box hover:scale-[1.02] transition-all duration-300 shadow-lg border-4 border-cyan-500/60 p-2 w-full max-w-[95%] mx-auto">
-              <a href="assets/img/print1.png" class="block w-full h-full">
+              <a href="/../../assets/img/painelPrint.png" class="block w-full h-full">
                   <img src="/../../assets/img/painelPrint.png" alt="Tela do Sistema 1" class="w-full h-full object-cover">
               </a>
           </div>
 
           <!-- Imagem 2 (vertical - menor) -->
           <div class="flex justify-center bg-slate-800/80 rounded-2xl overflow-hidden glow-box hover:scale-[1.02] transition-all duration-300 shadow-lg border-4 border-cyan-500/60 p-2 w-full max-w-[80%] mx-auto">
-              <a href="assets/img/print2.png" class="block w-full h-full">
+              <a href="/../../assets/img/pontoPrint.png" class="block w-full h-full">
                   <img src="/../../assets/img/pontoPrint.png" alt="Tela do Sistema 2" class="w-full h-full object-cover">
               </a>
           </div>

@@ -34,18 +34,16 @@
   <meta name="apple-mobile-web-app-title" content="Ninja Control" />
   <link rel="manifest" href="/../../assets/img/favicon/site.webmanifest" />
   <style>
-/* Gradiente principal de fundo com ofuscamento preto */
-body {
-  height: 100%;
-  margin: 0;
-  overflow: hidden;
-  font-family: 'Noto Sans', sans-serif;
-  background: 
-    linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), /* camada preta semitransparente */
-    linear-gradient(180deg, #125f7a, #94e4e6, #125f7a); /* gradiente original */
-}
-
-
+    /* Gradiente principal de fundo com ofuscamento preto */
+    body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      font-family: 'Noto Sans', sans-serif;
+      background: 
+        linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), /* camada preta semitransparente */
+        linear-gradient(180deg, #125f7a, #94e4e6, #125f7a); /* gradiente original */
+    }
 
     @keyframes pulse-glow {
       0%, 100% { box-shadow: 0 0 10px #00ffff20; }
@@ -80,13 +78,14 @@ body {
 
     /* Overlay semi-transparente para alertas e loader */
     .overlay-dark { background: rgba(15, 23, 42, 0.6); }
+
   </style>
 </head>
 
 <body class="relative flex items-center justify-center">
   
   <!-- Background com gradiente e opacidade via CSS -->
-  <div class="bg-gradient-overlay absolute inset-0 z-0"></div>
+  <div class=""></div>
 
   <!-- Loader -->
   <div id="loader-container" class="fixed inset-0 overlay-dark hidden flex flex-col items-center justify-center">
@@ -97,7 +96,7 @@ body {
   </div>
 
   <!-- Alertas -->
-  <div id="alert-box" class="hidden fixed top-6 left-6 right-6 max-w-sm mx-auto px-4 py-3 rounded-lg shadow-lg text-white bg-teal-600 flex items-center gap-3 z-50">
+  <div id="alert-box" class="hidden fixed top-6 left-0 right-12 max-w-sm mx-auto px-4 py-3 rounded-lg shadow-lg text-white bg-teal-600 flex items-center gap-3 z-50">
     <i id="alert-icon" class="fas fa-info-circle text-xl md:text-2xl"></i>
     <span id="alert-message" class="font-semibold text-sm md:text-base flex-1"></span>
     <button id="alert-close" class="ml-2 text-white text-lg hover:text-gray-200 focus:outline-none">
