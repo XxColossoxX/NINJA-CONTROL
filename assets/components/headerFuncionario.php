@@ -118,9 +118,8 @@
             }
         }
 
-        
-                /* Animação de entrada (fade-in + slide-down) */
-                @keyframes fadeInSlideDown {
+        /* Animação de entrada (fade-in + slide-down) */
+        @keyframes fadeInSlideDown {
             from {
                 opacity: 0;
                 transform: translateY(-20px);

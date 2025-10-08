@@ -27,52 +27,41 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
   <!-- Ícone -->
-  <link rel="icon" type="image/x-icon" href="../assets/img/icons/ninja_lock_icon.ico">
-
-  <!-- VANTA.TOPOLOGY -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.topology.min.js"></script>
-
+  <link rel="icon" type="image/png" href="/../../assets/img/favicon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/../../assets/img/favicon/favicon.svg" />
+  <link rel="shortcut icon" href="/../../assets/img/favicon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/../../assets/img/favicon/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="Ninja Control" />
+  <link rel="manifest" href="/../../assets/img/favicon/site.webmanifest" />
   <style>
+/* Gradiente principal de fundo com ofuscamento preto */
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  font-family: 'Noto Sans', sans-serif;
+  background: 
+    linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), /* camada preta semitransparente */
+    linear-gradient(180deg, #125f7a, #94e4e6, #125f7a); /* gradiente original */
+}
+
+
+
     @keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 0 10px #00ffff20; }
-    50% { box-shadow: 0 0 25px #00ffff50; }
+      0%, 100% { box-shadow: 0 0 10px #00ffff20; }
+      50% { box-shadow: 0 0 25px #00ffff50; }
     }
 
     .glow-box {
-    animation: pulse-glow 3s infinite ease-in-out;
+      animation: pulse-glow 3s infinite ease-in-out;
     }
 
     /* Alert animations */
-    #alert-box {
-        --animate-duration: 0.5s;
-    }
-    
-    #alert-box.animate__fadeInDown {
-        animation-duration: 0.3s !important;
-    }
-    
-    #alert-box.animate__fadeOutUp {
-        animation-duration: 0.2s !important;
-    }
+    #alert-box { --animate-duration: 0.5s; }
+    #alert-box.animate__fadeInDown { animation-duration: 0.3s !important; }
+    #alert-box.animate__fadeOutUp { animation-duration: 0.2s !important; }
 
-    html, body {
-      height: 100%;
-      margin: 0;
-      overflow: hidden;
-      font-family: 'Noto Sans', sans-serif;
-    }
-
-    /* Fundo animado Vanta.js */
-    #fundo {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      z-index: -1;
-      background-color: #10182d;
-    }
+    html, body { height: 100%; }
 
     /* Loader */
     #loader-container { z-index: 9999 !important; }
@@ -80,7 +69,7 @@
 
     /* Botão com gradiente animado */
     .bgBtn {
-      background: linear-gradient(45deg, rgb(0, 0, 0), rgb(115, 114, 115), rgb(0, 0, 0));
+      background: linear-gradient(45deg, rgb(0,0,0), rgb(115,114,115), rgb(0,0,0));
       background-size: 400% 400%;
       animation: gradientAnim 8s ease infinite;
     }
@@ -89,57 +78,35 @@
       50% { background-position: 100% 50%; }
     }
 
+    /* Overlay semi-transparente para alertas e loader */
+    .overlay-dark { background: rgba(15, 23, 42, 0.6); }
   </style>
 </head>
 
-<body class="flex items-center justify-center">
-
-  <!-- Fundo animado -->
-  <div id="fundo"></div>
+<body class="relative flex items-center justify-center">
+  
+  <!-- Background com gradiente e opacidade via CSS -->
+  <div class="bg-gradient-overlay absolute inset-0 z-0"></div>
 
   <!-- Loader -->
-  <div id="loader-container" class="fixed inset-0 bg-black bg-opacity-50 hidden flex flex-col items-center justify-center">
-    <div class="flex items-center space-x-4 bg-slate-900 px-6 py-4 rounded-lg shadow-lg">
+  <div id="loader-container" class="fixed inset-0 overlay-dark hidden flex flex-col items-center justify-center">
+    <div class="flex items-center space-x-4 bg-slate-900/80 px-6 py-4 rounded-lg shadow-lg">
       <div class="loader border-4 border-cyan-500 border-t-transparent rounded-full w-8 h-8 animate-spin"></div>
       <span id="loader-message" class="text-white font-semibold">Carregando...</span>
     </div>
   </div>
 
   <!-- Alertas -->
-<div id="alert-box" class="hidden fixed top-6 left-6 right-6 max-w-sm mx-auto px-4 py-3 rounded-lg shadow-lg text-white bg-teal-600 flex items-center gap-3 z-50">
-  <i id="alert-icon" class="fas fa-info-circle text-xl md:text-2xl"></i>
-  <span id="alert-message" class="font-semibold text-sm md:text-base flex-1"></span>
-  <button id="alert-close" class="ml-2 text-white text-lg hover:text-gray-200 focus:outline-none">
-    <i class="fas fa-times"></i>
-  </button>
-</div>
-
-
-  <!-- Scripts -->
-  <script>
-    // Inicializa o fundo VANTA.TOPOLOGY
-    document.addEventListener("DOMContentLoaded", function () {
-      VANTA.TOPOLOGY({
-        el: "#fundo",
-        mouseControls: true,
-        touchControls: true,
-        gyroControls: false,
-        minHeight: 200.00,
-        minWidth: 200.00,
-        scale: 1.00,
-        scaleMobile: 1.00,
-        color: 0x327182,          // linhas em ciano
-        backgroundColor: 0x121a25, // fundo escuro
-        points: 11.0,
-        maxDistance: 22.0,
-        spacing: 16.0
-      });
-    });
-  </script>
+  <div id="alert-box" class="hidden fixed top-6 left-6 right-6 max-w-sm mx-auto px-4 py-3 rounded-lg shadow-lg text-white bg-teal-600 flex items-center gap-3 z-50">
+    <i id="alert-icon" class="fas fa-info-circle text-xl md:text-2xl"></i>
+    <span id="alert-message" class="font-semibold text-sm md:text-base flex-1"></span>
+    <button id="alert-close" class="ml-2 text-white text-lg hover:text-gray-200 focus:outline-none">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
 
   <!-- Script do sistema (alertas e loader) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
+  <script>
     $(function () {
         const $alertBox = $('#alert-box');
         const $alertIcon = $('#alert-icon');
@@ -158,65 +125,43 @@
         function showAlert(message, type = 'info') {
             const alertType = types[type] || types.info;
 
-            // Reset animations and clear timeout
             clearTimeout(timeoutId);
-            $alertBox
-                .removeClass('animate__fadeInDown animate__fadeOutUp animate__animated')
-                .addClass('animate__animated');
-            
-            void $alertBox[0].offsetWidth; // Force DOM reflow
+            $alertBox.removeClass('animate__fadeInDown animate__fadeOutUp animate__animated').addClass('animate__animated');
+            void $alertBox[0].offsetWidth;
 
-            // Update content
             $alertMessage.text(message);
-            $alertBox
-                .removeClass('bg-green-600 bg-red-600 bg-yellow-500 bg-teal-600')
-                .addClass(alertType.bg);
-
+            $alertBox.removeClass('bg-green-600 bg-red-600 bg-yellow-500 bg-teal-600').addClass(alertType.bg);
             $alertIcon.attr('class', `${alertType.icon} text-xl`);
 
-            // Show with entrance animation
-            $alertBox
-                .removeClass('hidden')
-                .addClass('animate__fadeInDown');
+            $alertBox.removeClass('hidden').addClass('animate__fadeInDown');
 
-            // Set auto-hide timer
             timeoutId = setTimeout(() => {
-                $alertBox
-                    .removeClass('animate__fadeInDown')
-                    .addClass('animate__fadeOutUp');
-
-                // Hide after animation completes
+                $alertBox.removeClass('animate__fadeInDown').addClass('animate__fadeOutUp');
                 setTimeout(() => {
-                    $alertBox
-                        .addClass('hidden')
-                        .removeClass('animate__fadeOutUp animate__animated');
+                    $alertBox.addClass('hidden').removeClass('animate__fadeOutUp animate__animated');
                 }, 300);
             }, 3000);
         }
 
-        // Botão de fechar manualmente
         $alertClose.on('click', () => {
             clearTimeout(timeoutId);
             $alertBox.removeClass('animate__fadeInDown').addClass('animate__fadeOutUp');
             $alertBox.one('animationend', () => {
-            $alertBox.addClass('hidden').removeClass('animate__fadeOutUp animate__animated');
+                $alertBox.addClass('hidden').removeClass('animate__fadeOutUp animate__animated');
             });
         });
 
-        // Expor para uso global
         window.showAlert = showAlert;
 
-
-        // Loader opcional
         window.loaderM = function (mensagem, estado) {
             const $loaderContainer = $('#loader-container');
             const $loaderMessage = $('#loader-message');
 
             if (estado) {
-            $loaderMessage.text(mensagem || 'Carregando...');
-            $loaderContainer.removeClass('hidden');
+                $loaderMessage.text(mensagem || 'Carregando...');
+                $loaderContainer.removeClass('hidden');
             } else {
-            $loaderContainer.addClass('hidden');
+                $loaderContainer.addClass('hidden');
             }
         };
     });
@@ -224,3 +169,10 @@
 
 </body>
 </html>
+
+
+
+
+
+
+

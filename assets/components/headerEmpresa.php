@@ -33,7 +33,6 @@
             position: fixed;
             top: 0; left: 0;
             width: 100%;
-            height: 64px;         
             background: white;
             color: black;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -133,16 +132,6 @@
         @media (min-width: 769px) {
             .logo-emoji { display: none; }
         }
-
-        nav.header-funcionario {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%;
-            height: 64px; /* altura fixa */
-            z-index: 30;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
     </style>
 </head>
 
@@ -154,18 +143,18 @@
 
     <div id="controlador" class="hidden">
 
-        <!-- Navbar -->
-        <nav class="header-funcionario bg-slate-900">
-            <div class="container mx-auto px-4 py-3 flex items-center justify-between relative text-white  ">
+    <!-- Navbar -->
+    <nav class="header-funcionario bg-slate-900">
+        <div class="container mx-auto px-4 py-1.5 sm:py-3 flex items-center justify-between relative text-white">
 
                 <!-- Logo -->
                 <div class="flex items-center text-lg font-bold">
-                    <img id="ninja-img" class="w-10 mr-2" src="../../assets/img/ninjaLogo.png" alt="Ninja Control" />
+                    <img id="ninja-img" class="w-12 mr-2" src="../../assets/img/ninjaLogo.png" alt="Ninja Control" />
                     <span class="logo-text">NINJA CONTROL</span>
                 </div>
 
                 <!-- Nome Centralizado -->
-                <div class="text-xl font-semibold absolute left-1/2 transform -translate-x-1/2">
+                <div class="text-base sm:text-xl font-semibold absolute left-1/2 transform -translate-x-1/2">
                     PAINEL FUNCIONÁRIOS
                 </div>
 
