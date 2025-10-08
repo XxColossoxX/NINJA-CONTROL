@@ -26,81 +26,141 @@ require_once('../../assets/components/headerFuncionario.php');
 ?>
 
 <div class="min-h-screen flex flex-col items-center justify-center px-4">
-    <div class="w-full max-w-6xl bg-slate-900  rounded-2xl shadow-2xl p-0 mt-4 flex flex-col md:flex-row">
+    <div class="w-full max-w-6xl bg-[#0d1628]/90 backdrop-blur-md border border-cyan-500/20 rounded-2xl shadow-[0_0_20px_#00ffff20] p-0 mt-4 flex flex-col md:flex-row">
 
         <!-- Header do modal -->
-        <div class="w-full md:w-1/2 flex flex-col justify-start md:p-4 p-2 border-b md:border-b-0 md:border-r border-gray-200">
+        <div class="w-full md:w-1/2 flex flex-col justify-start md:p-4 p-2 border-b md:border-b-0 md:border-r border-cyan-400">
 
             <!-- Header mobile -->
-            <div class="md:hidden flex items-center gap-2 mb-4">
-                <img id="imgFuncionario" src="<?php echo $fotoFuncionario; ?>" alt="Foto do Funcionário"
-                     class="w-12 h-12 rounded-full object-cover border-2 border-teal-500">
-                <span class="font-bold text-base text-center text-gray-800 flex-1">
+            <div class="md:hidden flex items-center justify-center gap-2 mb-2 pl-1">
+                <img id="imgFuncionario" 
+                    src="<?php echo $fotoFuncionario; ?>" 
+                    alt="Foto do Funcionário"
+                    class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-2 border-cyan-500 ml-1">
+                
+                <span class="font-bold text-sm text-white flex items-center gap-2 text-center">
                     SEJA MUITO BEM VINDO!<br><?php echo htmlspecialchars($nomeFuncionario); ?>
                 </span>
             </div>
 
             <!-- Header desktop -->
-            <h2 class="hidden md:block text-xl font-bold text-gray-800 text-center mt-4 mb-10">
-                SEJA MUITO BEM VINDO!<br><?php echo htmlspecialchars($nomeFuncionario); ?>
-            </h2>
+            <div class="hidden md:block relative text-center mt-4 mb-10">
+                <h2 class="text-xl font-bold text-white">
+                    SEJA MUITO BEM VINDO!<br><?php echo htmlspecialchars($nomeFuncionario); ?>
+                </h2>
+            </div>
 
-            <div class="flex flex-col items-center">
-                <img src="<?php echo $fotoFuncionario; ?>" alt="Foto do Funcionário"
-                     class="w-24 h-24 rounded-full border-4 border-primary object-cover mb-4 hidden md:block">
+            <!-- Modal mobile estilizado -->
+            <div id="modal-dados-funcionario" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden px-4">
+                <div class="w-full max-w-lg bg-[#0d1628]/95 backdrop-blur-md border border-cyan-500/30 rounded-2xl shadow-[0_0_25px_#00ffff30] p-6 relative">
+                    <h3 class="text-xl font-bold text-center text-white mb-6">Dados do Funcionário</h3>
 
-                <div class="hidden md:block bg-gray-100 rounded-3xl md:p-8 p-4 w-full mb-6 mt-4" id="card-dados-funcionario">
-                    <div class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-4 text-sm">
                         <!-- Nome -->
-                        <div class="grid grid-cols-2 items-center gap-x-6">
-                            <div class="flex items-center min-w-[180px]">
-                                <i class="fas fa-user mr-3 text-gray-500 text-2xl"></i>
-                                <span class="text-lg text-gray-500 font-semibold">Nome:</span>
-                            </div>
-                            <span class="text-2xl font-bold text-gray-700 truncate min-w-[220px]"><?php echo htmlspecialchars($nomeFuncionario); ?></span>
+                        <div class="flex justify-between items-center bg-[#0d1628]/70 p-3 rounded-lg border border-cyan-400/30 shadow-[0_0_12px_#00ffff20]">
+                            <span class="text-cyan-400 font-semibold flex items-center gap-2">
+                                <i class="fas fa-user"></i> Nome:
+                            </span>
+                            <span class="text-white font-bold truncate max-w-[220px]"><?php echo htmlspecialchars($nomeFuncionario); ?></span>
                         </div>
 
                         <!-- Empresa -->
-                        <div class="grid grid-cols-2 items-center gap-x-6">
-                            <div class="flex items-center min-w-[180px]">
-                                <i class="fas fa-building mr-3 text-gray-500 text-2xl"></i>
-                                <span class="text-lg text-gray-500 font-semibold">Empresa:</span>
-                            </div>
-                            <span class="text-xl text-gray-700 truncate min-w-[220px]"><?php echo htmlspecialchars($nomeEmpresa); ?></span>
+                        <div class="flex justify-between items-center bg-[#0d1628]/70 p-3 rounded-lg border border-cyan-400/30 shadow-[0_0_12px_#00ffff20]">
+                            <span class="text-cyan-400 font-semibold flex items-center gap-2">
+                                <i class="fas fa-building"></i> Empresa:
+                            </span>
+                            <span class="text-white font-bold truncate max-w-[220px]"><?php echo htmlspecialchars($nomeEmpresa); ?></span>
                         </div>
 
                         <!-- RG -->
-                        <div class="grid grid-cols-2 items-center gap-x-6">
-                            <div class="flex items-center min-w-[180px]">
-                                <i class="fas fa-id-card mr-3 text-gray-500 text-2xl"></i>
-                                <span class="text-lg text-gray-500 font-semibold">RG:</span>
-                            </div>
-                            <span class="text-xl text-gray-700 truncate min-w-[220px]"><?php echo htmlspecialchars($rgFuncionario); ?></span>
+                        <div class="flex justify-between items-center bg-[#0d1628]/70 p-3 rounded-lg border border-cyan-400/30 shadow-[0_0_12px_#00ffff20]">
+                            <span class="text-cyan-400 font-semibold flex items-center gap-2">
+                                <i class="fas fa-id-card"></i> RG:
+                            </span>
+                            <span class="text-white font-bold truncate max-w-[220px]"><?php echo htmlspecialchars($rgFuncionario); ?></span>
                         </div>
 
                         <!-- CPF -->
-                        <div class="grid grid-cols-2 items-center gap-x-6">
-                            <div class="flex items-center min-w-[180px]">
-                                <i class="fas fa-address-card mr-3 text-gray-500 text-2xl"></i>
-                                <span class="text-lg text-gray-500 font-semibold">CPF:</span>
-                            </div>
-                            <span class="text-xl text-gray-700 truncate min-w-[220px]"><?php echo htmlspecialchars($cpfFuncionario); ?></span>
+                        <div class="flex justify-between items-center bg-[#0d1628]/70 p-3 rounded-lg border border-cyan-400/30 shadow-[0_0_12px_#00ffff20]">
+                            <span class="text-cyan-400 font-semibold flex items-center gap-2">
+                                <i class="fas fa-address-card"></i> CPF:
+                            </span>
+                            <span class="text-white font-bold truncate max-w-[220px]"><?php echo htmlspecialchars($cpfFuncionario); ?></span>
                         </div>
 
                         <!-- Nascimento -->
-                        <div class="grid grid-cols-2 items-center gap-x-6">
-                            <div class="flex items-center min-w-[180px]">
-                                <i class="fas fa-calendar-alt mr-3 text-gray-500 text-2xl"></i>
-                                <span class="text-lg text-gray-500 font-semibold">Nascimento:</span>
+                        <div class="flex justify-between items-center bg-[#0d1628]/70 p-3 rounded-lg border border-cyan-400/30 shadow-[0_0_12px_#00ffff20]">
+                            <span class="text-cyan-400 font-semibold flex items-center gap-2">
+                                <i class="fas fa-calendar-alt"></i> Nascimento:
+                            </span>
+                            <span class="text-white font-bold truncate max-w-[220px]"><?php echo htmlspecialchars($dataNascimentoFuncionario); ?></span>
+                        </div>
+                    </div>
+
+                    <!-- Botão fechar -->
+                    <button id="btn-fechar-modal-mobile" class="mt-6 w-full bg-cyan-500/90 text-white font-bold py-3 rounded-lg shadow-[0_0_20px_#00ffff40] transition flex items-center justify-center gap-2 hover:bg-cyan-400">
+                        <i class="fas fa-times"></i> Fechar
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="flex flex-col items-center">
+                <img src="<?php echo $fotoFuncionario; ?>" alt="Foto do Funcionário"
+                     class="w-24 h-24 rounded-full border-4 border-cyan-400 object-cover mb-4 hidden md:block">
+
+                <div class="hidden md:block bg-[#0d1628]/90 backdrop-blur-md border border-cyan-500/20 rounded-2xl shadow-[0_0_20px_#00ffff20] md:p-6 p-3 w-full mb-0 mt-5" id="card-dados-funcionario">
+                    <div class="flex flex-col gap-2">
+                        <!-- Nome -->
+                        <div class="grid grid-cols-2 items-center gap-x-2 mb-1">
+                            <div class="flex items-center min-w-[110px]">
+                                <i class="fas fa-user mr-2 text-cyan-400 text-base"></i>
+                                <span class="text-xs text-white font-bold whitespace-nowrap">Nome:</span>
                             </div>
-                            <span class="text-xl text-gray-700 truncate min-w-[220px]"><?php echo htmlspecialchars($dataNascimentoFuncionario); ?></span>
+                            <span class="text-sm font-bold text-white truncate min-w-[120px] max-w-[180px]"><?php echo htmlspecialchars($nomeFuncionario); ?></span>
+                        </div>
+
+                        <!-- Empresa -->
+                        <div class="grid grid-cols-2 items-center gap-x-2 mb-1">
+                            <div class="flex items-center min-w-[110px]">
+                                <i class="fas fa-building mr-2 text-cyan-400 text-base"></i>
+                                <span class="text-xs text-white font-bold whitespace-nowrap">Empresa:</span>
+                            </div>
+                            <span class="text-sm font-bold text-white truncate min-w-[120px] max-w-[180px]"><?php echo htmlspecialchars($nomeEmpresa); ?></span>
+                        </div>
+
+                        <!-- RG -->
+                        <div class="grid grid-cols-2 items-center gap-x-2 mb-1">
+                            <div class="flex items-center min-w-[110px]">
+                                <i class="fas fa-id-card mr-2 text-cyan-400 text-base"></i>
+                                <span class="text-xs text-white font-bold whitespace-nowrap">RG:</span>
+                            </div>
+                            <span class="text-sm text-white truncate min-w-[120px] max-w-[180px]"><?php echo htmlspecialchars($rgFuncionario); ?></span>
+                        </div>
+
+                        <!-- CPF -->
+                        <div class="grid grid-cols-2 items-center gap-x-2 mb-1">
+                            <div class="flex items-center min-w-[110px]">
+                                <i class="fas fa-address-card mr-2 text-cyan-400 text-base"></i>
+                                <span class="text-xs text-white font-bold whitespace-nowrap">CPF:</span>
+                            </div>
+                            <span class="text-sm text-white truncate min-w-[120px] max-w-[180px]"><?php echo htmlspecialchars($cpfFuncionario); ?></span>
+                        </div>
+
+                        <!-- Nascimento -->
+                        <div class="grid grid-cols-2 items-center gap-x-2 mb-1">
+                            <div class="flex items-center min-w-[110px]">
+                                <i class="fas fa-calendar-alt mr-2 text-cyan-400 text-base"></i>
+                                <span class="text-xs text-white font-bold whitespace-nowrap">Nascimento:</span>
+                            </div>
+                            <span class="text-sm text-white truncate min-w-[120px] max-w-[180px]"><?php echo htmlspecialchars($dataNascimentoFuncionario); ?></span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Botão mobile -->
-                <button class="md:hidden bg-gray-200 text-teal-700 font-semibold px-3 py-1 rounded-lg mt-4" id="btn-mais-info">
-                    <i class="fas fa-info-circle mr-2"></i> Mais informações do funcionário
+                <button class="md:hidden bg-cyan-500/90 text-white font-bold px-3 py-2 rounded-lg mt-4 shadow-[0_0_15px_#00ffff40] transition flex items-center gap-2" id="btn-mais-info">
+                    <i class="fas fa-info-circle"></i> Mais informações
                 </button>
             </div>
         </div>
@@ -110,62 +170,66 @@ require_once('../../assets/components/headerFuncionario.php');
 
             <!-- Título -->
             <div class="mb-6">
-                <h2 class="hidden md:block text-2xl font-extrabold text-teal-700 text-center mb-4 uppercase tracking-wide">
+                <h2 class="text-transparent bg-clip-text text-center bg-gradient-to-r from-cyan-400 to-blue-500 text-3xl font-extrabold hidden md:block">
                     PAINEL REGISTRO PONTO
                 </h2>
             </div>
 
             <!-- Últimos registros -->
             <div class="mb-6">
-                <h3 class="text-lg font-bold mb-3">Últimos registros</h3>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-gray-100 rounded-lg p-2 flex flex-col items-center">
-                        <i class="fas fa-sign-in-alt text-green-600 text-xl mb-1"></i>
-                        <span class="font-bold text-green-600">08:00</span>
-                        <span class="text-xs">Entrada</span>
+                <h3 class="text-lg font-bold text-white mb-3">Últimos registros</h3>
+                <div class="grid grid-cols-2 gap-3 sm:gap-4">
+                    <div class="bg-slate-800/80 border border-cyan-500/10 rounded-xl p-2 sm:p-3 flex flex-col items-center shadow-[0_0_10px_#00ffff10]">
+                        <i class="fas fa-sign-in-alt text-green-600 text-lg sm:text-xl mb-1"></i>
+                        <span class="font-bold text-green-600 text-sm sm:text-base">08:00</span>
+                        <span class="text-xs font-bold text-white">Entrada</span>
                         <span class="text-xs text-green-500">Concluído</span>
                     </div>
-                    <div class="bg-gray-100 rounded-lg p-2 flex flex-col items-center">
-                        <i class="fas fa-sign-out-alt text-red-600 text-xl mb-1"></i>
-                        <span class="font-bold text-red-600">12:00</span>
-                        <span class="text-xs">Saída</span>
+                    <div class="bg-slate-800/80 border border-cyan-500/10 rounded-xl p-2 sm:p-3 flex flex-col items-center shadow-[0_0_10px_#00ffff10]">
+                        <i class="fas fa-sign-out-alt text-red-600 text-lg sm:text-xl mb-1"></i>
+                        <span class="font-bold text-red-600 text-sm sm:text-base">12:00</span>
+                        <span class="text-xs font-bold text-white">Saída</span>
                         <span class="text-xs text-red-500">Concluído</span>
                     </div>
-                    <div class="bg-gray-100 rounded-lg p-2 flex flex-col items-center">
-                        <i class="fas fa-sign-in-alt text-green-600 text-xl mb-1"></i>
-                        <span class="font-bold text-green-600">13:30</span>
-                        <span class="text-xs">Entrada</span>
+                    <div class="bg-slate-800/80 border border-cyan-500/10 rounded-xl p-2 sm:p-3 flex flex-col items-center shadow-[0_0_10px_#00ffff10]">
+                        <i class="fas fa-sign-in-alt text-green-600 text-lg sm:text-xl mb-1"></i>
+                        <span class="font-bold text-green-600 text-sm sm:text-base">13:30</span>
+                        <span class="text-xs font-bold text-white">Entrada</span>
                         <span class="text-xs text-yellow-500">Pendente</span>
                     </div>
-                    <div class="bg-gray-100 rounded-lg p-2 flex flex-col items-center">
-                        <i class="fas fa-sign-out-alt text-red-600 text-xl mb-1"></i>
-                        <span class="font-bold text-red-600">18:00</span>
-                        <span class="text-xs">Saída</span>
+                    <div class="bg-slate-800/80 border border-cyan-500/10 rounded-xl p-2 sm:p-3 flex flex-col items-center shadow-[0_0_10px_#00ffff10]">
+                        <i class="fas fa-sign-out-alt text-red-600 text-lg sm:text-xl mb-1"></i>
+                        <span class="font-bold text-red-600 text-sm sm:text-base">18:00</span>
+                        <span class="text-xs font-bold text-white">Saída</span>
                         <span class="text-xs text-yellow-500">Pendente</span>
                     </div>
                 </div>
             </div>
 
             <!-- Localização -->
-            <div class="mb-6">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="localizacao">Localização Atual</label>
-                <div class="flex items-center bg-gray-100 rounded-lg p-2">
-                    <i class="fas fa-map-marker-alt text-teal-600 text-xl mr-2"></i>
+            <div class="mb-4">
+                <label class="block text-xs font-bold mb-1 text-white" for="localizacao">Localização Atual</label>
+                <div class="bg-slate-900 border border-cyan-500/10 shadow-[0_0_8px_#00ffff10] flex items-center bg-slate-900 rounded-lg p-1.5 glow-box">
+                    <i class="fas fa-map-marker-alt text-cyan-400 text-lg mr-1.5"></i>
                     <input id="inputLocalizacao" type="text" value=""
-                           class="w-full bg-gray-100 border-none outline-none text-gray-700 text-sm" readonly>
+                        class="w-full min-w-[250px] bg-slate-900 border border-cyan-500/10 shadow-[0_0_8px_#00ffff10] border-none outline-none font-bold text-white text-xs" readonly>
                 </div>
             </div>
 
             <!-- Botão bater ponto -->
-            <div class="flex justify-center mt-6 mb-4">
-                <button id="btnBaterPonto"
-                        class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
-                    <i class="fas fa-fingerprint mr-2"></i> BATER PONTO
+            <div class="flex justify-center mt-4 mb-3">
+                <button id="btnBaterPonto" 
+                    class="relative bg-cyan-500/90 text-slate-900 font-bold py-3 px-6 rounded-lg text-base
+                        shadow-[0_0_15px_#00ffff40] transition-all 
+                        md:hover:bg-cyan-400 md:hover:shadow-[0_0_25px_#00ffff80] md:hover:scale-105
+                        flex items-center gap-3 text-white">
+                    <img src="/../../assets/img/faceidIcon.png" class="w-7 h-7 icon-color" alt="Ícone FaceID" />
+                    <span class="text-white">BATER PONTO</span>
                 </button>
             </div>
 
             <!-- Rodapé -->
-            <div class="text-xs text-gray-400 text-center">
+            <div class="text-xs text-gray-400 text-center select-none">
                 Ninja Control - Direitos Reservados
             </div>
 
@@ -182,107 +246,6 @@ require_once('../../assets/components/headerFuncionario.php');
     </div> <!-- Fim do container principal -->
 </div> <!-- Fim do wrapper geral -->
 
-
-<!-- Modal mobile -->
-
-<div id="modal-dados-funcionario" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
-    <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-[400px] min-w-[220px] relative mx-2">
-        <h3 class="text-lg font-bold text-center mb-4">Dados do Funcionário</h3>
-        <div class="flex flex-col gap-2">
-            <div class="grid grid-cols-2 items-center mb-2">
-                <div class="flex items-center">
-                    <i class="fas fa-user mr-2 text-gray-500"></i>
-                    <span class="text-base text-gray-500 font-semibold">Nome:</span>
-                </div>
-                <span class="text-base font-bold text-gray-700 text-left break-words"><?php echo htmlspecialchars($nomeFuncionario); ?></span>
-            </div>
-            <div class="grid grid-cols-2 items-center mb-2">
-                <div class="flex items-center">
-                    <i class="fas fa-building mr-2 text-gray-500"></i>
-                    <span class="text-base text-gray-500 font-semibold">Empresa:</span>
-                </div>
-                <span class="text-base font-bold text-gray-700 text-left break-words"><?php echo htmlspecialchars($nomeEmpresa); ?></span>
-            </div>
-            <div class="grid grid-cols-2 items-center mb-2">
-                <div class="flex items-center">
-                    <i class="fas fa-id-card mr-2 text-gray-500"></i>
-                    <span class="text-base text-gray-500 font-semibold">RG:</span>
-                </div>
-                <span class="text-base font-bold text-gray-700 text-left break-words"><?php echo htmlspecialchars($rgFuncionario); ?></span>
-            </div>
-            <div class="grid grid-cols-2 items-center mb-2">
-                <div class="flex items-center">
-                    <i class="fas fa-address-card mr-2 text-gray-500"></i>
-                    <span class="text-base text-gray-500 font-semibold">CPF:</span>
-                </div>
-                <span class="text-base font-bold text-gray-700 text-left break-words"><?php echo htmlspecialchars($cpfFuncionario); ?></span>
-            </div>
-            <div class="grid grid-cols-2 items-center mb-2">
-                <div class="flex items-center">
-                    <i class="fas fa-calendar-alt mr-2 text-gray-500"></i>
-                    <span class="text-base text-gray-500 font-semibold">Nascimento:</span>
-                </div>
-                <span class="text-base font-bold text-gray-700 text-left break-words"><?php echo htmlspecialchars($dataNascimentoFuncionario); ?></span>
-            </div>
-        </div>
-        <button id="btn-fechar-modal-mobile" class="mt-6 w-full bg-gray-200 text-gray-700 font-semibold py-2 rounded-lg text-lg hover:bg-gray-300 transition">Fechar</button>
-    </div>
-</div>
-
-<!-- Modal de Bater Ponto -->
-<div id="modal-bater-ponto" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center">
-    <div class="bg-white rounded-xl shadow-lg w-[95vw] max-w-3xl relative p-4">
-        <h2 class="text-xl font-bold text-center mb-4"><i class="fas fa-fingerprint mr-2 text-teal-600"></i>Registro de Ponto</h2>
-
-        <!-- Abas -->
-        <div class="flex border-b border-gray-200 mb-4">
-            <button class="tab-button text-gray-600 font-semibold px-4 py-2 border-b-2 border-transparent hover:border-teal-500 hover:text-teal-600" data-tab="info-tab">
-                <i class="fas fa-user mr-2"></i>Informações
-            </button>
-            <button class="tab-button text-gray-600 font-semibold px-4 py-2 border-b-2 border-transparent hover:border-teal-500 hover:text-teal-600" data-tab="local-tab">
-                <i class="fas fa-map-marker-alt mr-2"></i>Localização
-            </button>
-        </div>
-
-        <!-- Conteúdo das Abas -->
-        <div id="info-tab" class="tab-content">
-            <div class="grid grid-cols-2 gap-4 text-sm text-gray-700">
-                <div><strong><i class="fas fa-id-badge mr-2"></i>Nome:</strong> <span id="tab-nome"></span></div>
-                <div><strong><i class="fas fa-building mr-2"></i>Empresa:</strong> <span id="tab-empresa"></span></div>
-                <div><strong><i class="fas fa-id-card mr-2"></i>RG:</strong> <span id="tab-rg"></span></div>
-                <div><strong><i class="fas fa-address-card mr-2"></i>CPF:</strong> <span id="tab-cpf"></span></div>
-                <div><strong><i class="fas fa-calendar-alt mr-2"></i>Nascimento:</strong> <span id="tab-nascimento"></span></div>
-            </div>
-        </div>
-
-        <div id="local-tab" class="tab-content hidden">
-            <div class="text-gray-700 text-sm mb-3">
-                <i class="fas fa-map-marker-alt mr-2"></i><strong>Localização da Empresa:</strong>
-                <div class="bg-gray-100 p-3 rounded mt-1" id="tab-localizacao"></div>
-            </div>
-        </div>
-
-        <div class="camera-container">
-            <div id="camera-container">
-                <video id="video-camera" autoplay muted playsinline class="video-feed"></video>
-            </div>            
-            <div class="overlay">
-                <div class="circle-ring"></div>
-            </div>
-        </div>
-
-
-        <!-- Botões -->
-        <div class="flex justify-between items-center mt-4">
-            <button id="btn-fechar-ponto" class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition">
-                <i class="fas fa-times mr-2"></i>Fechar
-            </button>
-            <button id="btn-efetuar-ponto" class="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700 transition font-bold">
-                <i class="fas fa-check-circle mr-2"></i>Efetuar Ponto
-            </button>
-        </div>
-    </div>
-</div>
 
 <script src="./js/pontoFuncionario.js"></script>
 <link rel="stylesheet" href="./css/pontoFuncionario.css">
@@ -303,12 +266,17 @@ require_once('../../assets/components/headerFuncionario.php');
     
     let divBemVindo = $("#bemVindo");
     let conteudo = `
-    <div id="welcome-message" class="fixed inset-0 flex items-center justify-center z-50 text-center">
-        <div>
-            <h1 class="text-2xl text-white font-sans"><i><strong>BEM-VINDO(A) DE VOLTA</strong></i></h1>
-            <h2 id="tituloEmpresa" class="text-lg text-white font-sans underline text-center"><i><strong>${nomeFuncionario}</strong></i></h2>
+        <div id="welcome-message" class="fixed inset-0 flex items-center justify-center z-50 px-4">
+            <div class="rounded-xl p-6 max-w-md w-full text-center animate-fade-in-up">
+                <h1 class="text-3xl sm:text-4xl font-bold text-white mb-2">
+                    BEM-VINDO(A) DE VOLTA
+                </h1>
+                <h2 id="tituloEmpresa" class="text-xl sm:text-2xl font-medium text-white line-clamp-2">
+                    ${nomeFuncionario}
+                </h2>
+            </div>
         </div>
-    </div>`;
+    `;
 
     divBemVindo.append(conteudo);
 

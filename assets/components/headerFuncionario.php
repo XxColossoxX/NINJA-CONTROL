@@ -164,7 +164,6 @@
             top: 0; left: 0;
             width: 100%;
             height: 64px; /* altura fixa */
-            background: white;
             z-index: 30;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
@@ -181,7 +180,7 @@
 <div id="controlador" class="hidden">
     
 <!-- Navbar -->
-<nav class="header-funcionario">
+<nav class="header-funcionario bg-slate-900 text-white">
     <div class="container mx-auto px-4 py-3 flex items-center justify-between relative bg-slate-900 text-white">
         <!-- Logo -->
         <div class="flex items-center text-lg font-bold">
@@ -197,17 +196,17 @@
         <!-- Botão Menu -->
         <button id="menu-toggle" class="block hover:opacity-80">
             <div class="space-y-1">
-                <span style="display: block; width: 1.5rem; height: 0.125rem; background-color: #000000ff;"></span>
-                <span style="display: block; width: 1.5rem; height: 0.125rem; background-color: #000000ff;"></span>
-                <span style="display: block; width: 1.5rem; height: 0.125rem; background-color: #000000ff;"></span>
+                <span style="display: block; width: 1.5rem; height: 0.125rem; background-color: #ffffffff;"></span>
+                <span style="display: block; width: 1.5rem; height: 0.125rem; background-color: #ffffffff;"></span>
+                <span style="display: block; width: 1.5rem; height: 0.125rem; background-color: #ffffffff;"></span>
             </div>
         </button>
     </div>
 
     <!-- Menu lateral -->
-    <div id="menu" class="absolute top-0 right-0 bg-white text-black w-48 h-screen menu-slide menu-hidden shadow-lg">
+    <div id="menu" class="absolute top-0 right-0 bg-slate-900 text-white w-48 h-screen menu-slide menu-hidden shadow-lg">
         <!-- Cabeçalho do Menu -->
-        <div class="bg-gray-100 text-center py-4 font-bold text-lg relative">
+        <div class="bg-slate-800 text-center py-4 font-bold text-lg relative">
             NINJA CONTROL
             <button id="menu-close" class="absolute top-2 right-2 text-red-500 font-bold hover:text-gray-800 focus:outline-none">
                 X

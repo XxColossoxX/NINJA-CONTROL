@@ -26,54 +26,55 @@ $emailEmpresa = isset($_SESSION['empresa_email']) ? $_SESSION['empresa_email'] :
 
 ?>
 
-    <div class="min-h-screen flex flex-col items-center justify-center">
-        <!-- Modal Empresa (como tela principal) -->
-        <div class="modalDadosEmpresa w-full max-w-6xl bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-10 md:p-14 flex flex-col md:flex-row gap-10">
-            
-            <!-- Coluna Esquerda -->
-            <div class="flex-1">
-                <h2 class="text-2xl font-bold text-teal-700 mb-6 flex items-center gap-3">
-                    <i class="fas fa-building text-teal-600 text-xl"></i>
-                    Informações da Empresa
-                </h2>
+<!-- Modal Empresa (como tela principal) -->
+<div class="min-h-screen flex flex-col items-center justify-center w-full px-4">
+    <div class="modalDadosEmpresa w-full max-w-4xl glow-box bg-slate-900/90 backdrop-blur-md rounded-2xl shadow-[0_0_25px_#00ffff20] p-6 md:p-10 flex flex-col md:flex-row gap-6 md:gap-10">
+        
+        <!-- Coluna Esquerda: Informações -->
+        <div class="flex-1">
+            <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-white mb-4 md:mb-6 flex items-center gap-2 md:gap-3">
+                <i class="fas fa-building text-cyan-500 text-base sm:text-lg md:text-xl"></i>
+                Informações da Empresa
+            </h2>
 
-                <ul class="space-y-4 text-gray-800 text-sm md:text-base">
-                    <li class="flex items-center gap-3">
-                        <i class="fas fa-id-badge text-teal-500"></i>
-                        <span><strong>Nome:</strong> <?php echo $socialEmpresa; ?></span>
-                    </li>
-                    <li class="flex items-center gap-3">
-                        <i class="fas fa-id-card text-teal-500"></i>
-                        <span><strong>CNPJ:</strong> <?php echo $cnpjEmpresa; ?></span>
-                    </li>
-                    <li class="flex items-center gap-3">
-                        <i class="fas fa-map-marker-alt text-teal-500"></i>
-                        <span><strong>Endereço:</strong> <?php echo $locEmpresa; ?></span>
-                    </li>
-                    <li class="flex items-center gap-3">
-                        <i class="fas fa-phone-alt text-teal-500"></i>
-                        <span><strong>Telefone:</strong> <?php echo $telEmpresa; ?></span>
-                    </li>
-                    <li class="flex items-center gap-3">
-                        <i class="fas fa-envelope text-teal-500"></i>
-                        <span><strong>Email:</strong> <?php echo $emailEmpresa; ?></span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Coluna Direita -->
-            <div class="flex-1 flex items-center">
-                <div class="bg-teal-600 text-white p-6 md:p-8 rounded-xl shadow-md w-full">
-                    <h3 class="text-lg md:text-xl font-semibold mb-3 flex items-center gap-2">
-                        <i class="fas fa-info-circle"></i> Sobre a Empresa
-                    </h3>
-                    <p class="text-sm md:text-base leading-relaxed">
-                        <?php echo $dscEmpresa; ?>
-                    </p>
-                </div>
-            </div>
+            <ul class="space-y-3 text-white text-[11px] sm:text-xs md:text-sm">
+                <li class="flex items-center gap-2 sm:gap-3">
+                    <i class="fas fa-id-badge text-cyan-500"></i>
+                    <span><strong>Nome:</strong> <?php echo $socialEmpresa; ?></span>
+                </li>
+                <li class="flex items-center gap-2 sm:gap-3">
+                    <i class="fas fa-id-card text-cyan-500"></i>
+                    <span><strong>CNPJ:</strong> <?php echo $cnpjEmpresa; ?></span>
+                </li>
+                <li class="flex items-center gap-2 sm:gap-3">
+                    <i class="fas fa-map-marker-alt text-cyan-500"></i>
+                    <span><strong>Endereço:</strong> <?php echo $locEmpresa; ?></span>
+                </li>
+                <li class="flex items-center gap-2 sm:gap-3">
+                    <i class="fas fa-phone-alt text-cyan-500"></i>
+                    <span><strong>Telefone:</strong> <?php echo $telEmpresa; ?></span>
+                </li>
+                <li class="flex items-center gap-2 sm:gap-3">
+                    <i class="fas fa-envelope text-cyan-500"></i>
+                    <span><strong>Email:</strong> <?php echo $emailEmpresa; ?></span>
+                </li>
+            </ul>
         </div>
+
+        <!-- Coluna Direita: Sobre e Ações -->
+        <div class="flex-1 flex flex-col justify-between">
+            <div class="bg-slate-800/80 border border-cyan-500/20 shadow-[0_0_12px_#00ffff20] rounded-xl p-4 md:p-6 w-full mb-4 md:mb-6">
+                <h3 class="text-sm sm:text-base md:text-lg font-semibold mb-2 flex items-center gap-2">
+                    <i class="fas fa-info-circle text-cyan-500"></i>
+                    <span class="text-white font-bold">Sobre a Empresa</span>
+                </h3>
+                <p class="text-[10px] sm:text-xs md:text-sm leading-relaxed text-white">
+                    <?php echo $dscEmpresa; ?>
+                </p>
+            </div>
     </div>
+</div>
+
 
 <script src="./js/dadosEmpresa.js"></script>
 <link rel="stylesheet" href="./css/dadosEmpresa.css">

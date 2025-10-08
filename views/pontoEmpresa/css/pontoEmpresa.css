@@ -151,5 +151,23 @@ img.icon-color {
   filter: brightness(0) invert(1);
 }
 
+/* Aplica hover normalmente em dispositivos que suportam hover */
+#btnBaterPonto {
+    transition: all 0.3s;
+}
 
+/* Hover original */
+#btnBaterPonto:hover {
+    background-color: #38bdf8; /* cyan-400 */
+    box-shadow: 0 0 25px #00ffff80;
+    transform: scale(1.05);
+}
 
+/* Desabilita hover em dispositivos touch (como Android) */
+@media (hover: none) and (pointer: coarse) {
+    #btnBaterPonto:hover {
+        background-color: #06b6d4; /* mantém a cor original */
+        box-shadow: 0 0 15px #00ffff40; /* mantém sombra original */
+        transform: none;
+    }
+}
