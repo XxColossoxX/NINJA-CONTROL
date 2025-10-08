@@ -1,21 +1,48 @@
 {
-  "name": "Ninja Control",
-  "short_name": "Ninja",
-  "start_url": ".",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#14b8a6",
-  "description": "Sistema de controle de ponto Ninja Control",
-  "icons": [
+"name": "NINJA CONTROL",
+"short_name": "NINJA",
+"start_url": "https://ninjacontrol.iceiy.com/index.php",
+"display": "fullscreen",
+"description": "O Ninja Control é a solução inovadora para gestão de ponto, trazendo tecnologia, segurança e praticidade para empresas e funcionários. Com nosso sistema, você pode registrar e monitorar horários de entrada e saída de forma simples e eficiente, garantindo conformidade com as normas trabalhistas. Ideal para empresas que buscam otimizar a administração de recursos humanos e proporcionar um ambiente de trabalho mais organizado.",
+"lang": "pt-BR",
+"dir": "auto",
+"theme_color": "#125f7a",
+"background_color": "#94e4e6",
+"orientation": "any",
+"icons": [
     {
-      "src": "assets/img/ninjaLogo.png",
-      "sizes": "192x192",
-      "type": "image/png"
+        "src": "/../../assets/img/favicon/icon512.png",
+        "sizes": "512x512",
+        "type": "image/png",
+        "purpose": "maskable"
     },
     {
-      "src": "assets/img/ninjaLogo.png",
-      "sizes": "512x512",
-      "type": "image/png"
+        "src": "/../../assets/img/favicon/icon192.png",
+        "sizes": "192x192",
+        "type": "image/png",
+        "purpose": "any"
     }
-  ]
+],
+"screenshots": [
+    {
+        "src": "/../../assets/img/pontoPrint.png",
+        "sizes": "2880x1800",
+        "type": "image/png",
+        "description": "Uma demonstração do painel de ponto."
+    }
+],
+"related_applications": [
+    {
+        "platform":"windows",
+        "url": " The URL to your app in that app store"
+    }
+],
+"prefer_related_applications": false,
+"shortcuts": [
+    {
+        "name":"Ninja Control",
+        "url":"https://ninjacontrol.iceiy.com/index.php",
+        "description":"O Ninja Control é a solução inovadora para gestão de ponto, trazendo tecnologia, segurança e praticidade para empresas e funcionários."
+    }
+]
 }

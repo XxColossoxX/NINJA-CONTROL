@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ninja Control</title>
 
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#125f7a">
+
+
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
