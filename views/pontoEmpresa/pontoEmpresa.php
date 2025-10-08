@@ -269,7 +269,7 @@ require_once('../../assets/components/headerEmpresa.php');
 
         <!-- Botão bater ponto -->
         <div class="flex justify-center mt-6 mb-4">
-            <button id="btnBaterPonto" 
+            <button id="btn-efetuar-ponto" 
                 class="relative bg-cyan-500/90 hover:bg-cyan-400 text-slate-900 font-bold 
                     py-2 px-3.5 sm:py-3 sm:px-6 rounded-lg text-sm sm:text-lg 
                     shadow-[0_0_10px_#00ffff40] sm:shadow-[0_0_15px_#00ffff40] 

@@ -31,8 +31,8 @@ $('#toggleSenhaLogin').on('click', function() {
    //loginEmpresa
    //#region 
    async function loginEmpresa() {
-    const cnpjEmpresa    = $("#inputCnpjLogin").val(); ;
-    const senhaEmpresa      = $("#inputSenhaLogin").val(); ;
+    const cnpjEmpresa   = $("#inputCnpjLogin").val(); ;
+    const senhaEmpresa  = $("#inputSenhaLogin").val(); ;
 
     if (!cnpjEmpresa || !senhaEmpresa) {
         showAlert("Por favor, preencha todos os campos.");
@@ -52,9 +52,9 @@ $('#toggleSenhaLogin').on('click', function() {
         });
 
         if (res.data.success) {
-            // Login bem-sucedido, redireciona para o dashboard
-            console.log(res.data.message, "success");
-            // sessionStorage.setItem(res.data.data['ID_EMPRESA'])
+            
+            sessionStorage.setItem('RAZAO_FANTASIA',res.data.data['RAZAO_FANTASIA']);
+            // Redireciona para a página principal
             window.location.href = "../../views/painelPrincipal/painelPrincipal.php";
         } else {
             // Exibe mensagem de erro

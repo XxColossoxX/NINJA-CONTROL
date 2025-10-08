@@ -1,33 +1,3 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Painel de Funcionários</title>
-
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
-
-    <!-- Axios -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Inputmask -->
-    <script src="https://cdn.jsdelivr.net/npm/inputmask@5.0.8/dist/inputmask.min.js"></script>
-
-    <!-- Ícones -->
-    <link rel="icon" type="image/x-icon" href="../../assets/img/icons/ninja_lock_icon.ico" />
-    <link rel="icon" type="image/png" sizes="192x192" href="assets/img/ninjaLogo.png" />
-    <link rel="icon" type="image/png" sizes="512x512" href="assets/img/ninjaLogo.png" />
-    <link rel="icon" type="image/x-icon" href="assets/img/icons/ninja_lock_icon.ico" />
-
-    <script defer src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.min.js"></script>
-
     <style>
         nav {
             position: fixed;
@@ -155,7 +125,7 @@
 
                 <!-- Nome Centralizado -->
                 <div class="text-base sm:text-xl font-semibold absolute left-1/2 transform -translate-x-1/2">
-                    PAINEL FUNCIONÁRIOS
+                    PAINEL EMPRESA
                 </div>
 
                 <!-- Botão Menu -->

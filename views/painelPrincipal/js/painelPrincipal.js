@@ -5,6 +5,7 @@ const tabela = $("#tblFuncionario tbody");
 
 
 $(document).ready( async function() {
+    loaderM("Carregando Funcionários... Aguarde Por Favor!");
     carregarNomeEmpresa()
 
     Inputmask("999.999.999-99").mask("#inputCpfFuncionario");
@@ -349,14 +350,7 @@ $(document).on("click", "#close-modal-info", function () {
 });
 
 async function carregarNomeEmpresa() {
-    const res = await axios({
-            url: "../../../backend/backend.php",
-            method: "POST",
-            data: {
-                function: "getNomeEmpresa",
-            },
-        });
-    let nomeEmpresa = res.data[0].RAZAO_FANTASIA.toUpperCase();
+    let nomeEmpresa = sessionStorage.getItem("RAZAO_FANTASIA");
     let divBemVindo = $("#bemVindo");
     let conteudo = `
     <div id="welcome-message" class="fixed inset-0 flex items-center justify-center z-50 text-center">
@@ -407,22 +401,9 @@ async function loadFuncionariosEmpresa(){
         await preencheTabela(res);
         $("totalFunc").empty();
         $("#totalFunc").text(res.data.length);
+        loaderM(false);
         return
 }; 
-
-async function verificaLoc(){
-    const res = await axios({
-        url: "../../../backend/backend.php",
-        method: "POST",
-        data: {
-            function: "getLocEmpresa",
-        },
-    });
-    console.log(res);
-    if(res.data[0].LOC_EMPRESA === null || res.data[0].LOC_EMPRESA === ""){
-        showAlert("Por favor, defina a localização da empresa em Dados Empresa.", "warning");
-    }
-}
 
 // FRONT-END
 $(document).ready(function () {

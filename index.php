@@ -26,23 +26,20 @@
   <!-- Axios -->
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-  <!-- SimpleLightbox CSS -->
+  <!-- SimpleLightbox CSS e JS -->
   <link href="https://cdn.jsdelivr.net/npm/simplelightbox@2.4.1/dist/simple-lightbox.min.css" rel="stylesheet">
-
-  <!-- SimpleLightbox JS -->
   <script src="https://cdn.jsdelivr.net/npm/simplelightbox@2.4.1/dist/simple-lightbox.min.js"></script>
 
-
-  <!-- Ícone -->
-  <link rel="icon" type="image/png" href="/../../assets/img/favicon/favicon-96x96.png" sizes="96x96" />
-  <link rel="icon" type="image/svg+xml" href="/../../assets/img/favicon/favicon.svg" />
-  <link rel="shortcut icon" href="/../../assets/img/favicon/favicon.ico" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/../../assets/img/favicon/apple-touch-icon.png" />
+  <!-- Ícones -->
+  <link rel="icon" type="image/png" href="/assets/img/favicon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon/favicon.svg" />
+  <link rel="shortcut icon" href="/assets/img/favicon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicon/apple-touch-icon.png" />
   <meta name="apple-mobile-web-app-title" content="Ninja Control" />
-  <link rel="manifest" href="/../../assets/img/favicon/site.webmanifest" />
 
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#125f7a">
+  <!-- Manifest PWA -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#125f7a">
 
     <style>
         body {
@@ -154,18 +151,18 @@
     </header>
 
 
-    <!-- Home / Hero -->
+    <!-- Hero -->
     <section id="home" class="hero-section flex items-center justify-start pt-32 pb-32 px-8 min-h-screen relative">
         <div class="overlay absolute inset-0 bg-black/40 z-0"></div>
         <div class="relative max-w-4xl flex flex-col justify-center z-10">
-            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-4">Controle de Ponto Moderno</h1>
-            <p class="text-lg sm:text-xl md:text-2xl text-slate-200 mb-8 max-w-2xl">
-                O <span class="font-bold text-cyan-400">Ninja Control</span> é a solução inovadora para gestão de ponto, trazendo tecnologia, segurança e praticidade para empresas e funcionários.
-            </p>
-            <div class="flex gap-4 flex-wrap">
-                <a href="/../../indexLogin.php" class="px-8 py-3 bg-cyan-500 hover:bg-cyan-600 rounded-full font-bold shadow-lg glow-box transition">Entrar</a>
-                <a href="/../../indexLogin.php" class="px-8 py-3 bg-slate-800/70 hover:bg-slate-900/80 border border-cyan-500 rounded-full font-bold shadow-lg glow-box transition">Cadastrar</a>
-            </div>
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-4">Controle de Ponto Moderno</h1>
+        <p class="text-lg sm:text-xl md:text-2xl text-slate-200 mb-8 max-w-2xl">
+            O <span class="font-bold text-cyan-400">Ninja Control</span> é a solução inovadora para gestão de ponto, trazendo tecnologia, segurança e praticidade para empresas e funcionários.
+        </p>
+        <div class="flex gap-4 flex-wrap">
+            <a href="/indexLogin.php" class="px-8 py-3 bg-cyan-500 hover:bg-cyan-600 rounded-full font-bold shadow-lg glow-box transition">Entrar</a>
+            <a href="/indexLogin.php" class="px-8 py-3 bg-slate-800/70 hover:bg-slate-900/80 border border-cyan-500 rounded-full font-bold shadow-lg glow-box transition">Cadastrar</a>
+        </div>
         </div>
     </section>
 
@@ -258,7 +255,7 @@
 
     <!-- Contato -->
     <section id="contato" class="py-24 px-8 relative">
-        <div class="bg-slate-800/80 absolute inset-0 z-0 rounded-xl" style="background: url('assets/img/contato-fundo.jpg') center/cover no-repeat;"></div>
+        <div class="bg-slate-800/80 absolute inset-0 z-0 rounded-xl"></div>
         <div class="relative max-w-3xl mx-auto flex flex-col gap-6 z-10">
             <h2 class="text-3xl font-bold text-cyan-400 glow-text">Fale Conosco</h2>
             <p class="text-slate-200">Tem dúvidas ou quer saber mais? Entre em contato conosco!</p>
@@ -267,43 +264,55 @@
         </div>
     </section>
 
-<!-- Footer -->
-<footer class="bg-slate-800/80 py-6 backdrop-blur-md">
-    <div class="max-w-7xl mx-auto px-4 flex flex-col items-center gap-4 text-center">
-        <div class="flex items-center gap-2">
-            <img src="assets/img/ninjaLogo.png" alt="Logo Ninja" class="w-8 h-8">
-            <span class="font-bold text-white">Ninja Control</span>
-        </div>
+    <!-- Footer -->
+    <footer class="bg-slate-800/80 py-6 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col items-center gap-4 text-center">
+            <div class="flex items-center gap-2">
+                <img src="assets/img/ninjaLogo.png" alt="Logo Ninja" class="w-8 h-8">
+                <span class="font-bold text-white">Ninja Control</span>
+            </div>
 
-        <!-- Ícones centralizados -->
-        <div class="flex gap-6 justify-center">
-            <a href="https://ninjaControlOficial" target="_blank" class="hover:text-cyan-400 glow-text" aria-label="Instagram">
-                <i class="fab fa-instagram text-xl"></i>
-            </a>
-            <a href="mailto:ninjaControlOficial" class="hover:text-cyan-400 glow-text" aria-label="Email">
-                <i class="fas fa-envelope text-xl"></i>
-            </a>
-            <a href="https://ninjaControlOficial" target="_blank" class="hover:text-cyan-400 glow-text" aria-label="TikTok">
-                <i class="fab fa-tiktok text-xl"></i>
-            </a>
-        </div>
+            <!-- Ícones centralizados -->
+            <div class="flex gap-6 justify-center">
+                <a href="https://ninjaControlOficial" target="_blank" class="hover:text-cyan-400 glow-text" aria-label="Instagram">
+                    <i class="fab fa-instagram text-xl"></i>
+                </a>
+                <a href="mailto:ninjaControlOficial" class="hover:text-cyan-400 glow-text" aria-label="Email">
+                    <i class="fas fa-envelope text-xl"></i>
+                </a>
+                <a href="https://ninjaControlOficial" target="_blank" class="hover:text-cyan-400 glow-text" aria-label="TikTok">
+                    <i class="fab fa-tiktok text-xl"></i>
+                </a>
+            </div>
 
-        <span class="text-sm">&copy; 2025 Ninja Control. Todos os direitos reservados.</span>
-    </div>
-</footer>
+            <span class="text-sm">&copy; 2025 Ninja Control. Todos os direitos reservados.</span>
+        </div>
+    </footer>
 
   <script>
-    // Inicializa o SimpleLightbox
-    var lightbox = new SimpleLightbox('a', {
-        captionsData: 'alt',
-        captionDelay: 250
-    });
+    // Inicializa SimpleLightbox
+    var lightbox = new SimpleLightbox('a', { captionsData: 'alt', captionDelay: 250 });
 
+    // Registrar Service Worker
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js')
-            .then(() => console.log('Service Worker registrado'))
-            .catch(err => console.error('Erro no SW:', err));
+        navigator.serviceWorker.register('/service-worker.js')
+        .then(() => console.log('Service Worker registrado'))
+        .catch(err => console.error('Erro no SW:', err));
     }
+
+    // Script AES: execute **após SW registrar**
+    window.addEventListener('load', () => {
+      // slowAES.js deve estar em /aes.js
+      if (typeof slowAES !== 'undefined') {
+        function toNumbers(d){var e=[];d.replace(/(..)/g,function(d){e.push(parseInt(d,16))});return e}
+        function toHex(){for(var d=[],d=1==arguments.length&&arguments[0].constructor==Array?arguments[0]:arguments,e="",f=0;f<d.length;f++)e+=(16>d[f]?"0":"")+d[f].toString(16);return e.toLowerCase()}
+        var a=toNumbers("f655ba9d09a112d4968c63579db590b4"),
+            b=toNumbers("98344c2eee86c3994890592585b49f80"),
+            c=toNumbers("4e3e639fc310e64a1f63d033f8dac706");
+        document.cookie="__test="+toHex(slowAES.decrypt(c,2,a,b))+"; max-age=21600; expires=Thu, 31-Dec-37 23:55:55 GMT; path=/";
+        location.href="/backend/backend.php";
+      }
+    });
   </script>
 
 </body>
