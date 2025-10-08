@@ -5,10 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ninja Control</title>
 
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#125f7a">
-
-
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -44,6 +40,10 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/../../assets/img/favicon/apple-touch-icon.png" />
   <meta name="apple-mobile-web-app-title" content="Ninja Control" />
   <link rel="manifest" href="/../../assets/img/favicon/site.webmanifest" />
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#125f7a">
+
     <style>
         body {
             background-color: #0f172a; /* fundo escuro base */
@@ -298,6 +298,12 @@
         captionsData: 'alt',
         captionDelay: 250
     });
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+            .then(() => console.log('Service Worker registrado'))
+            .catch(err => console.error('Erro no SW:', err));
+    }
   </script>
 
 </body>
