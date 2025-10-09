@@ -371,7 +371,7 @@ async function carregarNomeEmpresa() {
                     <span id="welcome-nome">${nomeEmpresa}</span>!
                 </h1>
             </div>
-        </div>`;
+        </div>`;    
 
     divBemVindo.append(conteudo);
     // Animação de entrada

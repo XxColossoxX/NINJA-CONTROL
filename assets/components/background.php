@@ -32,7 +32,11 @@
   <link rel="shortcut icon" href="/assets/img/favicon/favicon.ico" />
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicon/apple-touch-icon.png" />
   <meta name="apple-mobile-web-app-title" content="Ninja Control" />
-  <link rel="manifest" href="/assets/img/favicon/site.webmanifest" />
+  <link rel="manifest" href="/assets/manifest.json" />
+  <meta name="theme-color" content="#125f7a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
   <style>
     /* Gradiente principal de fundo com ofuscamento preto */
     body {
@@ -167,6 +171,21 @@
             }
         };
     });
+  </script>
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((registration) => {
+            console.log('SW registrado com sucesso:', registration);
+          })
+          .catch((error) => {
+            console.log('Falha no registro do SW:', error);
+          });
+      });
+    }
   </script>
 
 </body>

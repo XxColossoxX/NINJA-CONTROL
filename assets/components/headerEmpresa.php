@@ -20,11 +20,16 @@
     <!-- Inputmask -->
     <script src="https://cdn.jsdelivr.net/npm/inputmask@5.0.8/dist/inputmask.min.js"></script>
 
-    <!-- Ícones -->
-    <link rel="icon" type="image/x-icon" href="../../assets/img/icons/ninja_lock_icon.ico" />
-    <link rel="icon" type="image/png" sizes="192x192" href="assets/img/ninjaLogo.png" />
-    <link rel="icon" type="image/png" sizes="512x512" href="assets/img/ninjaLogo.png" />
-    <link rel="icon" type="image/x-icon" href="assets/img/icons/ninja_lock_icon.ico" />
+    <!-- Ícones e PWA -->
+    <link rel="manifest" href="/assets/manifest.json">
+    <meta name="theme-color" content="#125f7a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" type="image/png" href="/assets/img/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/favicon/icon192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/img/favicon/icon512.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicon/apple-touch-icon.png">
 
     <script defer src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.min.js"></script>
 
@@ -390,6 +395,21 @@
                 $('#config-overlay, #config-panel').fadeOut(200);
             });
         });
+    </script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((registration) => {
+                        console.log('SW registrado com sucesso:', registration);
+                    })
+                    .catch((error) => {
+                        console.log('Falha no registro do SW:', error);
+                    });
+            });
+        }
     </script>
 </body>
 </html>

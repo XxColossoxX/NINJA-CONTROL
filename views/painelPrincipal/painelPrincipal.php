@@ -37,7 +37,7 @@ $empresaId = $_SESSION['empresa_id'];
       </button>
 
       <!-- Botão mobile -->
-      <button id="btnAddMobile" class="sm:hidden bg-cyan-500 hover:bg-cyan-700 text-white p-2 rounded-full transition">
+      <button id="btnAddMobile" class="sm:hidden bg-cyan-500 text-white p-2 rounded-full transition">
         <i class="fas fa-user-plus text-lg"></i>
       </button>
     </div>

@@ -78,7 +78,7 @@ require_once('../../assets/components/background.php')
                 <i class="fas fa-arrow-right ml-2"></i>
             </button>
 
-            <a href="../../../indexLogin.php"
+            <a href="../../../views/loginEmpresa/loginEmpresa.php"
                 class="w-full bg-transparent border border-gray-400 text-gray-300 py-2.5 sm:py-3 rounded-lg text-center font-semibold hover:bg-gray-300/20 transition-all duration-300 hover:scale-[1.03] flex items-center justify-center">
                 <strong>Voltar</strong>
                 <i class="fas fa-arrow-left ml-2"></i>

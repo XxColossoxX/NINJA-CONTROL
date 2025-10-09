@@ -92,8 +92,11 @@
     </style>
 
   <!-- Manifest PWA -->
-<link rel="manifest" href="/manifest.webmanifest.json">
+<link rel="manifest" href="/assets/manifest.json">
 <meta name="theme-color" content="#125f7a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
 </head>
 
 
@@ -350,6 +353,21 @@
             document.body.classList.remove('overflow-hidden');
             }
         });
+  </script>
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((registration) => {
+            console.log('SW registrado com sucesso:', registration);
+          })
+          .catch((error) => {
+            console.log('Falha no registro do SW:', error);
+          });
+      });
+    }
   </script>
 
 </body>

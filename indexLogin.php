@@ -26,12 +26,16 @@ require_once('assets/components/background.php')
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ninja Control</title>
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#0f172a">
-    <link rel="icon" type="image/png" sizes="192x192" href="assets/img/ninjaLogo.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="assets/img/ninjaLogo.png">
-    <link rel="icon" href="/assets/img/icons/ninjaLogo16.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="/assets/img/icons/ninjaLogo16.ico" type="image/x-icon">
+    <link rel="manifest" href="/assets/manifest.json">
+    <meta name="theme-color" content="#125f7a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/favicon/icon192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/img/favicon/icon512.png">
+    <link rel="icon" href="/assets/img/favicon/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/assets/img/favicon/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicon/apple-touch-icon.png">
 
     <style>
         /* Animações de entrada e saída */
@@ -149,6 +153,21 @@ require_once('assets/components/background.php')
                 document.getElementById('login-system').classList.remove('hidden');
             }, 800); // Tempo da animação de saída
         }, 3000); 
+    </script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((registration) => {
+                        console.log('SW registrado com sucesso:', registration);
+                    })
+                    .catch((error) => {
+                        console.log('Falha no registro do SW:', error);
+                    });
+            });
+        }
     </script>
 
 </body>
