@@ -32,13 +32,6 @@ require_once('assets/components/background.php')
     <link rel="icon" type="image/png" sizes="512x512" href="assets/img/ninjaLogo.png">
     <link rel="icon" href="/assets/img/icons/ninjaLogo16.ico" type="image/x-icon">
     <link rel="shortcut icon" href="/assets/img/icons/ninjaLogo16.ico" type="image/x-icon">
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/service-worker.js');
-        });
-      }
-    </script>
 
     <style>
         /* Animações de entrada e saída */
@@ -89,15 +82,19 @@ require_once('assets/components/background.php')
     </style>
 </head>
     <!-- Mensagem de Boas-Vindas -->
-    <div id="welcome-message" class="welcome-message text-center opacity-0 translate-y-10">
-        <p class="text-2xl sm:text-2xl md:text-3xl text-white mb-3">
+    <div id="welcome-message"
+            class="text-center flex flex-col items-center justify-center animate-fadeInUp opacity-0 translate-y-4">
+        
+        <!-- Linha 1: menor e próxima -->
+        <p class="text-lg sm:text-xl md:text-2xl text-white tracking-wider mb-1">
             SEJA BEM-VINDO(A)
         </p>
-        <h1 class="text-3xl sm:text-4xl md:text-5xl text-white font-sans font-bold">
-            <strong>NINJA CONTROL</strong>
+
+        <!-- Linha 2: maior e destaque -->
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white">
+            NINJA CONTROL
         </h1>
     </div>
-
 
     <div id="login-system2"
         class="hidden w-full max-w-sm sm:max-w-md rounded-3xl shadow-2xl relative mx-auto overflow-hidden"

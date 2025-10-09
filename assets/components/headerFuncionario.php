@@ -190,7 +190,7 @@
 
         <!-- Nome Centralizado -->
         <div class="text-xl font-semibold absolute left-1/2 transform -translate-x-1/2">
-            FUNCIONÁRIOS
+            PAINEL FUNCIONÁRIOS
         </div>
 
         <!-- Botão Menu -->
@@ -234,7 +234,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="../../index.php" class="flex items-center gap-2 hover:text-gray-500">
+                    <a href="../../indexLogin.php" class="flex items-center gap-2 hover:text-gray-500">
                         <i class="fas fa-sign-out-alt"></i> LOGOUT
                     </a>
                 </li>

@@ -69,37 +69,37 @@ $empresaId = $_SESSION['empresa_id'];
                     <div>
                         <label class="block text-white text-sm font-bold mb-1" for="name">Nome</label>
                         <input id="inputNomeFuncionario" type="text" placeholder="Digite o nome"
-                            class="w-full shadow border rounded py-2 px-3 text-white focus:outline-none focus:shadow-outline">
+                            class="w-full shadow border rounded py-2 px-3 text-black focus:outline-none focus:shadow-outline">
                     </div>
                     <div>
                         <label class="block text-white text-sm font-bold mb-1" for="cpf">CPF</label>
                         <input id="inputCpfFuncionario" type="text" placeholder="Digite o CPF"
-                            class="w-full shadow border rounded py-2 px-3 text-white focus:outline-none focus:shadow-outline">
+                            class="w-full shadow border rounded py-2 px-3 text-black focus:outline-none focus:shadow-outline">
                     </div>
                     <div>
                         <label class="block text-white text-sm font-bold mb-1" for="rg">RG</label>
                         <input id="inputRgFuncionario" type="text" placeholder="Digite o RG"
-                            class="w-full shadow border rounded py-2 px-3 text-white focus:outline-none focus:shadow-outline">
+                            class="w-full shadow border rounded py-2 px-3 text-black focus:outline-none focus:shadow-outline">
                     </div>
                     <div>
                         <label class="block text-white text-sm font-bold mb-1" for="celular">Celular</label>
                         <input id="inputCelularFuncionario" type="text" placeholder="Digite o Celular"
-                            class="w-full shadow border rounded py-2 px-3 text-white focus:outline-none focus:shadow-outline">
+                            class="w-full shadow border rounded py-2 px-3 text-black focus:outline-none focus:shadow-outline">
                     </div>
                     <div>
                         <label class="block text-white text-sm font-bold mb-1" for="email">Email</label>
                         <input id="inputEmailFuncionario" type="text" placeholder="Digite o Email"
-                            class="w-full shadow border rounded py-2 px-3 text-white focus:outline-none focus:shadow-outline">
+                            class="w-full shadow border rounded py-2 px-3 text-black focus:outline-none focus:shadow-outline">
                     </div>
                     <div>
                         <label class="block text-white text-sm font-bold mb-1" for="password">Senha Acesso</label>
                         <input id="inputSenhaFuncionario" type="password" placeholder="Digite a senha"
-                            class="w-full shadow border rounded py-2 px-3 text-white focus:outline-none focus:shadow-outline">
+                            class="w-full shadow border rounded py-2 px-3 text-black focus:outline-none focus:shadow-outline">
                     </div>
                     <div>
                         <label class="block text-white text-sm font-bold mb-1" for="nascimento">Data de Nascimento</label>
                         <input id="inputDataNascFuncionario" type="date"
-                            class="w-full shadow border rounded py-2 px-3 text-white focus:outline-none focus:shadow-outline">
+                            class="w-full shadow border rounded py-2 px-3 text-black focus:outline-none focus:shadow-outline">
                     </div>
                 </div>
                 <div class="flex justify-end mt-4">

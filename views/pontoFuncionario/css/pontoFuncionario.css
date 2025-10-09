@@ -246,11 +246,11 @@ body {
     z-index: 3;
 }
 
-.circle-ring {
+.circlee-ring {
     width: 200px;
     height: 200px;
     border-radius: 50%;
-    box-shadow: 0 0 0 4px #14b8a6 inset;
+    box-shadow: 0 0 0 4px #98d7d8;
     animation: pulse-ring 2.5s infinite;
     background: transparent;
 }

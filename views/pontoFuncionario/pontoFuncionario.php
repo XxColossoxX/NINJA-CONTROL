@@ -25,6 +25,62 @@ require_once('../../assets/components/headerFuncionario.php');
 
 ?>
 
+<!-- Modal de Bater Ponto -->
+<div id="modal-bater-ponto" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center">
+    <div class="w-full max-w-md sm:max-w-lg bg-slate-900 rounded-xl shadow-lg p-4 relative overflow-y-auto max-h-[90vh]">
+        
+        <!-- Botão Fechar -->
+        <button id="btnCloseModal" class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl font-bold transition" aria-label="Fechar Modal">
+            &times;
+        </button>
+        
+        <h2 class="text-xl font-bold text-white text-center mb-4 flex items-center justify-center gap-2">
+            <img src="/../../assets/img/faceidIcon.png" class="w-8 h-8 icon-color" alt="Ícone FaceID" />
+            Registro de Ponto
+        </h2>
+
+        <!-- Abas -->
+        <div class="flex border-b mb-4">
+            <button class="tab-button text-cyan-500 font-bold px-4 py-2 border-transparent hover:border-cyan-700 hover:text-white" data-tab="info-tab">
+                <i class="fas fa-user mr-2 text-cyan-500"></i><span class="text-cyan-500 font-bold">Informações</span>
+            </button>
+        </div>
+
+        <!-- Conteúdo das Abas -->
+        <div id="info-tab" class="tab-content mb-10">
+            <div class="grid grid-cols-2 gap-4 text-sm text-gray-700">
+                <div class="text-white font-bold"><strong><i class="fas fa-id-badge mr-2 text-cyan-400"></i>Nome:</strong> <span id="tab-nome"></span></div>
+                <div class="text-white font-bold"><strong><i class="fas fa-id-card mr-2 text-cyan-400"></i>RG:</strong> <span id="tab-rg"></span></div>
+                <div class="text-white font-bold"><strong><i class="fas fa-address-card mr-2 text-cyan-400"></i>CPF:</strong> <span id="tab-cpf"></span></div>
+                <div class="text-white font-bold"><strong><i class="fas fa-calendar-alt mr-2 text-cyan-400"></i>Nascimento:</strong> <span id="tab-nascimento"></span></div>
+            </div>
+        </div>
+
+        <div class="camera-container">
+            <div id="camera-container" class="mt-20">
+                <video id="video-camera" autoplay muted playsinline class="video-feed"></video>
+            </div>            
+            <div class="overlay">
+                <div class="circlee-ring"></div>
+            </div>
+        </div>
+
+        <!-- Botão bater ponto -->
+        <div class="flex justify-center mt-6 mb-4">
+            <button id="btn-efetuar-ponto" 
+                class="relative bg-cyan-500/90  text-slate-900 font-bold 
+                    py-2 px-3.5 sm:py-3 sm:px-6 rounded-lg text-sm sm:text-lg 
+                    shadow-[0_0_10px_#00ffff40] sm:shadow-[0_0_15px_#00ffff40] 
+                    transition-all 
+                    flex items-center gap-1 sm:gap-2 text-white">
+                <img src="/../../assets/img/faceidIcon.png" 
+                    class="w-5 h-5 sm:w-8 sm:h-8 icon-color" alt="Ícone FaceID" />
+                <span class="text-white">BATER PONTO</span>
+            </button>
+        </div>
+    </div>
+</div>
+
 <div class="min-h-screen flex flex-col items-center justify-center px-4">
     <div class="w-full max-w-6xl bg-[#0d1628]/90 backdrop-blur-md border border-cyan-500/20 rounded-2xl shadow-[0_0_20px_#00ffff20] p-0 mt-4 flex flex-col md:flex-row">
 
@@ -98,7 +154,7 @@ require_once('../../assets/components/headerFuncionario.php');
                     </div>
 
                     <!-- Botão fechar -->
-                    <button id="btn-fechar-modal-mobile" class="mt-6 w-full bg-cyan-500/90 text-white font-bold py-3 rounded-lg shadow-[0_0_20px_#00ffff40] transition flex items-center justify-center gap-2 hover:bg-cyan-400">
+                    <button id="btn-fechar-modal-mobile" class="mt-6 w-full bg-cyan-500/90 text-white font-bold py-3 rounded-lg shadow-[0_0_20px_#00ffff40] transition flex items-center justify-center gap-2">
                         <i class="fas fa-times"></i> Fechar
                     </button>
                 </div>
@@ -221,7 +277,6 @@ require_once('../../assets/components/headerFuncionario.php');
                 <button id="btnBaterPonto" 
                     class="relative bg-cyan-500/90 text-slate-900 font-bold py-3 px-6 rounded-lg text-base
                         shadow-[0_0_15px_#00ffff40] transition-all 
-                        md:hover:bg-cyan-400 md:hover:shadow-[0_0_25px_#00ffff80] md:hover:scale-105
                         flex items-center gap-3 text-white">
                     <img src="/../../assets/img/faceidIcon.png" class="w-7 h-7 icon-color" alt="Ícone FaceID" />
                     <span class="text-white">BATER PONTO</span>
@@ -299,6 +354,9 @@ require_once('../../assets/components/headerFuncionario.php');
         });
         $('#btn-fechar-modal, #btn-fechar-modal-mobile').on('click', function() {
             $('#modal-dados-funcionario').addClass('hidden');
+        });
+        $('#btnCloseModal, #btn-fechar-modal-mobile').on('click', function() {
+            $('#modal-bater-ponto').addClass('hidden');
         });
         $('#btn-menu-mobile').on('click', function(e) {
             e.stopPropagation();
