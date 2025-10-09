@@ -526,16 +526,6 @@
         }
       }
       
-      // Registrar service worker
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js')
-          .then((registration) => {
-            console.log('SW registrado com sucesso:', registration);
-          })
-          .catch((error) => {
-            console.log('Falha no registro do SW:', error);
-          });
-      }
     });
   </script>
 
