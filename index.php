@@ -76,6 +76,37 @@
             box-shadow: 0 0 12px #00ffff88, 0 4px 20px #00ffff44;
         }
 
+        /* Animações para modal PWA */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOutUp {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+        }
+
+        .animate-fadeInDown {
+            animation: fadeInDown 0.5s ease-out forwards;
+        }
+
+        .animate-fadeOutUp {
+            animation: fadeOutUp 0.3s ease-in forwards;
+        }
+
         .hero-section {
             background-image: url('../../assets/img/saibaFotoMobi.png'); /* Mobile padrão */
             background-size: cover;
@@ -99,6 +130,59 @@
 <meta name="mobile-web-app-capable" content="yes">
 </head>
 
+
+<!-- Modal de Instalação PWA -->
+<div id="installModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 transition-all">
+  <div class="bg-slate-900/95 backdrop-blur-md rounded-2xl p-8 max-w-md mx-4 border border-cyan-500/30 shadow-2xl">
+    <!-- Cabeçalho -->
+    <div class="text-center mb-6">
+      <div class="w-16 h-16 bg-cyan-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+        <i class="fas fa-download text-cyan-400 text-2xl"></i>
+      </div>
+      <h3 class="text-2xl font-bold text-white mb-2">Instalar Ninja Control</h3>
+      <p class="text-slate-300 text-sm">Instale nosso app para uma experiência melhor!</p>
+    </div>
+
+    <!-- Benefícios -->
+    <div class="space-y-3 mb-6">
+      <div class="flex items-center text-sm text-slate-300">
+        <i class="fas fa-mobile-alt text-cyan-400 mr-3"></i>
+        <span>Acesso rápido pelo celular</span>
+      </div>
+      <div class="flex items-center text-sm text-slate-300">
+        <i class="fas fa-wifi-slash text-cyan-400 mr-3"></i>
+        <span>Funciona offline</span>
+      </div>
+      <div class="flex items-center text-sm text-slate-300">
+        <i class="fas fa-bolt text-cyan-400 mr-3"></i>
+        <span>Carregamento mais rápido</span>
+      </div>
+      <div class="flex items-center text-sm text-slate-300">
+        <i class="fas fa-bell text-cyan-400 mr-3"></i>
+        <span>Notificações importantes</span>
+      </div>
+    </div>
+
+    <!-- Botões -->
+    <div class="flex gap-3">
+      <button onclick="installPWA()" 
+              class="flex-1 bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 glow-box">
+        <i class="fas fa-download mr-2"></i>
+        Instalar
+      </button>
+      <button onclick="dismissInstallPrompt()" 
+              class="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300">
+        <i class="fas fa-times mr-2"></i>
+        Agora não
+      </button>
+    </div>
+
+    <!-- Informação adicional -->
+    <p class="text-xs text-slate-400 text-center mt-4">
+      Você pode instalar depois pelo menu do navegador
+    </p>
+  </div>
+</div>
 
 <!-- Modal de Imagem -->
 <div id="imageModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 transition-all">
@@ -357,8 +441,93 @@
 
   <!-- Service Worker Registration -->
   <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
+    let deferredPrompt;
+    let isPWAInstalled = false;
+
+    // Verificar se já está instalado como PWA
+    window.addEventListener('beforeinstallprompt', (e) => {
+      console.log('PWA pode ser instalado');
+      deferredPrompt = e;
+      showInstallPrompt();
+    });
+
+    // Verificar se já está rodando como PWA
+    window.addEventListener('appinstalled', () => {
+      console.log('PWA foi instalado');
+      isPWAInstalled = true;
+      hideInstallPrompt();
+    });
+
+    // Verificar se está rodando em modo standalone (PWA)
+    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+      console.log('Rodando como PWA');
+      isPWAInstalled = true;
+    }
+
+    function showInstallPrompt() {
+      if (isPWAInstalled) return;
+      
+      // Aguardar 3 segundos antes de mostrar o popup
+      setTimeout(() => {
+        const installModal = document.getElementById('installModal');
+        if (installModal && !isPWAInstalled) {
+          installModal.classList.remove('hidden');
+          installModal.classList.add('animate-fadeInDown');
+        }
+      }, 3000);
+    }
+
+    function hideInstallPrompt() {
+      const installModal = document.getElementById('installModal');
+      if (installModal) {
+        installModal.classList.add('animate-fadeOutUp');
+        setTimeout(() => {
+          installModal.classList.add('hidden');
+        }, 300);
+      }
+    }
+
+    async function installPWA() {
+      if (!deferredPrompt) {
+        console.log('PWA não pode ser instalado');
+        return;
+      }
+
+      // Mostrar o prompt de instalação
+      deferredPrompt.prompt();
+      
+      // Aguardar a resposta do usuário
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`PWA instalação: ${outcome}`);
+      
+      // Limpar o prompt
+      deferredPrompt = null;
+      
+      // Esconder o modal
+      hideInstallPrompt();
+    }
+
+    function dismissInstallPrompt() {
+      hideInstallPrompt();
+      // Não mostrar novamente por 24 horas
+      localStorage.setItem('pwa-install-dismissed', Date.now());
+    }
+
+    // Verificar se o usuário já dispensou o prompt recentemente
+    window.addEventListener('load', () => {
+      const dismissed = localStorage.getItem('pwa-install-dismissed');
+      if (dismissed) {
+        const timeDiff = Date.now() - parseInt(dismissed);
+        const hoursDiff = timeDiff / (1000 * 60 * 60);
+        
+        if (hoursDiff < 24) {
+          console.log('PWA prompt dispensado recentemente');
+          return;
+        }
+      }
+      
+      // Registrar service worker
+      if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js')
           .then((registration) => {
             console.log('SW registrado com sucesso:', registration);
@@ -366,8 +535,8 @@
           .catch((error) => {
             console.log('Falha no registro do SW:', error);
           });
-      });
-    }
+      }
+    });
   </script>
 
 </body>
