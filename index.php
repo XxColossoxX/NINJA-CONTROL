@@ -275,7 +275,7 @@
                 Controle de Ponto Moderno
             </h1>
             <p class="text-lg sm:text-xl md:text-2xl text-slate-200 mb-8 max-w-2xl">
-                O <span class="font-bold text-cyan-400">Ninja Control</span> é a solução inovadora para gestão de ponto.
+                O <span class="font-bold text-cyan-400">Ninja Control</span> é uma solução completa e moderna para controle de ponto empresarial, desenvolvida com foco em <span class="font-bold text-cyan-400">usabilidade</span>, <span class="font-bold text-cyan-400">segurança</span> e <span class="font-bold text-cyan-400">performace</span>. O sistema oferece uma experiência de usuário excepcional tanto em dispositivos móveis quanto em desktop, com funcionalidades avançadas de reconhecimento facial e interface responsiva.
             </p>
             <div class="flex gap-4 flex-wrap">
                 <a href="/indexLogin.php" 
@@ -467,14 +467,14 @@
     function showInstallPrompt() {
       if (isPWAInstalled) return;
       
-      // Aguardar 3 segundos antes de mostrar o popup
+      // Aguardar 5 segundos antes de mostrar o popup
       setTimeout(() => {
         const installModal = document.getElementById('installModal');
         if (installModal && !isPWAInstalled) {
           installModal.classList.remove('hidden');
           installModal.classList.add('animate-fadeInDown');
         }
-      }, 3000);
+      }, 5000);
     }
 
     function hideInstallPrompt() {
@@ -513,18 +513,88 @@
       localStorage.setItem('pwa-install-dismissed', Date.now());
     }
 
+    // Função para testar o modal (chamada via console)
+    function testModal() {
+      console.log('🧪 Testando modal manualmente');
+      const installModal = document.getElementById('installModal');
+      if (installModal) {
+        installModal.classList.remove('hidden');
+        installModal.classList.add('animate-fadeInDown');
+        console.log('✅ Modal mostrado via teste');
+      } else {
+        console.log('❌ Modal não encontrado');
+      }
+    }
+
+    // Função para limpar localStorage (chamada via console)
+    function clearPWAStorage() {
+      localStorage.removeItem('pwa-install-dismissed');
+      console.log('🗑️ localStorage limpo - modal aparecerá novamente');
+    }
+
+    // Tornar funções globais para teste
+    window.testModal = testModal;
+    window.clearPWAStorage = clearPWAStorage;
+
     // Verificar se o usuário já dispensou o prompt recentemente
     window.addEventListener('load', () => {
+      console.log('🚀 Página carregada - verificando PWA');
+      console.log('🔍 isPWAInstalled:', isPWAInstalled);
+      
+      // Verificar se PWA já foi instalado
+      if (isPWAInstalled) {
+        console.log('✅ PWA já instalado - não mostrando prompt');
+        return;
+      }
+
+      // Verificar se foi dispensado recentemente
       const dismissed = localStorage.getItem('pwa-install-dismissed');
       if (dismissed) {
         const timeDiff = Date.now() - parseInt(dismissed);
         const hoursDiff = timeDiff / (1000 * 60 * 60);
         
+        console.log('⏰ Horas desde último dismiss:', hoursDiff.toFixed(2));
+        
         if (hoursDiff < 24) {
-          console.log('PWA prompt dispensado recentemente');
+          console.log('⏭️ PWA prompt dispensado recentemente - não mostrando');
           return;
         }
       }
+
+      // Sempre mostrar o prompt após 5 segundos se não foi instalado
+      console.log('⏱️ PWA não instalado - preparando para mostrar prompt em 5 segundos');
+      
+      // Contador visual
+      let countdown = 5;
+      const countdownInterval = setInterval(() => {
+        console.log(`⏳ Contador: ${countdown} segundos`);
+        countdown--;
+        if (countdown <= 0) {
+          clearInterval(countdownInterval);
+        }
+      }, 1000);
+      
+      setTimeout(() => {
+        console.log('🎯 Executando timeout - tentando mostrar modal');
+        const installModal = document.getElementById('installModal');
+        console.log('🔍 Modal encontrado:', !!installModal);
+        console.log('🔍 isPWAInstalled no timeout:', isPWAInstalled);
+        
+        if (installModal && !isPWAInstalled) {
+          console.log('✅ Mostrando modal de instalação PWA');
+          installModal.classList.remove('hidden');
+          installModal.classList.add('animate-fadeInDown');
+          console.log('✅ Modal deve estar visível agora');
+        } else {
+          console.log('❌ Modal não encontrado ou PWA já instalado');
+          if (!installModal) {
+            console.log('❌ Modal não encontrado no DOM');
+          }
+          if (isPWAInstalled) {
+            console.log('❌ PWA já instalado');
+          }
+        }
+      }, 5000);
       
     });
   </script>
