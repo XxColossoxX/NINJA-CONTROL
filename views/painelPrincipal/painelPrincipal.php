@@ -10,9 +10,19 @@ require_once('../../assets/components/background.php');
 $empresaId = $_SESSION['empresa_id'];
 ?>
 
-<!-- Boas-vindas (se necessário via animação) -->
-<div id="welcome-message" class="mt-6 text-green-500 font-bold hidden">
-    Bem-vindo, <span id="welcome-nome"></span>!
+<!-- Mensagem de Boas-Vindas -->
+<div id="welcome-message"
+        class="text-center flex flex-col items-center justify-center animate-fadeInUp opacity-0 translate-y-4">
+    
+    <!-- Linha 1: menor e próxima -->
+    <p class="text-lg sm:text-xl md:text-2xl text-white tracking-wider mb-1">
+        SEJA BEM-VINDO(A)
+    </p>
+
+    <!-- Linha 2: maior e destaque -->
+    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white">
+        <span id="welcome-nome"></span>!
+    </h1>
 </div>
 
 <div class="flex justify-center items-start min-h-[calc(100vh-64px)] pt-20 px-4">

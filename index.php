@@ -95,6 +95,24 @@
 <link rel="manifest" href="/manifest.webmanifest.json">
 <meta name="theme-color" content="#125f7a">
 </head>
+
+
+<!-- Modal de Imagem -->
+<div id="imageModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 transition-all">
+  <div class="relative max-w-4xl w-[90%]">
+      <!-- Botão de Fechar -->
+      <button id="closeModal" class="absolute -top-5 -right-5 bg-cyan-500 hover:bg-cyan-600 text-white rounded-full p-2 shadow-lg transition-transform hover:scale-110">
+          <i class="fas fa-times"></i>
+      </button>
+
+      <!-- Imagem dentro do modal -->
+      <div class="rounded-2xl overflow-hidden border-4 border-cyan-500/60 shadow-2xl">
+          <img id="modalImage" src="" alt="Imagem Ampliada"
+               class="w-full object-contain max-h-[85vh] bg-slate-900">
+      </div>
+  </div>
+</div>
+
 <body class="font-sans text-white">
 
     <!-- Header com Menu Hamburger -->
@@ -155,20 +173,35 @@
 
 
     <!-- Hero -->
-    <section id="home" class="hero-section flex items-center justify-start pt-32 pb-32 px-8 min-h-screen relative">
-        <div class="overlay absolute inset-0 bg-black/40 z-0"></div>
-        <div class="relative max-w-4xl flex flex-col justify-center z-10">
-        <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-4">Controle de Ponto Moderno</h1>
-        <p class="text-lg sm:text-xl md:text-2xl text-slate-200 mb-8 max-w-2xl">
-            O <span class="font-bold text-cyan-400">Ninja Control</span> é a solução inovadora para gestão de ponto.
-        </p>
-        <div class="flex gap-4 flex-wrap">
-            <a href="/indexLogin.php" class="px-8 py-3 bg-cyan-500 hover:bg-cyan-600 rounded-full font-bold shadow-lg glow-box transition">Entrar</a>
-            <a href="/indexLogin.php" class="px-8 py-3 bg-slate-800/70 hover:bg-slate-900/80 border border-cyan-500 rounded-full font-bold shadow-lg glow-box transition">Cadastrar</a>
+    <section id="home" 
+        class="hero-section flex items-center justify-start pt-32 pb-32 px-8 min-h-screen relative">
+
+        <!-- Fundo ofuscado e imagem -->
+        <div class="absolute inset-0">
+            <div class="absolute inset-0 bg-black/60"></div> 
+            <!-- overlay mais escuro -->
         </div>
+
+        <!-- Conteúdo -->
+        <div class="relative max-w-4xl flex flex-col justify-center z-10">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-4 drop-shadow-lg">
+                Controle de Ponto Moderno
+            </h1>
+            <p class="text-lg sm:text-xl md:text-2xl text-slate-200 mb-8 max-w-2xl">
+                O <span class="font-bold text-cyan-400">Ninja Control</span> é a solução inovadora para gestão de ponto.
+            </p>
+            <div class="flex gap-4 flex-wrap">
+                <a href="/indexLogin.php" 
+                    class="px-8 py-3 bg-cyan-500 hover:bg-cyan-600 rounded-full font-bold shadow-lg glow-box transition">
+                    Entrar
+                </a>
+                <a href="/indexLogin.php" 
+                    class="px-8 py-3 bg-slate-800/70 hover:bg-slate-900/80 border border-cyan-500 rounded-full font-bold shadow-lg glow-box transition">
+                    Cadastrar
+                </a>
+            </div>
         </div>
     </section>
-
 
     <!-- Seção Sobre Nós -->
     <section id="sobre" class="py-24 px-8 relative">
@@ -206,29 +239,26 @@
         </div>
     </section>
 
-  <!-- Seção de Prints do Sistema -->
-  <section class="py-24 px-6 bg-slate-900/90">
-      <div class="max-w-6xl mx-auto text-center mb-12">
-          <h2 class="text-3xl sm:text-4xl font-bold text-cyan-400 glow-text mb-4">Veja o Ninja Control em Ação</h2>
-          <p class="text-slate-300 text-lg">Confira abaixo algumas telas do nosso sistema em funcionamento.</p>
-      </div>
+    <!-- Seção de Prints do Sistema -->
+    <section class="py-24 px-6 bg-slate-900/90">
+        <div class="max-w-6xl mx-auto text-center mb-12">
+            <h2 class="text-3xl sm:text-4xl font-bold text-cyan-400 glow-text mb-4">Veja o Ninja Control em Ação</h2>
+            <p class="text-slate-300 text-lg">Confira abaixo algumas telas do nosso sistema em funcionamento.</p>
+        </div>
 
-      <div class="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
-          <!-- Imagem 1 (horizontal - maior) -->
-          <div class="flex justify-center bg-slate-800/80 rounded-2xl overflow-hidden glow-box hover:scale-[1.02] transition-all duration-300 shadow-lg border-4 border-cyan-500/60 p-2 w-full max-w-[95%] mx-auto">
-              <a href="/../../assets/img/painelPrint.png" class="block w-full h-full">
-                  <img src="/../../assets/img/painelPrint.png" alt="Tela do Sistema 1" class="w-full h-full object-cover">
-              </a>
-          </div>
+        <div class="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
+            <!-- Imagem 1 -->
+            <div class="flex justify-center bg-slate-800/80 rounded-2xl overflow-hidden glow-box hover:scale-[1.02] transition-all duration-300 shadow-lg border-4 border-cyan-500/60 p-2 w-full max-w-[95%] mx-auto cursor-pointer open-modal" data-img="/../../assets/img/painelPrint.png">
+                <img src="/../../assets/img/painelPrint.png" alt="Tela do Sistema 1" class="w-full h-full object-cover">
+            </div>
 
-          <!-- Imagem 2 (vertical - menor) -->
-          <div class="flex justify-center bg-slate-800/80 rounded-2xl overflow-hidden glow-box hover:scale-[1.02] transition-all duration-300 shadow-lg border-4 border-cyan-500/60 p-2 w-full max-w-[80%] mx-auto">
-              <a href="/../../assets/img/pontoPrint.png" class="block w-full h-full">
-                  <img src="/../../assets/img/pontoPrint.png" alt="Tela do Sistema 2" class="w-full h-full object-cover">
-              </a>
-          </div>
-      </div>
-  </section>
+            <!-- Imagem 2 -->
+            <div class="flex justify-center bg-slate-800/80 rounded-2xl overflow-hidden glow-box hover:scale-[1.02] transition-all duration-300 shadow-lg border-4 border-cyan-500/60 p-2 w-full max-w-[80%] mx-auto cursor-pointer open-modal" data-img="/../../assets/img/pontoPrint.png">
+                <img src="/../../assets/img/pontoPrint.png" alt="Tela do Sistema 2" class="w-full h-full object-cover">
+            </div>
+        </div>
+    </section>
+
 
     <!-- Seção de Funcionalidades -->
     <section class="py-24 px-8 bg-slate-900/80 backdrop-blur-md">
@@ -292,30 +322,34 @@
         </div>
     </footer>
 
+
+
   <script>
-    // Inicializa SimpleLightbox
-    var lightbox = new SimpleLightbox('a', { captionsData: 'alt', captionDelay: 250 });
+        // Abrir modal ao clicar na imagem
+        document.querySelectorAll('.open-modal').forEach(el => {
+            el.addEventListener('click', () => {
+            const src = el.getAttribute('data-img');
+            const modal = document.getElementById('imageModal');
+            const img = document.getElementById('modalImage');
+            img.src = src;
+            modal.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+            });
+        });
 
-    // Registrar Service Worker
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/service-worker.js')
-        .then(() => console.log('Service Worker registrado'))
-        .catch(err => console.error('Erro no SW:', err));
-    }
+        // Fechar modal
+        document.getElementById('closeModal').addEventListener('click', () => {
+            document.getElementById('imageModal').classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        });
 
-    // Script AES: execute **após SW registrar**
-    window.addEventListener('load', () => {
-      // slowAES.js deve estar em /aes.js
-      if (typeof slowAES !== 'undefined') {
-        function toNumbers(d){var e=[];d.replace(/(..)/g,function(d){e.push(parseInt(d,16))});return e}
-        function toHex(){for(var d=[],d=1==arguments.length&&arguments[0].constructor==Array?arguments[0]:arguments,e="",f=0;f<d.length;f++)e+=(16>d[f]?"0":"")+d[f].toString(16);return e.toLowerCase()}
-        var a=toNumbers("f655ba9d09a112d4968c63579db590b4"),
-            b=toNumbers("98344c2eee86c3994890592585b49f80"),
-            c=toNumbers("4e3e639fc310e64a1f63d033f8dac706");
-        document.cookie="__test="+toHex(slowAES.decrypt(c,2,a,b))+"; max-age=21600; expires=Thu, 31-Dec-37 23:55:55 GMT; path=/";
-        location.href="/backend/backend.php";
-      }
-    });
+        // Fechar ao clicar fora da imagem
+        document.getElementById('imageModal').addEventListener('click', e => {
+            if (e.target.id === 'imageModal') {
+            e.currentTarget.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+            }
+        });
   </script>
 
 </body>

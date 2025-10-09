@@ -96,14 +96,16 @@
   </div>
 
   <!-- Alertas -->
-  <div id="alert-box" class="hidden fixed top-6 left-0 right-12 max-w-sm mx-auto px-4 py-3 rounded-lg shadow-lg text-white bg-teal-600 flex items-center gap-3 z-50">
+  <div id="alert-box" 
+      class="hidden fixed top-6 right-6 w-[90%] sm:w-auto max-w-sm px-4 py-3 rounded-lg shadow-lg 
+              text-white bg-teal-600 flex items-center gap-3 z-50 animate-slide-in-right">
     <i id="alert-icon" class="fas fa-info-circle text-xl md:text-2xl"></i>
     <span id="alert-message" class="font-semibold text-sm md:text-base flex-1"></span>
     <button id="alert-close" class="ml-2 text-white text-lg hover:text-gray-200 focus:outline-none">
       <i class="fas fa-times"></i>
     </button>
   </div>
-
+  
   <!-- Script do sistema (alertas e loader) -->
   <script>
     $(function () {

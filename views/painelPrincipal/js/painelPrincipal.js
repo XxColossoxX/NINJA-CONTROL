@@ -361,8 +361,15 @@ async function carregarNomeEmpresa() {
     let conteudo = `
     <div id="welcome-message" class="fixed inset-0 flex items-center justify-center z-50 text-center">
         <div>
-            <h1 class="text-4xl text-white font-sans"><i><strong>BEM-VINDO(A) DE VOLTA</strong></i></h1>
-            <h2 id="tituloEmpresa" class="text-2xl text-white font-sans underline text-center"><i><strong>${nomeEmpresa}</strong></i></h2>
+            <!-- Linha 1: menor e próxima -->
+            <p class="text-lg sm:text-xl md:text-2xl text-white tracking-wider mb-1">
+                SEJA BEM-VINDO(A)
+            </p>
+
+            <!-- Linha 2: maior e destaque -->
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white">
+                <span id="welcome-nome">${nomeEmpresa}</span>!
+            </h1>
         </div>
     </div>`;
 

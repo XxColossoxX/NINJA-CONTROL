@@ -41,18 +41,36 @@ require_once('../../assets/components/headerFuncionario.php');
 
         <!-- Abas -->
         <div class="flex border-b mb-4">
-            <button class="tab-button text-cyan-500 font-bold px-4 py-2 border-transparent hover:border-cyan-700 hover:text-white" data-tab="info-tab">
-                <i class="fas fa-user mr-2 text-cyan-500"></i><span class="text-cyan-500 font-bold">Informações</span>
+            <button class="tab-button text-cyan-500 font-bold px-4 py-2 border-transparent hover:border-cyan-700 hover:text-white border-b-2 border-cyan-500" data-tab="info-tab">
+                <i class="fas fa-user mr-2 text-cyan-500"></i>
+                <span class="text-cyan-500 font-bold">Informações</span>
+            </button>
+
+            <button class="tab-button text-cyan-500 font-bold px-4 py-2 border-transparent hover:border-cyan-700 hover:text-white" data-tab="localizacao-tab">
+                <i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>
+                <span class="text-cyan-500 font-bold">Localização Empresa</span>
             </button>
         </div>
 
-        <!-- Conteúdo das Abas -->
+        <!-- Conteúdo da aba Informações -->
         <div id="info-tab" class="tab-content mb-10">
             <div class="grid grid-cols-2 gap-4 text-sm text-gray-700">
                 <div class="text-white font-bold"><strong><i class="fas fa-id-badge mr-2 text-cyan-400"></i>Nome:</strong> <span id="tab-nome"></span></div>
                 <div class="text-white font-bold"><strong><i class="fas fa-id-card mr-2 text-cyan-400"></i>RG:</strong> <span id="tab-rg"></span></div>
                 <div class="text-white font-bold"><strong><i class="fas fa-address-card mr-2 text-cyan-400"></i>CPF:</strong> <span id="tab-cpf"></span></div>
                 <div class="text-white font-bold"><strong><i class="fas fa-calendar-alt mr-2 text-cyan-400"></i>Nascimento:</strong> <span id="tab-nascimento"></span></div>
+            </div>
+        </div>
+
+        <!-- Conteúdo da aba Localização -->
+        <div id="localizacao-tab" class="tab-content hidden mb-10">
+            <div class="mb-4">
+                <label class="block text-xs font-bold mb-1 text-white" for="tab-localizacao">Localização Atual</label>
+                <div class="bg-slate-900 border border-cyan-500/10 shadow-[0_0_8px_#00ffff10] flex items-center rounded-lg p-1.5 glow-box">
+                    <i class="fas fa-map-marker-alt text-cyan-400 text-lg mr-1.5"></i>
+                    <input id="tab-localizacao" type="text" value="<?php echo htmlspecialchars($localizacaoEmpresa); ?>"
+                        class="w-full min-w-[250px] bg-slate-900 border-none outline-none font-bold text-white text-xs" readonly>
+                </div>
             </div>
         </div>
 
@@ -321,17 +339,19 @@ require_once('../../assets/components/headerFuncionario.php');
     
     let divBemVindo = $("#bemVindo");
     let conteudo = `
-        <div id="welcome-message" class="fixed inset-0 flex items-center justify-center z-50 px-4">
-            <div class="rounded-xl p-6 max-w-md w-full text-center animate-fade-in-up">
-                <h1 class="text-3xl sm:text-4xl font-bold text-white mb-2">
-                    BEM-VINDO(A) DE VOLTA
-                </h1>
-                <h2 id="tituloEmpresa" class="text-xl sm:text-2xl font-medium text-white line-clamp-2">
-                    ${nomeFuncionario}
-                </h2>
-            </div>
-        </div>
-    `;
+        <div id="welcome-message" class="fixed inset-0 flex items-center justify-center z-50 text-center">
+                <div>
+                    <!-- Linha 1: menor e próxima -->
+                    <p class="text-lg sm:text-xl md:text-2xl text-white tracking-wider mb-1">
+                        SEJA BEM-VINDO(A)
+                    </p>
+
+                    <!-- Linha 2: maior e destaque -->
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white">
+                        <span id="welcome-nome">${nomeFuncionario}</span>!
+                    </h1>
+                </div>
+            </div>`;
 
     divBemVindo.append(conteudo);
 
@@ -366,6 +386,21 @@ require_once('../../assets/components/headerFuncionario.php');
             if (!$(e.target).closest('#menu-mobile, #btn-menu-mobile').length) {
                 $('#menu-mobile').addClass('hidden');
             }
+        });
+
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const target = btn.getAttribute('data-tab');
+
+                tabButtons.forEach(b => b.classList.remove('border-b-2', 'border-cyan-500'));
+                tabContents.forEach(c => c.classList.add('hidden'));
+
+                btn.classList.add('border-b-2', 'border-cyan-500');
+                document.getElementById(target).classList.remove('hidden');
+            });
         });
     });
 </script>
