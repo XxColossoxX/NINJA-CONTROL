@@ -108,35 +108,39 @@ require_once('../../assets/components/headerEmpresa.php');
 
             <!-- Últimos registros -->
             <div class="mb-6">
-                <h3 class="text-lg font-bold text-white mb-3">Últimos registros</h3>
-                <div class="grid grid-cols-2 gap-3 sm:gap-4">
-                    <div class="bg-slate-800/80 border border-cyan-500/10 rounded-xl p-2 sm:p-3 flex flex-col items-center shadow-[0_0_10px_#00ffff10]">
-                        <i class="fas fa-sign-in-alt text-green-600 text-lg sm:text-xl mb-1"></i>
-                        <span class="font-bold text-green-600 text-sm sm:text-base">08:00</span>
-                        <span class="text-xs font-bold text-white">Entrada</span>
-                        <span class="text-xs text-green-500">Concluído</span>
+                <h3 class="text-lg sm:text-xl font-bold text-white mb-3 text-center sm:text-left">Últimos registros</h3>
+
+                <div class="grid grid-cols-2 gap-2 sm:gap-4">
+                    <div class="bg-slate-800/80 border border-cyan-500/10 rounded-lg sm:rounded-xl p-1.5 sm:p-3 flex flex-col items-center shadow-[0_0_8px_#00ffff10] sm:shadow-[0_0_10px_#00ffff10] scale-90 sm:scale-100">
+                        <i class="fas fa-sign-in-alt text-green-600 text-base sm:text-xl mb-0.5 sm:mb-1"></i>
+                        <span class="font-bold text-green-600 text-xs sm:text-base">08:00</span>
+                        <span class="text-[10px] sm:text-xs font-bold text-white">Entrada</span>
+                        <span class="text-[10px] sm:text-xs text-green-500">Concluído</span>
                     </div>
-                    <div class="bg-slate-800/80 border border-cyan-500/10 rounded-xl p-2 sm:p-3 flex flex-col items-center shadow-[0_0_10px_#00ffff10]">
-                        <i class="fas fa-sign-out-alt text-red-600 text-lg sm:text-xl mb-1"></i>
-                        <span class="font-bold text-red-600 text-sm sm:text-base">12:00</span>
-                        <span class="text-xs font-bold text-white">Saída</span>
-                        <span class="text-xs text-red-500">Concluído</span>
+
+                    <div class="bg-slate-800/80 border border-cyan-500/10 rounded-lg sm:rounded-xl p-1.5 sm:p-3 flex flex-col items-center shadow-[0_0_8px_#00ffff10] sm:shadow-[0_0_10px_#00ffff10] scale-90 sm:scale-100">
+                        <i class="fas fa-sign-out-alt text-red-600 text-base sm:text-xl mb-0.5 sm:mb-1"></i>
+                        <span class="font-bold text-red-600 text-xs sm:text-base">12:00</span>
+                        <span class="text-[10px] sm:text-xs font-bold text-white">Saída</span>
+                        <span class="text-[10px] sm:text-xs text-red-500">Concluído</span>
                     </div>
-                    <div class="bg-slate-800/80 border border-cyan-500/10 rounded-xl p-2 sm:p-3 flex flex-col items-center shadow-[0_0_10px_#00ffff10]">
-                        <i class="fas fa-sign-in-alt text-green-600 text-lg sm:text-xl mb-1"></i>
-                        <span class="font-bold text-green-600 text-sm sm:text-base">13:30</span>
-                        <span class="text-xs font-bold text-white">Entrada</span>
-                        <span class="text-xs text-yellow-500">Pendente</span>
+
+                    <div class="bg-slate-800/80 border border-cyan-500/10 rounded-lg sm:rounded-xl p-1.5 sm:p-3 flex flex-col items-center shadow-[0_0_8px_#00ffff10] sm:shadow-[0_0_10px_#00ffff10] scale-90 sm:scale-100">
+                        <i class="fas fa-sign-in-alt text-green-600 text-base sm:text-xl mb-0.5 sm:mb-1"></i>
+                        <span class="font-bold text-green-600 text-xs sm:text-base">13:30</span>
+                        <span class="text-[10px] sm:text-xs font-bold text-white">Entrada</span>
+                        <span class="text-[10px] sm:text-xs text-yellow-500">Pendente</span>
                     </div>
-                    <div class="bg-slate-800/80 border border-cyan-500/10 rounded-xl p-2 sm:p-3 flex flex-col items-center shadow-[0_0_10px_#00ffff10]">
-                        <i class="fas fa-sign-out-alt text-red-600 text-lg sm:text-xl mb-1"></i>
-                        <span class="font-bold text-red-600 text-sm sm:text-base">18:00</span>
-                        <span class="text-xs font-bold text-white">Saída</span>
-                        <span class="text-xs text-yellow-500">Pendente</span>
+
+                    <div class="bg-slate-800/80 border border-cyan-500/10 rounded-lg sm:rounded-xl p-1.5 sm:p-3 flex flex-col items-center shadow-[0_0_8px_#00ffff10] sm:shadow-[0_0_10px_#00ffff10] scale-90 sm:scale-100">
+                        <i class="fas fa-sign-out-alt text-red-600 text-base sm:text-xl mb-0.5 sm:mb-1"></i>
+                        <span class="font-bold text-red-600 text-xs sm:text-base">18:00</span>
+                        <span class="text-[10px] sm:text-xs font-bold text-white">Saída</span>
+                        <span class="text-[10px] sm:text-xs text-yellow-500">Pendente</span>
                     </div>
                 </div>
             </div>
-
+            
             <!-- Localização -->
             <div class="mb-4">
                 <label class="block text-xs font-bold mb-1 text-white" for="localizacao">Localização Atual</label>

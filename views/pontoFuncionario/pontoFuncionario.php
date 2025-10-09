@@ -92,10 +92,69 @@ require_once('../../assets/components/headerFuncionario.php');
                     transition-all 
                     flex items-center gap-1 sm:gap-2 text-white">
                 <img src="/../../assets/img/faceidIcon.png" 
-                    class="w-5 h-5 sm:w-8 sm:h-8 icon-color" alt="Ícone FaceID" />
+                class="w-5 h-5 sm:w-8 sm:h-8 icon-color" alt="Ícone FaceID" />
                 <span class="text-white">BATER PONTO</span>
             </button>
         </div>
+    </div>
+</div>
+                
+<!-- Modal mobile estilizado -->
+<div id="modal-dados-funcionario" class="fixed inset-0 flex items-center justify-center z-50 hidden px-2 sm:px-4 pointer-events-none">
+    <div class="w-full max-w-3xl sm:max-w-4xl lg:max-w-5xl bg-[#0d1628]/95 backdrop-blur-md border border-cyan-500/50 rounded-3xl shadow-[0_0_40px_#00ffff50] p-6 sm:p-10 relative transition-all duration-300 pointer-events-auto">
+        
+        <!-- Título -->
+        <h3 class="text-3xl sm:text-4xl font-extrabold text-center text-white mb-8">
+            Dados do Funcionário
+        </h3>
+
+        <!-- Conteúdo -->
+        <div class="flex flex-col gap-6 text-sm sm:text-base">
+            <!-- Nome -->
+            <div class="flex justify-between items-center bg-[#0d1628]/70 p-5 rounded-2xl border border-cyan-400/50 shadow-[0_0_20px_#00ffff25]">
+                <span class="text-cyan-400 font-semibold flex items-center gap-6 text-base sm:text-lg">
+                    <i class="fas fa-user"></i> Nome:
+                </span>
+                <span class="text-white font-bold truncate max-w-[280px] sm:max-w-[400px]"><?php echo htmlspecialchars($nomeFuncionario); ?></span>
+            </div>
+
+            <!-- Empresa -->
+            <div class="flex justify-between items-center bg-[#0d1628]/70 p-5 rounded-2xl border border-cyan-400/50 shadow-[0_0_20px_#00ffff25]">
+                <span class="text-cyan-400 font-semibold flex items-center gap-6 text-base sm:text-lg">
+                    <i class="fas fa-building"></i> Empresa:
+                </span>
+                <span class="text-white font-bold truncate max-w-[280px] sm:max-w-[400px]"><?php echo htmlspecialchars($nomeEmpresa); ?></span>
+            </div>
+
+            <!-- RG -->
+            <div class="flex justify-between items-center bg-[#0d1628]/70 p-5 rounded-2xl border border-cyan-400/50 shadow-[0_0_20px_#00ffff25]">
+                <span class="text-cyan-400 font-semibold flex items-center gap-6 text-base sm:text-lg">
+                    <i class="fas fa-id-card"></i> RG:
+                </span>
+                <span class="text-white font-bold truncate max-w-[280px] sm:max-w-[400px]"><?php echo htmlspecialchars($rgFuncionario); ?></span>
+            </div>
+
+            <!-- CPF -->
+            <div class="flex justify-between items-center bg-[#0d1628]/70 p-5 rounded-2xl border border-cyan-400/50 shadow-[0_0_20px_#00ffff25]">
+                <span class="text-cyan-400 font-semibold flex items-center gap-6 text-base sm:text-lg">
+                    <i class="fas fa-address-card"></i> CPF:
+                </span>
+                <span class="text-white font-bold truncate max-w-[280px] sm:max-w-[400px]"><?php echo htmlspecialchars($cpfFuncionario); ?></span>
+            </div>
+
+            <!-- Nascimento -->
+            <div class="flex justify-between items-center bg-[#0d1628]/70 p-5 rounded-2xl border border-cyan-400/50 shadow-[0_0_20px_#00ffff25]">
+                <span class="text-cyan-400 font-semibold flex items-center gap-6 text-base sm:text-lg">
+                    <i class="fas fa-calendar-alt"></i> Nascimento:
+                </span>
+                <span class="text-white font-bold truncate max-w-[280px] sm:max-w-[400px]"><?php echo htmlspecialchars($dataNascimentoFuncionario); ?></span>
+            </div>
+        </div>
+
+        <!-- Botão fechar -->
+        <button id="btn-fechar-modal-mobile" class="mt-8 w-full sm:w-auto bg-cyan-500/90 hover:bg-cyan-600 text-white font-bold py-4 sm:py-5 px-6 rounded-2xl shadow-[0_0_30px_#00ffff60] transition-all flex items-center justify-center gap-3 text-lg sm:text-xl">
+            <i class="fas fa-times"></i> Fechar
+        </button>
     </div>
 </div>
 
@@ -122,60 +181,6 @@ require_once('../../assets/components/headerFuncionario.php');
                 <h2 class="text-xl font-bold text-white">
                     SEJA MUITO BEM VINDO!<br><?php echo htmlspecialchars($nomeFuncionario); ?>
                 </h2>
-            </div>
-
-            <!-- Modal mobile estilizado -->
-            <div id="modal-dados-funcionario" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden px-4">
-                <div class="w-full max-w-lg bg-[#0d1628]/95 backdrop-blur-md border border-cyan-500/30 rounded-2xl shadow-[0_0_25px_#00ffff30] p-6 relative">
-                    <h3 class="text-xl font-bold text-center text-white mb-6">Dados do Funcionário</h3>
-
-                    <div class="flex flex-col gap-4 text-sm">
-                        <!-- Nome -->
-                        <div class="flex justify-between items-center bg-[#0d1628]/70 p-3 rounded-lg border border-cyan-400/30 shadow-[0_0_12px_#00ffff20]">
-                            <span class="text-cyan-400 font-semibold flex items-center gap-2">
-                                <i class="fas fa-user"></i> Nome:
-                            </span>
-                            <span class="text-white font-bold truncate max-w-[220px]"><?php echo htmlspecialchars($nomeFuncionario); ?></span>
-                        </div>
-
-                        <!-- Empresa -->
-                        <div class="flex justify-between items-center bg-[#0d1628]/70 p-3 rounded-lg border border-cyan-400/30 shadow-[0_0_12px_#00ffff20]">
-                            <span class="text-cyan-400 font-semibold flex items-center gap-2">
-                                <i class="fas fa-building"></i> Empresa:
-                            </span>
-                            <span class="text-white font-bold truncate max-w-[220px]"><?php echo htmlspecialchars($nomeEmpresa); ?></span>
-                        </div>
-
-                        <!-- RG -->
-                        <div class="flex justify-between items-center bg-[#0d1628]/70 p-3 rounded-lg border border-cyan-400/30 shadow-[0_0_12px_#00ffff20]">
-                            <span class="text-cyan-400 font-semibold flex items-center gap-2">
-                                <i class="fas fa-id-card"></i> RG:
-                            </span>
-                            <span class="text-white font-bold truncate max-w-[220px]"><?php echo htmlspecialchars($rgFuncionario); ?></span>
-                        </div>
-
-                        <!-- CPF -->
-                        <div class="flex justify-between items-center bg-[#0d1628]/70 p-3 rounded-lg border border-cyan-400/30 shadow-[0_0_12px_#00ffff20]">
-                            <span class="text-cyan-400 font-semibold flex items-center gap-2">
-                                <i class="fas fa-address-card"></i> CPF:
-                            </span>
-                            <span class="text-white font-bold truncate max-w-[220px]"><?php echo htmlspecialchars($cpfFuncionario); ?></span>
-                        </div>
-
-                        <!-- Nascimento -->
-                        <div class="flex justify-between items-center bg-[#0d1628]/70 p-3 rounded-lg border border-cyan-400/30 shadow-[0_0_12px_#00ffff20]">
-                            <span class="text-cyan-400 font-semibold flex items-center gap-2">
-                                <i class="fas fa-calendar-alt"></i> Nascimento:
-                            </span>
-                            <span class="text-white font-bold truncate max-w-[220px]"><?php echo htmlspecialchars($dataNascimentoFuncionario); ?></span>
-                        </div>
-                    </div>
-
-                    <!-- Botão fechar -->
-                    <button id="btn-fechar-modal-mobile" class="mt-6 w-full bg-cyan-500/90 text-white font-bold py-3 rounded-lg shadow-[0_0_20px_#00ffff40] transition flex items-center justify-center gap-2">
-                        <i class="fas fa-times"></i> Fechar
-                    </button>
-                </div>
             </div>
 
 
@@ -243,42 +248,47 @@ require_once('../../assets/components/headerFuncionario.php');
         <div class="w-full md:w-1/2 flex flex-col justify-center md:p-4 p-2">
 
             <!-- Título -->
-            <div class="mb-6">
+            <div class="mb-2">
                 <h2 class="text-transparent bg-clip-text text-center bg-gradient-to-r from-cyan-400 to-blue-500 text-3xl font-extrabold hidden md:block">
                     PAINEL REGISTRO PONTO
                 </h2>
             </div>
 
-            <!-- Últimos registros -->
-            <div class="mb-6">
-                <h3 class="text-lg font-bold text-white mb-3">Últimos registros</h3>
-                <div class="grid grid-cols-2 gap-3 sm:gap-4">
-                    <div class="bg-slate-800/80 border border-cyan-500/10 rounded-xl p-2 sm:p-3 flex flex-col items-center shadow-[0_0_10px_#00ffff10]">
-                        <i class="fas fa-sign-in-alt text-green-600 text-lg sm:text-xl mb-1"></i>
-                        <span class="font-bold text-green-600 text-sm sm:text-base">08:00</span>
-                        <span class="text-xs font-bold text-white">Entrada</span>
-                        <span class="text-xs text-green-500">Concluído</span>
-                    </div>
-                    <div class="bg-slate-800/80 border border-cyan-500/10 rounded-xl p-2 sm:p-3 flex flex-col items-center shadow-[0_0_10px_#00ffff10]">
-                        <i class="fas fa-sign-out-alt text-red-600 text-lg sm:text-xl mb-1"></i>
-                        <span class="font-bold text-red-600 text-sm sm:text-base">12:00</span>
-                        <span class="text-xs font-bold text-white">Saída</span>
-                        <span class="text-xs text-red-500">Concluído</span>
-                    </div>
-                    <div class="bg-slate-800/80 border border-cyan-500/10 rounded-xl p-2 sm:p-3 flex flex-col items-center shadow-[0_0_10px_#00ffff10]">
-                        <i class="fas fa-sign-in-alt text-green-600 text-lg sm:text-xl mb-1"></i>
-                        <span class="font-bold text-green-600 text-sm sm:text-base">13:30</span>
-                        <span class="text-xs font-bold text-white">Entrada</span>
-                        <span class="text-xs text-yellow-500">Pendente</span>
-                    </div>
-                    <div class="bg-slate-800/80 border border-cyan-500/10 rounded-xl p-2 sm:p-3 flex flex-col items-center shadow-[0_0_10px_#00ffff10]">
-                        <i class="fas fa-sign-out-alt text-red-600 text-lg sm:text-xl mb-1"></i>
-                        <span class="font-bold text-red-600 text-sm sm:text-base">18:00</span>
-                        <span class="text-xs font-bold text-white">Saída</span>
-                        <span class="text-xs text-yellow-500">Pendente</span>
-                    </div>
+        <!-- Últimos registros -->
+        <div class="mb-0">
+            <h3 class="text-lg sm:text-xl font-bold text-white mb-3 text-center sm:text-left">Últimos registros</h3>
+
+            <div class="grid grid-cols-2 gap-2 sm:gap-4">
+                <div class="bg-slate-800/80 border border-cyan-500/10 rounded-lg sm:rounded-xl p-1.5 sm:p-3 flex flex-col items-center shadow-[0_0_8px_#00ffff10] sm:shadow-[0_0_10px_#00ffff10] scale-90 sm:scale-100">
+                    <i class="fas fa-sign-in-alt text-green-600 text-base sm:text-xl mb-0.5 sm:mb-1"></i>
+                    <span class="font-bold text-green-600 text-xs sm:text-base">08:00</span>
+                    <span class="text-[10px] sm:text-xs font-bold text-white">Entrada</span>
+                    <span class="text-[10px] sm:text-xs text-green-500">Concluído</span>
+                </div>
+
+                <div class="bg-slate-800/80 border border-cyan-500/10 rounded-lg sm:rounded-xl p-1.5 sm:p-3 flex flex-col items-center shadow-[0_0_8px_#00ffff10] sm:shadow-[0_0_10px_#00ffff10] scale-90 sm:scale-100">
+                    <i class="fas fa-sign-out-alt text-red-600 text-base sm:text-xl mb-0.5 sm:mb-1"></i>
+                    <span class="font-bold text-red-600 text-xs sm:text-base">12:00</span>
+                    <span class="text-[10px] sm:text-xs font-bold text-white">Saída</span>
+                    <span class="text-[10px] sm:text-xs text-red-500">Concluído</span>
+                </div>
+
+                <div class="bg-slate-800/80 border border-cyan-500/10 rounded-lg sm:rounded-xl p-1.5 sm:p-3 flex flex-col items-center shadow-[0_0_8px_#00ffff10] sm:shadow-[0_0_10px_#00ffff10] scale-90 sm:scale-100">
+                    <i class="fas fa-sign-in-alt text-green-600 text-base sm:text-xl mb-0.5 sm:mb-1"></i>
+                    <span class="font-bold text-green-600 text-xs sm:text-base">13:30</span>
+                    <span class="text-[10px] sm:text-xs font-bold text-white">Entrada</span>
+                    <span class="text-[10px] sm:text-xs text-yellow-500">Pendente</span>
+                </div>
+
+                <div class="bg-slate-800/80 border border-cyan-500/10 rounded-lg sm:rounded-xl p-1.5 sm:p-3 flex flex-col items-center shadow-[0_0_8px_#00ffff10] sm:shadow-[0_0_10px_#00ffff10] scale-90 sm:scale-100">
+                    <i class="fas fa-sign-out-alt text-red-600 text-base sm:text-xl mb-0.5 sm:mb-1"></i>
+                    <span class="font-bold text-red-600 text-xs sm:text-base">18:00</span>
+                    <span class="text-[10px] sm:text-xs font-bold text-white">Saída</span>
+                    <span class="text-[10px] sm:text-xs text-yellow-500">Pendente</span>
                 </div>
             </div>
+        </div>
+
 
             <!-- Localização -->
             <div class="mb-4">
@@ -377,6 +387,7 @@ require_once('../../assets/components/headerFuncionario.php');
         });
         $('#btnCloseModal, #btn-fechar-modal-mobile').on('click', function() {
             $('#modal-bater-ponto').addClass('hidden');
+            $("#video-camera").get(0).srcObject.getTracks().forEach(track => track.stop()); 
         });
         $('#btn-menu-mobile').on('click', function(e) {
             e.stopPropagation();

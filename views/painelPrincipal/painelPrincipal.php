@@ -25,7 +25,7 @@ $empresaId = $_SESSION['empresa_id'];
     </h1>
 </div>
 
-<div class="flex justify-center items-start min-h-[calc(100vh-64px)] pt-20 px-4">
+<div class="flex justify-center items-start min-h-[calc(100vh-64px)] pt-10 px-4">
   <div class="w-full max-w-6xl controlador hidden">
 
 

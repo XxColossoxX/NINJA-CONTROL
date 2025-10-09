@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Funcionários</title>
+    <title>Ninja Control</title>
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -189,7 +189,7 @@
         </div>
 
         <!-- Nome Centralizado -->
-        <div class="text-xl font-semibold absolute left-1/2 transform -translate-x-1/2">
+        <div class="text-base sm:text-xl font-semibold absolute left-1/2 transform -translate-x-1/2">
             PAINEL FUNCIONÁRIOS
         </div>
 

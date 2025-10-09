@@ -359,19 +359,19 @@ async function carregarNomeEmpresa() {
     let nomeEmpresa = res.data[0].RAZAO_FANTASIA.toUpperCase();
     let divBemVindo = $("#bemVindo");
     let conteudo = `
-    <div id="welcome-message" class="fixed inset-0 flex items-center justify-center z-50 text-center">
-        <div>
-            <!-- Linha 1: menor e próxima -->
-            <p class="text-lg sm:text-xl md:text-2xl text-white tracking-wider mb-1">
-                SEJA BEM-VINDO(A)
-            </p>
+        <div id="welcome-message" class="fixed inset-0 flex items-center justify-center z-50 text-center">
+            <div>
+                <!-- Linha 1: menor e próxima -->
+                <p class="text-lg sm:text-xl md:text-2xl text-white tracking-wider mb-1">
+                    SEJA BEM-VINDO(A)
+                </p>
 
-            <!-- Linha 2: maior e destaque -->
-            <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white">
-                <span id="welcome-nome">${nomeEmpresa}</span>!
-            </h1>
-        </div>
-    </div>`;
+                <!-- Linha 2: maior e destaque -->
+                <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white">
+                    <span id="welcome-nome">${nomeEmpresa}</span>!
+                </h1>
+            </div>
+        </div>`;
 
     divBemVindo.append(conteudo);
     // Animação de entrada
