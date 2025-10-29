@@ -17,6 +17,8 @@ db.run(`
         RAZAO_FANTASIA TEXT NOT NULL,
         CNPJ_EMPRESA TEXT NOT NULL,
         LOC_EMPRESA TEXT,
+        LAT_EMPRESA TEXT,
+        LONG_EMPRESA TEXT,
         DSC_EMPRESA TEXT,
         TEL_EMPRESA TEXT,
         EMAIL_EMPRESA TEXT,
@@ -55,6 +57,25 @@ db.run(`
     }
 });
 
+// Criando a Config Horarios Funcionarios
+db.run(`
+    CREATE TABLE IF NOT EXISTS HORARIOS_FUNCIONARIOS (
+        ID_PONTO INTEGER PRIMARY KEY AUTOINCREMENT,
+        FK_FUNCIONARIO INTEGER NOT NULL,
+        ENTRADA1 TIME,
+        INTER TIME,
+        ENTRADA2 TIME, 
+        DATA DATE NOT NULL,
+        FOREIGN KEY (FK_FUNCIONARIO) REFERENCES FUNCIONARIOS(ID_FUNCIONARIO)
+    )
+`, (err) => {
+    if (err) {
+        console.error("Erro ao criar a tabela Funcionarios:", err.message);
+    } else {
+        console.log("Tabela Funcionarios criada com sucesso.");
+    }
+});
+
 // Criando a tabela Ponto
 db.run(`
     CREATE TABLE IF NOT EXISTS PONTO (
@@ -62,10 +83,19 @@ db.run(`
         FK_FUNCIONARIO INTEGER NOT NULL,
         FK_EMPRESA INTEGER NOT NULL,
         NOME_FUNCIONARIO TEXT NOT NULL,
-        DATA_HORA DATE NOT NULL,
-        TIPO_PONTO TEXT CHECK(TIPO_PONTO IN ('E', 'S')) NOT NULL,
+        ENTRADA1 TIME,
+        STATUS_ENTRADA1 TEXT,
+        SAIDA1 TIME,
+        STATUS_SAIDA1 TEXT,
+        ENTRADA2 TIME,
+        STATUS_ENTRADA2 TEXT,
+        SAIDA2 TIME,
+        STATUS_SAIDA2 TEXT,
+        DIVIDA TIME,
+        DATA DATE NOT NULL,
         FACEID_FUNCIONARIO TEXT NOT NULL,
         FOREIGN KEY (FK_FUNCIONARIO) REFERENCES FUNCIONARIOS(ID_FUNCIONARIO)
+        FOREIGN KEY (FK_EMPRESA) REFERENCES EMPRESA(ID_EMPRESA)
     )
 `, (err) => {
     if (err) {
