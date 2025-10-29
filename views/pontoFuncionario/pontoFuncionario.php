@@ -22,6 +22,8 @@ if (!isset($_SESSION['funcionario_id'])) {
 }
 require_once('../../assets/components/background.php');
 require_once('../../assets/components/headerFuncionario.php');
+// Garante APP_CONFIG mesmo se algum header não injetar (fallback)
+@include_once __DIR__ . '/../../.env';
 
 ?>
 
@@ -51,56 +53,59 @@ require_once('../../assets/components/headerFuncionario.php');
             </div>
 
             <!-- Modal mobile estilizado -->
-            <div id="modal-dados-funcionario" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden px-4">
-                <div class="w-full max-w-lg bg-[#0d1628]/95 backdrop-blur-md border border-cyan-500/30 rounded-2xl shadow-[0_0_25px_#00ffff30] p-6 relative">
-                    <h3 class="text-xl font-bold text-center text-white mb-6">Dados do Funcionário</h3>
+            <div id="modal-dados-funcionario" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden px-0">
+                <div class="w-full h-full max-w-none bg-[#0d1628]/95 backdrop-blur-md border border-cyan-500/30 rounded-none shadow-[0_0_25px_#00ffff30] p-0 relative overflow-hidden">
+                    <button id="btn-fechar-modal-mobile" class="absolute top-3 right-3 z-10 text-white/80 hover:text-white" aria-label="Fechar">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                    <div class="h-full overflow-y-auto p-6">
+                    <div class="flex flex-col items-center mb-4">
+                        <img src="<?php echo $fotoFuncionario; ?>" alt="Foto do Funcionário" class="w-20 h-20 rounded-full object-cover border-2 border-cyan-500 shadow-[0_0_12px_#00ffff50]">
+                        <h3 class="text-lg font-bold text-center text-white mt-2 line-clamp-2"><?php echo htmlspecialchars($nomeFuncionario); ?></h3>
+                        <span class="text-xs text-cyan-300"><?php echo htmlspecialchars($nomeEmpresa); ?></span>
+                    </div>
 
-                    <div class="flex flex-col gap-4 text-sm">
-                        <!-- Nome -->
-                        <div class="flex justify-between items-center bg-[#0d1628]/70 p-3 rounded-lg border border-cyan-400/30 shadow-[0_0_12px_#00ffff20]">
-                            <span class="text-cyan-400 font-semibold flex items-center gap-2">
-                                <i class="fas fa-user"></i> Nome:
-                            </span>
-                            <span class="text-white font-bold truncate max-w-[220px]"><?php echo htmlspecialchars($nomeFuncionario); ?></span>
-                        </div>
+                    <!-- Tabs -->
+                    <div class="flex items-center justify-center gap-2 mb-4">
+                        <button class="tab-func active px-3 py-1.5 rounded-full text-xs font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/50" data-tab="tab-dados">Dados</button>
+                        <button class="tab-func px-3 py-1.5 rounded-full text-xs font-bold bg-transparent text-cyan-300 border border-cyan-500/30 hover:bg-cyan-500/10" data-tab="tab-horarios">Horários</button>
+                    </div>
 
-                        <!-- Empresa -->
-                        <div class="flex justify-between items-center bg-[#0d1628]/70 p-3 rounded-lg border border-cyan-400/30 shadow-[0_0_12px_#00ffff20]">
-                            <span class="text-cyan-400 font-semibold flex items-center gap-2">
-                                <i class="fas fa-building"></i> Empresa:
-                            </span>
-                            <span class="text-white font-bold truncate max-w-[220px]"><?php echo htmlspecialchars($nomeEmpresa); ?></span>
-                        </div>
-
-                        <!-- RG -->
-                        <div class="flex justify-between items-center bg-[#0d1628]/70 p-3 rounded-lg border border-cyan-400/30 shadow-[0_0_12px_#00ffff20]">
-                            <span class="text-cyan-400 font-semibold flex items-center gap-2">
-                                <i class="fas fa-id-card"></i> RG:
-                            </span>
-                            <span class="text-white font-bold truncate max-w-[220px]"><?php echo htmlspecialchars($rgFuncionario); ?></span>
-                        </div>
-
-                        <!-- CPF -->
-                        <div class="flex justify-between items-center bg-[#0d1628]/70 p-3 rounded-lg border border-cyan-400/30 shadow-[0_0_12px_#00ffff20]">
-                            <span class="text-cyan-400 font-semibold flex items-center gap-2">
-                                <i class="fas fa-address-card"></i> CPF:
-                            </span>
-                            <span class="text-white font-bold truncate max-w-[220px]"><?php echo htmlspecialchars($cpfFuncionario); ?></span>
-                        </div>
-
-                        <!-- Nascimento -->
-                        <div class="flex justify-between items-center bg-[#0d1628]/70 p-3 rounded-lg border border-cyan-400/30 shadow-[0_0_12px_#00ffff20]">
-                            <span class="text-cyan-400 font-semibold flex items-center gap-2">
-                                <i class="fas fa-calendar-alt"></i> Nascimento:
-                            </span>
-                            <span class="text-white font-bold truncate max-w-[220px]"><?php echo htmlspecialchars($dataNascimentoFuncionario); ?></span>
+                    <!-- Conteúdos -->
+                    <div id="tab-dados" class="tab-pane">
+                        <div class="flex flex-col gap-3 text-sm">
+                            <div class="flex justify-between items-center bg-[#0d1628]/70 p-3 rounded-lg border border-cyan-400/30 shadow-[0_0_12px_#00ffff20]">
+                                <span class="text-cyan-400 font-semibold flex items-center gap-2"><i class="fas fa-id-card"></i> RG:</span>
+                                <span class="text-white font-bold truncate max-w-[220px]"><?php echo htmlspecialchars($rgFuncionario); ?></span>
+                            </div>
+                            <div class="flex justify-between items-center bg-[#0d1628]/70 p-3 rounded-lg border border-cyan-400/30 shadow-[0_0_12px_#00ffff20]">
+                                <span class="text-cyan-400 font-semibold flex items-center gap-2"><i class="fas fa-address-card"></i> CPF:</span>
+                                <span class="text-white font-bold truncate max-w-[220px]"><?php echo htmlspecialchars($cpfFuncionario); ?></span>
+                            </div>
+                            <div class="flex justify-between items-center bg-[#0d1628]/70 p-3 rounded-lg border border-cyan-400/30 shadow-[0_0_12px_#00ffff20]">
+                                <span class="text-cyan-400 font-semibold flex items-center gap-2"><i class="fas fa-calendar-alt"></i> Nascimento:</span>
+                                <span class="text-white font-bold truncate max-w-[220px]"><?php echo htmlspecialchars($dataNascimentoFuncionario); ?></span>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Botão fechar -->
-                    <button id="btn-fechar-modal-mobile" class="mt-6 w-full bg-cyan-500/90 text-white font-bold py-3 rounded-lg shadow-[0_0_20px_#00ffff40] transition flex items-center justify-center gap-2 hover:bg-cyan-400">
-                        <i class="fas fa-times"></i> Fechar
-                    </button>
+                    <div id="tab-horarios" class="tab-pane hidden">
+                        <div class="grid grid-cols-2 gap-3 text-sm">
+                            <div class="bg-[#0d1628]/70 p-3 rounded-lg border border-cyan-400/30">
+                                <span class="text-cyan-400 font-semibold block mb-1"><i class="fas fa-sign-in-alt"></i> Entrada:</span>
+                                <span class="text-white font-bold">08:00</span>
+                            </div>
+                            <div class="bg-[#0d1628]/70 p-3 rounded-lg border border-cyan-400/30">
+                                <span class="text-cyan-400 font-semibold block mb-1"><i class="fas fa-sign-out-alt"></i> Saída:</span>
+                                <span class="text-white font-bold">18:00</span>
+                            </div>
+                            <div class="bg-[#0d1628]/70 p-3 rounded-lg border border-cyan-400/30">
+                                <span class="text-cyan-400 font-semibold block mb-1"><i class="fas fa-coffee"></i> Intervalo:</span>
+                                <span class="text-white font-bold">12:00 - 13:00</span>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
                 </div>
             </div>
 
@@ -242,6 +247,61 @@ require_once('../../assets/components/headerFuncionario.php');
                 <span id="alert-message"></span>
             </div>
 
+            <!-- Modal de Bater Ponto -->
+            <div id="modal-bater-ponto" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center">
+                <div class="w-full max-w-md sm:max-w-lg bg-slate-900 rounded-xl shadow-lg p-4 relative overflow-y-auto max-h-[90vh]">
+                    
+                    <!-- Botão Fechar -->
+                    <button id="btnCloseModal" class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl font-bold transition" aria-label="Fechar Modal">
+                        &times;
+                    </button>
+                    
+                    <h2 class="text-xl font-bold text-white text-center mb-4 flex items-center justify-center gap-2">
+                        <img src="/../../assets/img/faceidIcon.png" class="w-8 h-8 icon-color" alt="Ícone FaceID" />
+                        Registro de Ponto
+                    </h2>
+
+                    <!-- Abas -->
+                    <div class="flex border-b mb-4">
+                        <button class="tab-button text-cyan-500 font-bold px-4 py-2 border-transparent hover:border-cyan-700 hover:text-white" data-tab="info-tab">
+                            <i class="fas fa-user mr-2 text-cyan-500"></i><span class="text-cyan-500 font-bold">Informações</span>
+                        </button>
+                    </div>
+
+                    <!-- Conteúdo das Abas -->
+                    <div id="info-tab" class="tab-content mb-10">
+                        <div class="grid grid-cols-2 gap-4 text-sm text-gray-700">
+                            <div class="text-white font-bold"><strong><i class="fas fa-id-badge mr-2 text-cyan-400"></i>Nome:</strong> <span id="tab-nome"></span></div>
+                            <div class="text-white font-bold"><strong><i class="fas fa-id-card mr-2 text-cyan-400"></i>RG:</strong> <span id="tab-rg"></span></div>
+                            <div class="text-white font-bold"><strong><i class="fas fa-address-card mr-2 text-cyan-400"></i>CPF:</strong> <span id="tab-cpf"></span></div>
+                            <div class="text-white font-bold"><strong><i class="fas fa-calendar-alt mr-2 text-cyan-400"></i>Nascimento:</strong> <span id="tab-nascimento"></span></div>
+                        </div>
+                    </div>
+
+                    <div class="camera-container">
+                        <div id="camera-container" class="mt-20">
+                            <video id="video-camera" autoplay muted playsinline class="video-feed"></video>
+                        </div>            
+                        <div class="overlay">
+                            <div class="circle-ring"></div>
+                        </div>
+                    </div>
+
+                    <!-- Botão bater ponto -->
+                    <div class="flex justify-center mt-6 mb-4">
+                        <button id="btn-efetuar-ponto" 
+                            class="relative bg-cyan-500/90 hover:bg-cyan-400 text-slate-900 font-bold 
+                                py-2 px-3.5 sm:py-3 sm:px-6 rounded-lg text-sm sm:text-lg 
+                                shadow-[0_0_10px_#00ffff40] sm:shadow-[0_0_15px_#00ffff40] 
+                                transition-all hover:shadow-[0_0_25px_#00ffff80] hover:scale-105 
+                                flex items-center gap-1 sm:gap-2 text-white">
+                            <img src="/../../assets/img/faceidIcon.png" 
+                                class="w-5 h-5 sm:w-8 sm:h-8 icon-color" alt="Ícone FaceID" />
+                            <span class="text-white">BATER PONTO</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div> <!-- Fim da coluna direita -->
     </div> <!-- Fim do container principal -->
 </div> <!-- Fim do wrapper geral -->
@@ -268,14 +328,14 @@ require_once('../../assets/components/headerFuncionario.php');
     let conteudo = `
         <div id="welcome-message" class="fixed inset-0 flex items-center justify-center z-50 px-4">
             <div class="rounded-xl p-6 max-w-md w-full text-center animate-fade-in-up">
-                <h1 class="text-3xl sm:text-4xl font-bold text-white mb-2">
-                    BEM-VINDO(A) DE VOLTA
-                </h1>
-                <h2 id="tituloEmpresa" class="text-xl sm:text-2xl font-medium text-white line-clamp-2">
+                <p class="text-sm sm:text-base md:text-lg text-white mb-1 leading-tight">
+                    BEM-VINDO(A)
+                </p>
+                <h2 id="tituloEmpresa" class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight">
                     ${nomeFuncionario}
                 </h2>
             </div>
-        </div>
+        </div>  
     `;
 
     divBemVindo.append(conteudo);

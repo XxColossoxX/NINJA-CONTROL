@@ -1,3 +1,4 @@
+<?php @include_once __DIR__ . '/../../config/env.php'; ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -33,16 +34,20 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/../../assets/img/favicon/apple-touch-icon.png" />
   <meta name="apple-mobile-web-app-title" content="Ninja Control" />
   <link rel="manifest" href="/../../assets/img/favicon/site.webmanifest" />
+  <script>
+    window.APP_CONFIG = {
+      googleMapsApiKey: <?php echo json_encode(getenv('GOOGLE_MAPS_API_KEY') ?: ''); ?>
+    };
+  </script>
   <style>
-    /* Gradiente principal de fundo com ofuscamento preto */
+    /* Fundo azul-escuro quase preto */
     body {
       height: 100%;
       margin: 0;
       overflow: hidden;
       font-family: 'Noto Sans', sans-serif;
-      background: 
-        linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), /* camada preta semitransparente */
-        linear-gradient(180deg, #125f7a, #94e4e6, #125f7a); /* gradiente original */
+      background: radial-gradient(1200px 800px at 70% 10%, #0b2a36 0%, #071823 40%, #051119 70%, #030a10 100%);
+      background-color: #030a10;
     }
 
     @keyframes pulse-glow {
@@ -76,6 +81,16 @@
       50% { background-position: 100% 50%; }
     }
 
+    /* Canvas de partículas */
+    #bg-particles {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0; /* atrás de tudo */
+      pointer-events: none;
+    }
+
     /* Overlay semi-transparente para alertas e loader */
     .overlay-dark { background: rgba(15, 23, 42, 0.6); }
 
@@ -84,8 +99,8 @@
 
 <body class="relative flex items-center justify-center">
   
-  <!-- Background com gradiente e opacidade via CSS -->
-  <div class=""></div>
+  <!-- Canvas de partículas de fundo -->
+  <canvas id="bg-particles"></canvas>
 
   <!-- Loader -->
   <div id="loader-container" class="fixed inset-0 overlay-dark hidden flex flex-col items-center justify-center">
@@ -96,9 +111,9 @@
   </div>
 
   <!-- Alertas -->
-  <div id="alert-box" class="hidden fixed top-6 left-0 right-12 max-w-sm mx-auto px-4 py-3 rounded-lg shadow-lg text-white bg-teal-600 flex items-center gap-3 z-50">
-    <i id="alert-icon" class="fas fa-info-circle text-xl md:text-2xl"></i>
-    <span id="alert-message" class="font-semibold text-sm md:text-base flex-1"></span>
+  <div id="alert-box" class="hidden fixed top-4 left-0 right-0 max-w-sm sm:max-w-md mx-auto px-3 py-2 sm:px-4 sm:py-3 rounded-lg shadow-lg text-white bg-teal-600 flex items-center gap-3 z-50">
+    <i id="alert-icon" class="fas fa-info-circle text-lg md:text-2xl"></i>
+    <span id="alert-message" class="font-semibold text-xs md:text-base flex-1 leading-snug"></span>
     <button id="alert-close" class="ml-2 text-white text-lg hover:text-gray-200 focus:outline-none">
       <i class="fas fa-times"></i>
     </button>
@@ -106,6 +121,91 @@
 
   <!-- Script do sistema (alertas e loader) -->
   <script>
+    // Partículas ciano leves e animadas
+    (function(){
+      const canvas = document.getElementById('bg-particles');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width, height, dpr, particles, lastTs;
+
+      function rand(min, max){ return Math.random() * (max - min) + min; }
+
+      function resize(){
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        width = canvas.clientWidth;
+        height = canvas.clientHeight;
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        initParticles();
+      }
+
+      function initParticles(){
+        const area = width * height;
+        const density = Math.min(120, Math.max(35, Math.floor(area / 22000)));
+        particles = new Array(density).fill(0).map(() => ({
+          x: rand(0, width),
+          y: rand(0, height),
+          r: rand(0.8, 2.0),
+          vx: rand(-0.08, 0.08),
+          vy: rand(-0.08, 0.08),
+          alpha: rand(0.35, 0.85),
+          alphaSpeed: rand(0.002, 0.006),
+        }));
+      }
+
+      function step(ts){
+        const dt = lastTs ? Math.min((ts - lastTs) / 16.666, 2) : 1;
+        lastTs = ts;
+        ctx.clearRect(0, 0, width, height);
+
+        // fundo muito sutil com gradiente radial (leve vinheta)
+        const g = ctx.createRadialGradient(width*0.7, height*0.1, 100, width*0.5, height*0.5, Math.max(width, height));
+        g.addColorStop(0, 'rgba(0, 255, 255, 0.04)');
+        g.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = g;
+        ctx.fillRect(0,0,width,height);
+
+        ctx.save();
+        ctx.shadowColor = 'rgba(0,255,255,0.5)';
+        ctx.shadowBlur = 6;
+        for (let p of particles){
+          // atualizar
+          p.x += p.vx * dt * 1.2;
+          p.y += p.vy * dt * 1.2;
+          p.alpha += p.alphaSpeed * dt;
+          if (p.alpha > 0.9 || p.alpha < 0.3) p.alphaSpeed *= -1;
+
+          // wrap nas bordas
+          if (p.x < -5) p.x = width + 5;
+          if (p.x > width + 5) p.x = -5;
+          if (p.y < -5) p.y = height + 5;
+          if (p.y > height + 5) p.y = -5;
+
+          // desenhar
+          ctx.beginPath();
+          ctx.fillStyle = `rgba(0, 255, 255, ${p.alpha})`;
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+
+          // "emissão" sutil: pequeno traço atrás da partícula
+          ctx.beginPath();
+          ctx.strokeStyle = `rgba(0, 255, 255, ${p.alpha * 0.35})`;
+          ctx.lineWidth = Math.max(0.5, p.r * 0.6);
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p.x - p.vx * 10, p.y - p.vy * 10);
+          ctx.stroke();
+        }
+        ctx.restore();
+
+        requestAnimationFrame(step);
+      }
+
+      window.addEventListener('resize', resize);
+      resize();
+      requestAnimationFrame(step);
+    })();
+
     $(function () {
         const $alertBox = $('#alert-box');
         const $alertIcon = $('#alert-icon');

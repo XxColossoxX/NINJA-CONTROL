@@ -133,14 +133,45 @@ $empresaId = $_SESSION['empresa_id'];
                 </button>
             </div>
 
-                <!-- Dados do Formulário -->
-                <div class="w-full lg:w-1/2 space-y-2">
-                    <h3 class="text-white font-bold text-lg font-bold mb-2">Dados do Funcionário</h3>
-                    <p class="text-white font-bold"><strong>Nome:</strong> <span id="display-nome"></span></p>
-                    <p class="text-white font-bold"><strong>CPF:</strong> <span id="display-cpf"></span></p>
-                    <p class="text-white font-bold"><strong>RG:</strong> <span id="display-rg"></span></p>
-                    <p class="text-white font-bold"><strong>Senha Acesso:</strong> <span id="display-senha"></span></p>
-                    <p class="text-white font-bold"><strong>Data de Nascimento:</strong> <span id="display-data"></span></p>
+                <!-- Painel com Abas: Dados | Horários -->
+                <div class="w-full lg:w-1/2">
+                    <div class="flex gap-2 mb-3">
+                        <button class="tab-admin px-3 py-1.5 rounded-full text-xs font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/50 active" data-tab="admin-dados">Dados</button>
+                        <button class="tab-admin px-3 py-1.5 rounded-full text-xs font-bold bg-transparent text-cyan-300 border border-cyan-500/30 hover:bg-cyan-500/10" data-tab="admin-horarios">Horários</button>
+                    </div>
+
+                    <div id="admin-dados" class="admin-pane space-y-2">
+                        <h3 class="text-white font-bold text-lg mb-2">Dados do Funcionário</h3>
+                        <p class="text-white font-bold"><strong>Nome:</strong> <span id="display-nome"></span></p>
+                        <p class="text-white font-bold"><strong>CPF:</strong> <span id="display-cpf"></span></p>
+                        <p class="text-white font-bold"><strong>RG:</strong> <span id="display-rg"></span></p>
+                        <p class="text-white font-bold"><strong>Senha Acesso:</strong> <span id="display-senha"></span></p>
+                        <p class="text-white font-bold"><strong>Data de Nascimento:</strong> <span id="display-data"></span></p>
+                    </div>
+
+                    <div id="admin-horarios" class="admin-pane hidden">
+                        <h3 class="text-white font-bold text-lg mb-3">Horários do Funcionário</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-white text-sm mb-1">Entrada</label>
+                                <input id="inputHoraEntrada" type="time" class="w-full bg-slate-800 text-white rounded px-3 py-2 border border-slate-700">
+                            </div>
+                            <div>
+                                <label class="block text-white text-sm mb-1">Saída</label>
+                                <input id="inputHoraSaida" type="time" class="w-full bg-slate-800 text-white rounded px-3 py-2 border border-slate-700">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-white text-sm mb-1">Intervalo (início e fim)</label>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <input id="inputHoraIntInicio" type="time" class="w-full bg-slate-800 text-white rounded px-3 py-2 border border-slate-700">
+                                    <input id="inputHoraIntFim" type="time" class="w-full bg-slate-800 text-white rounded px-3 py-2 border border-slate-700">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-end mt-4">
+                            <button id="btnSalvarHorarios" class="bg-cyan-500 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded transition">Salvar Horários</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

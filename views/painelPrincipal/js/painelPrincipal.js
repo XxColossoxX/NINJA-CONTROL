@@ -325,18 +325,20 @@ $(document).on("click", ".info-icon", async function () {
     $("#modal-info-funcionario").remove();
     // Cria modal
     const modal = `
-        <div id="modal-info-funcionario" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-            <div class="bg-slate-900 rounded-xl shadow-lg p-6 w-full max-w-md relative animate-fade-in">
-                <button id="close-modal-info" class="absolute top-2 right-2 text-white hover:text-red-500 text-xl"><i class="fas fa-times"></i></button>
-                <div class="flex flex-col items-center gap-3">
-                    <div class="w-24 h-24 rounded-full border-4 border-cyan-300 bg-center bg-cover mb-2" style="background-image: url('${f.FACEID}');"></div>
-                    <h2 class="text-xl font-bold text-cyan-400 mb-1">${f.NOME_FUNCIONARIO}</h2>
-                    <div class="w-full flex flex-col gap-2 text-white">
-                        <div><i class="fas fa-id-card mr-2 text-cyan-500"></i> <b>CPF:</b> ${f.CPF}</div>
-                        <div><i class="fas fa-address-card mr-2 text-cyan-500"></i> <b>RG:</b> ${f.RG}</div>
-                        <div><i class="fas fa-calendar-alt mr-2 text-cyan-500"></i> <b>Nascimento:</b> ${f.DATA_NASCIMENTO}</div>
-                        ${f.TEL_FUNCIONARIO ? `<div><i class='fas fa-phone mr-2 text-cyan-500'></i> <b>Telefone:</b> ${f.TEL_FUNCIONARIO}</div>` : ''}
-                        ${f.EMAIL_FUNCIONARIO ? `<div><i class='fas fa-envelope mr-2 text-cyan-500'></i> <b>Email:</b> ${f.EMAIL_FUNCIONARIO}</div>` : ''}
+        <div id="modal-info-funcionario" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="bg-slate-900 w-full h-full max-w-none rounded-none shadow-lg p-0 relative animate-fade-in overflow-hidden">
+                <button id="close-modal-info" class="absolute top-3 right-3 text-white hover:text-red-500 text-xl z-10"><i class="fas fa-times"></i></button>
+                <div class="h-full overflow-y-auto p-6">
+                    <div class="flex flex-col items-center gap-3">
+                        <div class="w-24 h-24 rounded-full border-4 border-cyan-300 bg-center bg-cover mb-2" style="background-image: url('${f.FACEID}');"></div>
+                        <h2 class="text-xl font-bold text-cyan-400 mb-1">${f.NOME_FUNCIONARIO}</h2>
+                        <div class="w-full flex flex-col gap-2 text-white">
+                            <div><i class="fas fa-id-card mr-2 text-cyan-500"></i> <b>CPF:</b> ${f.CPF}</div>
+                            <div><i class="fas fa-address-card mr-2 text-cyan-500"></i> <b>RG:</b> ${f.RG}</div>
+                            <div><i class="fas fa-calendar-alt mr-2 text-cyan-500"></i> <b>Nascimento:</b> ${f.DATA_NASCIMENTO}</div>
+                            ${f.TEL_FUNCIONARIO ? `<div><i class='fas fa-phone mr-2 text-cyan-500'></i> <b>Telefone:</b> ${f.TEL_FUNCIONARIO}</div>` : ''}
+                            ${f.EMAIL_FUNCIONARIO ? `<div><i class='fas fa-envelope mr-2 text-cyan-500'></i> <b>Email:</b> ${f.EMAIL_FUNCIONARIO}</div>` : ''}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -439,6 +441,36 @@ $(document).ready(function () {
     });
 
     //#endregion
+
+    // Tabs (Dados | Horários) no modal admin
+    $(document).on('click', '.tab-admin', function(){
+        $('.tab-admin').removeClass('active bg-cyan-500/20').addClass('bg-transparent');
+        $(this).addClass('active bg-cyan-500/20');
+        const tab = $(this).data('tab');
+        $('.admin-pane').addClass('hidden');
+        $('#' + tab).removeClass('hidden');
+    });
+
+    // Salvar horários (placeholder – integrar backend depois)
+    $(document).on('click', '#btnSalvarHorarios', async function(){
+        const entrada = $('#inputHoraEntrada').val();
+        const saida = $('#inputHoraSaida').val();
+        const intIni = $('#inputHoraIntInicio').val();
+        const intFim = $('#inputHoraIntFim').val();
+
+        if(!entrada || !saida){
+            showAlert('Preencha Entrada e Saída', 'warning');
+            return;
+        }
+
+        try{
+            // await axios.post('../../../backend/backend.php', { function: 'salvarHorarios', entrada, saida, intIni, intFim, id: funcionarioIdSelecionado })
+            showAlert('Horários atualizados!', 'success');
+        }catch(e){
+            console.error(e);
+            showAlert('Erro ao salvar horários', 'error');
+        }
+    });
 });
 
 //#endregion

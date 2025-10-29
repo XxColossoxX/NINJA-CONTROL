@@ -90,10 +90,10 @@ require_once('assets/components/background.php')
 </head>
     <!-- Mensagem de Boas-Vindas -->
     <div id="welcome-message" class="welcome-message text-center opacity-0 translate-y-10">
-        <p class="text-2xl sm:text-2xl md:text-3xl text-white mb-3">
+        <p class="text-sm sm:text-base md:text-lg text-white mb-1 leading-tight">
             SEJA BEM-VINDO(A)
         </p>
-        <h1 class="text-3xl sm:text-4xl md:text-5xl text-white font-sans font-bold">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl text-white font-sans font-extrabold leading-tight">
             <strong>NINJA CONTROL</strong>
         </h1>
     </div>
@@ -108,7 +108,6 @@ require_once('assets/components/background.php')
             background-repeat: no-repeat;">
 
         <!-- Overlay escuro suave -->
-        <div class="absolute inset-0 bg-black/30 rounded-3xl"></div>
 
         <!-- Botões dentro da imagem -->
         <div class="absolute bottom-5 left-1/2 transform -translate-x-1/2 px-5 flex flex-col gap-3 w-11/12 sm:w-9/12">
@@ -133,26 +132,28 @@ require_once('assets/components/background.php')
         </div>
     </div>
 
-    <script>
-        // Seleciona a div
-        const welcome = document.getElementById('welcome-message');
-
-        // Adiciona animação de entrada
-        window.addEventListener('load', () => {
-            welcome.classList.add('fade-in-up');
-        });
-
-        // Exemplo de animação de saída após 3 segundos
-        setTimeout(() => {
-            welcome.classList.remove('fade-in-up');
-            welcome.classList.add('fade-out-up');
-            setTimeout(() => {
-                welcome.style.display = 'none';
-                document.getElementById('login-system2').classList.remove('hidden');
-                document.getElementById('login-system').classList.remove('hidden');
-            }, 800); // Tempo da animação de saída
-        }, 3000); 
-    </script>
+      <script>
+         (function(){
+             const welcome = document.getElementById('welcome-message');
+             const card = document.getElementById('login-system2');
+             function safeRemoveHidden(el){ if (el && el.classList.contains('hidden')) el.classList.remove('hidden'); }
+             window.addEventListener('load', function(){
+                 if (welcome) {
+                     welcome.classList.add('fade-in-up');
+                     setTimeout(function(){
+                         welcome.classList.remove('fade-in-up');
+                         welcome.classList.add('fade-out-up');
+                         setTimeout(function(){
+                             welcome.style.display = 'none';
+                             safeRemoveHidden(card);
+                         }, 800);
+                     }, 1600);
+                 } else {
+                     safeRemoveHidden(card);
+                 }
+             });
+         })();
+      </script>
 
 </body>
 </html>

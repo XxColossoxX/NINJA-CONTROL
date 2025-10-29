@@ -1,3 +1,4 @@
+<?php @include_once __DIR__ . '/config/env.php'; ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -40,11 +41,24 @@
   <!-- Manifest PWA -->
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#125f7a">
+  <script>
+    window.APP_CONFIG = {
+      googleMapsApiKey: <?php echo json_encode(getenv('GOOGLE_MAPS_API_KEY') ?: ''); ?>
+    };
+  </script>
 
     <style>
         body {
-            background-color: #0f172a; /* fundo escuro base */
+            background: radial-gradient(1200px 800px at 70% 10%, #0b2a36 0%, #071823 40%, #051119 70%, #030a10 100%);
+            background-color: #030a10;
         }
+        /* Reveal on scroll */
+        .reveal { opacity: 0; transform: translateY(24px); transition: opacity .65s ease, transform .65s ease; will-change: opacity, transform; }
+        .reveal.in-view { opacity: 1; transform: none; }
+        .reveal-delay-1 { transition-delay: .08s; }
+        .reveal-delay-2 { transition-delay: .16s; }
+        .reveal-delay-3 { transition-delay: .24s; }
+        .reveal-delay-4 { transition-delay: .32s; }
         .glow-box {
             box-shadow: 0 0 8px #00ffff33, 0 0 16px #00ffff22;
         }
@@ -94,11 +108,14 @@
 </head>
 <body class="font-sans text-white">
 
+    <!-- Canvas de partículas de fundo -->
+    <canvas id="bg-particles" style="position:fixed; inset:0; width:100vw; height:100vh; z-index:0; pointer-events:none;"></canvas>
+
     <!-- Header com Menu Hamburger -->
     <header class="bg-slate-900/80 fixed w-full z-10 top-0 backdrop-blur-md shadow-md">
         <div class="max-w-7xl mx-auto px-4 py-2 sm:py-3 flex items-center justify-between">
             <!-- Logo e Nome -->
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 reveal in-view">
                 <img src="assets/img/ninjaLogo.png" alt="Logo Ninja" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full shadow-md">
                 <span class="text-white font-sans font-extrabold tracking-tight text-lg sm:text-xl md:text-2xl drop-shadow-sm">
                     NINJA CONTROL
@@ -129,7 +146,17 @@
         </div>
 
         <!-- Menu Mobile -->
-        <div id="mobile-menu" class="hidden sm:hidden bg-slate-900/95">
+        <!-- Mobile Drawer -->
+        <div id="mobile-overlay" class="fixed inset-0 bg-black/50 hidden sm:hidden" style="z-index:9;"></div>
+        <nav id="mobile-menu" class="fixed top-0 right-0 h-full w-72 max-w-[80%] bg-slate-900/95 backdrop-blur-md shadow-2xl transform translate-x-full transition-transform duration-300 sm:hidden" style="z-index:10;">
+            <div class="flex items-center justify-between px-4 py-3 border-b border-slate-700">
+                <span class="text-white font-bold">Menu</span>
+                <button id="menu-close" class="text-white" aria-label="Fechar menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
             <ul class="flex flex-col gap-3 p-4 text-white font-sans font-semibold text-base">
                 <li><a href="#home" class="hover:text-cyan-400 transition">Home</a></li>
                 <li><a href="#sobre" class="hover:text-cyan-400 transition">Sobre Nós</a></li>
@@ -137,29 +164,39 @@
                 <li><a href="/../../indexLogin.php" class="hover:text-cyan-400 transition">Entrar</a></li>
                 <li><a href="/../../indexLogin.php" class="hover:text-cyan-400 transition">Cadastrar</a></li>
             </ul>
-        </div>
+        </nav>
 
         <script>
-            // Toggle menu mobile
-            const btn = document.getElementById('menu-btn');
-            const menu = document.getElementById('mobile-menu');
-
-            btn.addEventListener('click', () => {
-                menu.classList.toggle('hidden');
+            // Mobile drawer interactions
+            $(function(){
+                const $menu = $('#mobile-menu');
+                const $overlay = $('#mobile-overlay');
+                function openMenu(){
+                    $menu.removeClass('translate-x-full');
+                    $overlay.removeClass('hidden');
+                }
+                function closeMenu(){
+                    $menu.addClass('translate-x-full');
+                    $overlay.addClass('hidden');
+                }
+                $('#menu-btn').on('click', function(){ openMenu(); });
+                $('#menu-close, #mobile-overlay').on('click', function(){ closeMenu(); });
+                // Fecha com ESC
+                $(document).on('keydown', function(e){ if (e.key === 'Escape') closeMenu(); });
             });
         </script>
     </header>
 
 
     <!-- Hero -->
-    <section id="home" class="hero-section flex items-center justify-start pt-32 pb-32 px-8 min-h-screen relative">
+    <section id="home" class="hero-section flex items-center justify-start pt-32 pb-32 px-8 min-h-screen relative" style="z-index:1;">
         <div class="overlay absolute inset-0 bg-black/40 z-0"></div>
         <div class="relative max-w-4xl flex flex-col justify-center z-10">
-        <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-4">Controle de Ponto Moderno</h1>
-        <p class="text-lg sm:text-xl md:text-2xl text-slate-200 mb-8 max-w-2xl">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-4 reveal">Controle de Ponto Moderno</h1>
+        <p class="text-lg sm:text-xl md:text-2xl text-slate-200 mb-8 max-w-2xl reveal reveal-delay-1">
             O <span class="font-bold text-cyan-400">Ninja Control</span> é a solução inovadora para gestão de ponto, trazendo tecnologia, segurança e praticidade para empresas e funcionários.
         </p>
-        <div class="flex gap-4 flex-wrap">
+        <div class="flex gap-4 flex-wrap reveal reveal-delay-2">
             <a href="/indexLogin.php" class="px-8 py-3 bg-cyan-500 hover:bg-cyan-600 rounded-full font-bold shadow-lg glow-box transition">Entrar</a>
             <a href="/indexLogin.php" class="px-8 py-3 bg-slate-800/70 hover:bg-slate-900/80 border border-cyan-500 rounded-full font-bold shadow-lg glow-box transition">Cadastrar</a>
         </div>
@@ -168,14 +205,14 @@
 
 
     <!-- Seção Sobre Nós -->
-    <section id="sobre" class="py-24 px-8 relative">
+    <section class="py-24 px-6 bg-slate-900/90" style="z-index:1;">
         <div class="relative max-w-7xl mx-auto z-10">
             <!-- Título acima dos cards -->
-            <h2 class="text-4xl font-bold text-cyan-400 glow-text mb-8 text-center">Sobre Nós</h2>
+            <h2 class="text-4xl font-bold text-cyan-400 glow-text mb-8 text-center reveal">Sobre Nós</h2>
 
             <!-- Descrição -->
             <div class="flex flex-col md:flex-row items-start gap-12 mb-12">
-                <div class="flex-1">
+                <div class="flex-1 reveal">
                     <p class="text-slate-200 mb-6">
                         Somos apaixonados por tecnologia e inovação. O Ninja Control nasceu para revolucionar o controle de ponto, oferecendo uma plataforma segura, rápida e fácil de usar.
                     </p>
@@ -184,42 +221,42 @@
 
             <!-- Cards de Benefícios -->
             <div class="flex flex-wrap gap-8 md:flex-row sm:flex-col lg:flex-row">
-                <div class="bg-slate-900/70 border border-cyan-500 rounded-xl p-6 glow-box card-hover transition flex-1 min-w-[280px]">
+                <div class="bg-slate-900/70 border border-cyan-500 rounded-xl p-6 glow-box card-hover transition flex-1 min-w-[280px] reveal">
                     <i class="fas fa-shield-alt text-cyan-400 text-3xl mb-2"></i>
                     <h3 class="text-xl font-bold text-white mb-2">Segurança</h3>
                     <p class="text-slate-300">Dados protegidos e autenticação avançada para garantir total segurança.</p>
                 </div>
-                <div class="bg-slate-900/70 border border-cyan-500 rounded-xl p-6 glow-box card-hover transition flex-1 min-w-[280px]">
+                <div class="bg-slate-900/70 border border-cyan-500 rounded-xl p-6 glow-box card-hover transition flex-1 min-w-[280px] reveal reveal-delay-1">
                     <i class="fas fa-bolt text-cyan-400 text-3xl mb-2"></i>
                     <h3 class="text-xl font-bold text-white mb-2">Agilidade</h3>
                     <p class="text-slate-300">Processos rápidos e automatizados para facilitar o dia a dia.</p>
                 </div>
-                <div class="bg-slate-900/70 border border-cyan-500 rounded-xl p-6 glow-box card-hover transition flex-1 min-w-[280px]">
+                <div class="bg-slate-900/70 border border-cyan-500 rounded-xl p-6 glow-box card-hover transition flex-1 min-w-[280px] reveal reveal-delay-2">
                     <i class="fas fa-users text-cyan-400 text-3xl mb-2"></i>
                     <h3 class="text-xl font-bold text-white mb-2">Facilidade</h3>
                     <p class="text-slate-300">Interface intuitiva e moderna, pensada para todos os públicos.</p>
                 </div>
             </div>
         </div>
-    </section>
+    </section >
 
   <!-- Seção de Prints do Sistema -->
-  <section class="py-24 px-6 bg-slate-900/90">
+  <section class="py-24 px-6 bg-slate-900/90" style="z-index:1;">
       <div class="max-w-6xl mx-auto text-center mb-12">
-          <h2 class="text-3xl sm:text-4xl font-bold text-cyan-400 glow-text mb-4">Veja o Ninja Control em Ação</h2>
-          <p class="text-slate-300 text-lg">Confira abaixo algumas telas do nosso sistema em funcionamento.</p>
+          <h2 class="text-3xl sm:text-4xl font-bold text-cyan-400 glow-text mb-4 reveal">Veja o Ninja Control em Ação</h2>
+          <p class="text-slate-300 text-lg reveal reveal-delay-1">Confira abaixo algumas telas do nosso sistema em funcionamento.</p>
       </div>
 
       <div class="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
           <!-- Imagem 1 (horizontal - maior) -->
-          <div class="flex justify-center bg-slate-800/80 rounded-2xl overflow-hidden glow-box hover:scale-[1.02] transition-all duration-300 shadow-lg border-4 border-cyan-500/60 p-2 w-full max-w-[95%] mx-auto">
+          <div class="flex justify-center bg-slate-800/80 rounded-2xl overflow-hidden glow-box hover:scale-[1.02] transition-all duration-300 shadow-lg border-4 border-cyan-500/60 p-2 w-full max-w-[95%] mx-auto reveal">
               <a href="/../../assets/img/painelPrint.png" class="block w-full h-full">
                   <img src="/../../assets/img/painelPrint.png" alt="Tela do Sistema 1" class="w-full h-full object-cover">
               </a>
           </div>
 
           <!-- Imagem 2 (vertical - menor) -->
-          <div class="flex justify-center bg-slate-800/80 rounded-2xl overflow-hidden glow-box hover:scale-[1.02] transition-all duration-300 shadow-lg border-4 border-cyan-500/60 p-2 w-full max-w-[80%] mx-auto">
+          <div class="flex justify-center bg-slate-800/80 rounded-2xl overflow-hidden glow-box hover:scale-[1.02] transition-all duration-300 shadow-lg border-4 border-cyan-500/60 p-2 w-full max-w-[80%] mx-auto reveal reveal-delay-1">
               <a href="/../../assets/img/pontoPrint.png" class="block w-full h-full">
                   <img src="/../../assets/img/pontoPrint.png" alt="Tela do Sistema 2" class="w-full h-full object-cover">
               </a>
@@ -228,24 +265,24 @@
   </section>
 
     <!-- Seção de Funcionalidades -->
-    <section class="py-24 px-8 bg-slate-900/80 backdrop-blur-md">
+    <section class="py-24 px-8 bg-slate-900/80 backdrop-blur-md" style="z-index:1;">
         <div class="max-w-6xl mx-auto text-center mb-12">
-            <h2 class="text-3xl sm:text-4xl font-bold text-cyan-400 glow-text mb-4">Nossas Funcionalidades!</h2>
-            <p class="text-slate-300 text-lg">Confira abaixo as qualidades que garantimos para você!</p>
+            <h2 class="text-3xl sm:text-4xl font-bold text-cyan-400 glow-text mb-4 reveal">Nossas Funcionalidades!</h2>
+            <p class="text-slate-300 text-lg reveal reveal-delay-1">Confira abaixo as qualidades que garantimos para você!</p>
         </div>
 
         <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
-            <div class="bg-slate-800/70 border border-cyan-500 rounded-xl p-6 glow-box card-hover transition flex flex-col items-center text-center">
+            <div class="bg-slate-800/70 border border-cyan-500 rounded-xl p-6 glow-box card-hover transition flex flex-col items-center text-center reveal">
                 <i class="fas fa-cogs text-cyan-400 text-4xl mb-3"></i>
                 <h3 class="text-xl font-bold text-white mb-2">Automação</h3>
                 <p class="text-slate-300">Automatize tarefas repetitivas e ganhe tempo na gestão de ponto.</p>
             </div>
-            <div class="bg-slate-800/70 border border-cyan-500 rounded-xl p-6 glow-box card-hover transition flex flex-col items-center text-center">
+            <div class="bg-slate-800/70 border border-cyan-500 rounded-xl p-6 glow-box card-hover transition flex flex-col items-center text-center reveal reveal-delay-1">
                 <i class="fas fa-chart-line text-cyan-400 text-4xl mb-3"></i>
                 <h3 class="text-xl font-bold text-white mb-2">Relatórios</h3>
                 <p class="text-slate-300">Acompanhe métricas e dados em tempo real com dashboards intuitivos.</p>
             </div>
-            <div class="bg-slate-800/70 border border-cyan-500 rounded-xl p-6 glow-box card-hover transition flex flex-col items-center text-center">
+            <div class="bg-slate-800/70 border border-cyan-500 rounded-xl p-6 glow-box card-hover transition flex flex-col items-center text-center reveal reveal-delay-2">
                 <i class="fas fa-mobile-alt text-cyan-400 text-4xl mb-3"></i>
                 <h3 class="text-xl font-bold text-white mb-2">Mobile</h3>
                 <p class="text-slate-300">Acesse todas as funções do Ninja Control pelo celular de forma prática.</p>
@@ -254,18 +291,18 @@
     </section>
 
     <!-- Contato -->
-    <section id="contato" class="py-24 px-8 relative">
+    <section id="contato" class="py-24 px-8 relative" style="z-index:1;">
         <div class="bg-slate-800/80 absolute inset-0 z-0 rounded-xl"></div>
         <div class="relative max-w-3xl mx-auto flex flex-col gap-6 z-10">
-            <h2 class="text-3xl font-bold text-cyan-400 glow-text">Fale Conosco</h2>
-            <p class="text-slate-200">Tem dúvidas ou quer saber mais? Entre em contato conosco!</p>
+            <h2 class="text-3xl font-bold text-cyan-400 glow-text reveal">Fale Conosco</h2>
+            <p class="text-slate-200 reveal reveal-delay-1">Tem dúvidas ou quer saber mais? Entre em contato conosco!</p>
 
-            <a href="mailto:contato@ninjacontrol.com" class="inline-block px-8 py-3 bg-cyan-500 hover:bg-cyan-600 text-white font-bold rounded-full shadow-lg glow-box transition">contato@ninjacontrol.com</a>
+            <a href="mailto:contato@ninjacontrol.com" class="inline-block px-8 py-3 bg-cyan-500 hover:bg-cyan-600 text-white font-bold rounded-full shadow-lg glow-box transition reveal reveal-delay-2">contato@ninjacontrol.com</a>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-slate-800/80 py-6 backdrop-blur-md">
+    <footer class="bg-slate-800/80 py-6 backdrop-blur-md" style="z-index:1;">
         <div class="max-w-7xl mx-auto px-4 flex flex-col items-center gap-4 text-center">
             <div class="flex items-center gap-2">
                 <img src="assets/img/ninjaLogo.png" alt="Logo Ninja" class="w-8 h-8">
@@ -290,6 +327,106 @@
     </footer>
 
   <script>
+    // Reveal on scroll com IntersectionObserver
+    (function(){
+      var els = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+      if (!('IntersectionObserver' in window) || els.length === 0) {
+        // Fallback: mostra tudo
+        els.forEach(function(el){ el.classList.add('in-view'); });
+        return;
+      }
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -10% 0px', threshold: 0.12 });
+      els.forEach(function(el){ io.observe(el); });
+    })();
+    // Partículas ciano leves e animadas
+    (function(){
+      var canvas = document.getElementById('bg-particles');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+      var width, height, dpr, particles, lastTs;
+
+      function rand(min, max){ return Math.random() * (max - min) + min; }
+
+      function resize(){
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        width = canvas.clientWidth;
+        height = canvas.clientHeight;
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        initParticles();
+      }
+
+      function initParticles(){
+        var area = width * height;
+        var density = Math.min(120, Math.max(35, Math.floor(area / 22000)));
+        particles = Array(density).fill(0).map(function(){
+          return {
+            x: rand(0, width),
+            y: rand(0, height),
+            r: rand(0.8, 2.0),
+            vx: rand(-0.08, 0.08),
+            vy: rand(-0.08, 0.08),
+            alpha: rand(0.35, 0.85),
+            alphaSpeed: rand(0.002, 0.006)
+          };
+        });
+      }
+
+      function step(ts){
+        var dt = lastTs ? Math.min((ts - lastTs) / 16.666, 2) : 1;
+        lastTs = ts;
+        ctx.clearRect(0, 0, width, height);
+
+        var g = ctx.createRadialGradient(width*0.7, height*0.1, 100, width*0.5, height*0.5, Math.max(width, height));
+        g.addColorStop(0, 'rgba(0, 255, 255, 0.04)');
+        g.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = g;
+        ctx.fillRect(0,0,width,height);
+
+        ctx.save();
+        ctx.shadowColor = 'rgba(0,255,255,0.5)';
+        ctx.shadowBlur = 6;
+        for (var i=0;i<particles.length;i++){
+          var p = particles[i];
+          p.x += p.vx * dt * 1.2;
+          p.y += p.vy * dt * 1.2;
+          p.alpha += p.alphaSpeed * dt;
+          if (p.alpha > 0.9 || p.alpha < 0.3) p.alphaSpeed *= -1;
+
+          if (p.x < -5) p.x = width + 5;
+          if (p.x > width + 5) p.x = -5;
+          if (p.y < -5) p.y = height + 5;
+          if (p.y > height + 5) p.y = -5;
+
+          ctx.beginPath();
+          ctx.fillStyle = 'rgba(0, 255, 255, ' + p.alpha + ')';
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.strokeStyle = 'rgba(0, 255, 255, ' + (p.alpha * 0.35) + ')';
+          ctx.lineWidth = Math.max(0.5, p.r * 0.6);
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p.x - p.vx * 10, p.y - p.vy * 10);
+          ctx.stroke();
+        }
+        ctx.restore();
+
+        requestAnimationFrame(step);
+      }
+
+      window.addEventListener('resize', resize);
+      resize();
+      requestAnimationFrame(step);
+    })();
     // Inicializa SimpleLightbox
     var lightbox = new SimpleLightbox('a', { captionsData: 'alt', captionDelay: 250 });
 

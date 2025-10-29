@@ -30,8 +30,11 @@ $(document).ready(function () {
         $('#tab-cpf').text(cpfFuncionario);
         $('#tab-nascimento').text(dataNascimentoFuncionario);
         $('#tab-localizacao').text(localizacaoEmpresa);
+        $('#inputLocalizacaoEmpresa').val(localizacaoEmpresa);
 
-        $('#modal-bater-ponto').removeClass('hidden');
+        const $modalFunc = $('#modal-bater-ponto-funcionario');
+        if ($modalFunc.length) { $modalFunc.removeClass('hidden'); }
+        else { $('#modal-bater-ponto').removeClass('hidden'); }
         $('.tab-button').first().click(); // Ativa primeira aba
 
         // Delay para garantir que o vídeo esteja no DOM e visível
@@ -66,6 +69,8 @@ $(document).ready(function () {
 
     // Fechar modal e parar a câmera
     $('#btn-fechar-ponto').on('click', function () {
+        const $modalFunc = $('#modal-bater-ponto-funcionario');
+        if ($modalFunc.length) { $modalFunc.addClass('hidden'); }
         $('#modal-bater-ponto').addClass('hidden');
         if (cameraStream) {
             cameraStream.getTracks().forEach(track => track.stop());
@@ -124,6 +129,8 @@ async function locAtual() {
             (position) => {
                 const lat = position.coords.latitude;
                 const lng = position.coords.longitude;
+                $('#inputLatitude').val(lat);
+                $('#inputLongitude').val(lng);
                 getEndereco(lat, lng);
             },
             (error) => {
@@ -139,7 +146,7 @@ async function locAtual() {
 };
 
 function getEndereco(latitude, longitude) {
-    const apiKey = 'AIzaSyDwpxfS7AptP74paz0S889G-uy4hE9bJV4';
+    const apiKey = (window.APP_CONFIG && window.APP_CONFIG.googleMapsApiKey) ? window.APP_CONFIG.googleMapsApiKey : '';
     const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
     let endereco = {
         numero: '',
@@ -201,56 +208,37 @@ async function comparaEndereco(){
 
 //!FRONT-END
 //#region
-// Botões de fechar os modais e eventos da captura de camera 
+$(function(){
+    // Fechar o modal do formulário
+    $('#close-form-modal').on('click', function(){
+        $('#form-modal').addClass('hidden');
+    });
 
-const closeFormModalBtn     = document.getElementById('close-form-modal');
-const closeCameraModalBtn   = document.getElementById('close-camera-modal');
+    // Fechar o modal de captura de rosto
+    $('#close-camera-modal').on('click', function(){
+        const video = $('#register-camera')[0];
+        if (video && video.srcObject) {
+            video.srcObject.getTracks().forEach(track => track.stop());
+        }
+        $('#camera-modal').addClass('hidden');
+    });
 
-// Fechar o modal do formulário
-closeFormModalBtn.addEventListener('click', () => {
-    formModal.classList.add('hidden');
-});
+    // Menu hambúrguer
+    $('#menu-toggle').on('click', function(){
+        $('#menu').removeClass('menu-hidden').addClass('menu-visible');
+    });
+    $('#menu-close').on('click', function(){
+        $('#menu').removeClass('menu-visible').addClass('menu-hidden');
+    });
 
-// Fechar o modal de captura de rosto
-closeCameraModalBtn.addEventListener('click', () => {
-    cameraModal.classList.add('hidden');
-});
+    // Abrir modal de formulário de funcionário
+    $('#add-employee-btn').on('click', function(){
+        $('#form-modal').removeClass('hidden');
+    });
 
-document.getElementById("close-camera-modal").addEventListener("click", function () {
-    const cameraModal = document.getElementById("camera-modal");
-    const video = document.getElementById("register-camera");
-
-    // Parar o stream da câmera
-    if (video.srcObject) {
-        video.srcObject.getTracks().forEach((track) => track.stop());
-    }
-
-    cameraModal.classList.add("hidden");
-});
-
-const menuToggle    = document.getElementById("menu-toggle");
-const menuClose     = document.getElementById("menu-close");
-const menu          = document.getElementById("menu");
-
-menuToggle.addEventListener("click", () => {
-    menu.classList.remove("menu-hidden");
-    menu.classList.add("menu-visible");
-});
-
-menuClose.addEventListener("click", () => {
-    menu.classList.remove("menu-visible");
-    menu.classList.add("menu-hidden");
-});
-
-const addEmployeeBtn    = document.getElementById('add-employee-btn');
-const formModal         = document.getElementById('form-modal');
-const cameraModal       = document.getElementById('camera-modal');
-const nextToCameraBtn   = document.getElementById('next-to-camera');
-const video             = document.getElementById('video');
-const captureBtn        = document.getElementById('capture-btn');
-
-addEmployeeBtn.addEventListener('click', () => {
-    formModal.classList.remove('hidden');
+    $('#btnCloseModal').on('click', function(){
+        $('#modal-bater-ponto').addClass('hidden');
+    });
 });
 //#endregion
 });
