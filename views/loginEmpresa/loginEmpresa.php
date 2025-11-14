@@ -3,16 +3,7 @@
 ?>
 
 
-<div id="login-empresa-container"
-    class="w-full min-h-screen flex items-center justify-center relative overflow-hidden" style="height: 100%;
-        margin: 0;
-        overflow: hidden;
-        font-family: 'Noto Sans', sans-serif;
-        background: 
-            linear-gradient(180deg, #125f7a, #94e4e6, #125f7a) !important; /* gradiente original */">
-
-    <!-- Overlay escuro suave -->
-    <div class="absolute inset-0 bg-black/40"></div>
+<div id="login-empresa-container">
 
     <!-- Formulário Glass -->
     <div id="login-system"

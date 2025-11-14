@@ -88,6 +88,7 @@ require_once('assets/components/background.php')
     }
     </style>
 </head>
+
     <!-- Mensagem de Boas-Vindas -->
     <div id="welcome-message" class="welcome-message text-center opacity-0 translate-y-10">
         <p class="text-sm sm:text-base md:text-lg text-white mb-1 leading-tight">

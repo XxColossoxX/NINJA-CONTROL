@@ -248,11 +248,11 @@ $(document).ready( async function() {
             url: "../../../backend/backend.php",
             method: "POST",
             data: {
-                function: "getLocEmpresa",
+                function: "getLocaEmpresa",
             },
         });
         if(res.data){
-           loc = res.data[0]['LOC_EMPRESA'];
+            let loc =! '' ? res.data[0]['LOC_EMPRESA'] : 'Endereço não disponível';
             locSeparada = loc.split(', ');
             $("#inputRua").val(locSeparada[0])
             $("#inputNro").val(locSeparada[1]);

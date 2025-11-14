@@ -142,7 +142,7 @@ require_once('../../assets/components/headerEmpresa.php');
                 <label class="block text-xs font-bold mb-1 text-white" for="localizacao">Localização Atual</label>
                 <div class="bg-slate-800/80 border border-cyan-500/10 shadow-[0_0_8px_#00ffff10] flex items-center bg-gray-100 rounded-lg p-1.5 glow-box">
                     <i class="fas fa-map-marker-alt text-cyan-400 text-lg mr-1.5"></i>
-                    <input id="inputLocalizacao" type="text" value="<?php echo isset($_SESSION['empresa_loc']) ? $_SESSION['empresa_loc'] : 'Endereço não disponível'; ?>"
+                    <input id="inputLocalizacao" type="text" value=""
                         class="w-full min-w-[250px] bg-slate-800/80 border border-cyan-500/10 shadow-[0_0_8px_#00ffff10] border-none outline-none font-bold text-white text-xs" readonly>
                 </div>
             </div>

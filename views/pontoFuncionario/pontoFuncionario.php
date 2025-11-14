@@ -252,7 +252,7 @@ require_once('../../assets/components/headerFuncionario.php');
                 <div class="w-full max-w-md sm:max-w-lg bg-slate-900 rounded-xl shadow-lg p-4 relative overflow-y-auto max-h-[90vh]">
                     
                     <!-- Botão Fechar -->
-                    <button id="btnCloseModal" class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl font-bold transition" aria-label="Fechar Modal">
+                    <button id="btnCloseModal" class="btnCloseModal absolute top-3 right-3 text-gray-400 hover:text-white text-2xl font-bold transition">
                         &times;
                     </button>
                     
@@ -310,6 +310,20 @@ require_once('../../assets/components/headerFuncionario.php');
 <script src="./js/pontoFuncionario.js"></script>
 <link rel="stylesheet" href="./css/pontoFuncionario.css">
 <script>
+
+    $('.btnCloseModal').on('click', function(){
+                $('#modal-bater-ponto').addClass('hidden');
+                console.log('Fechando modal e parando câmera');
+                const videoEl = $('#video-camera')[0];
+                if (videoEl && videoEl.srcObject) {
+                    videoEl.srcObject.getTracks().forEach(track => track.stop());
+                    videoEl.srcObject = null;
+                }
+                if (cameraStream) {
+                    cameraStream.getTracks().forEach(track => track.stop());
+                    cameraStream = null;
+                }
+            });
     
     const faceIdFuncionario         = "<?php echo isset($_SESSION['funcionario_faceid']) ? $_SESSION['funcionario_faceid'] : ''; ?>";
     const nomeFuncionario           = "<?php echo isset($_SESSION['funcionario_nome']) ? $_SESSION['funcionario_nome'] : ''; ?>";

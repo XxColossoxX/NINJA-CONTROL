@@ -7,6 +7,9 @@ const tabela = $("#tblFuncionario tbody");
 $(document).ready( async function() {
     loaderM("Carregando Funcionários... Aguarde Por Favor!");
     carregarNomeEmpresa()
+    if(sessionStorage.getItem('locEmpresa') === null || sessionStorage.getItem('locEmpresa') === "" )
+        showAlert('Preencha a localização em Dados Empresa!', "warning");
+    
 
     Inputmask("999.999.999-99").mask("#inputCpfFuncionario");
     Inputmask("99.999.999-9").mask("#inputRgFuncionario");
@@ -16,10 +19,9 @@ $(document).ready( async function() {
     Inputmask("99.999.999-9").mask("#showRg");
 
     await recarregaTabela();
-    await verificaLoc();
     
 //!BOTOES
-$("#btnProximo").on('click', async function(){
+$(document).on('click', "#btnProximo", async function(){
     let inputNome   = $("#inputNomeFuncionario").val()
     let inputCpf    = $("#inputCpfFuncionario").val()
     let inputRg     = $("#inputRgFuncionario").val()
@@ -35,11 +37,19 @@ $("#btnProximo").on('click', async function(){
 
 });
 
+$(document).on('click', '#btnSalvarHorarios', async function(){
+    const entrada = $('#inputHoraEntrada').val();
+    const saida = $('#inputHoraSaida').val();
+    const intIni = $('#inputHoraIntInicio').val();
+    const intFim = $('#inputHoraIntFim').val();
+    await salvarHorarios(entrada, saida, intIni, intFim);
+});
+
 $('#btnAdd').on("click", async function(){
     dataMethod = "insert";
     id = '';
 
-    $("#form-modal").removeClass("hidden");
+    $("#form-modal").show();
     $("#inputNomeFuncionario").val('');
     $("#inputCpfFuncionario").val('');
     $("#inputRgFuncionario").val('');
@@ -77,12 +87,13 @@ $(document).on("click", ".delete-icon", async function () {
     if (confirm("Tem certeza que deseja excluir este funcionário?")) {
         try {
             const res = await axios({
-                url: "../../../backend/backend.php",
+                url: "/backend/backend.php",
                 method: "POST",
                 data: {
                     function: "deletaFuncionario",
                     ID_FUNCIONARIO: id,
                 },
+                headers: { "Content-Type": "application/json"}
             });
 
             if (res.data) {
@@ -111,12 +122,13 @@ $(document).on("click", ".edit-icon", async function () {
     $("#inputDataNascFuncionario").val('')
 
     const res = await axios({
-        url: "../../../backend/backend.php",
+        url: "/backend/backend.php",
         method: "POST",
         data: {
             function: "loadDadosFuncionario",
             ID_FUNCIONARIO: id,
         },
+        headers: { "Content-Type": "application/json"}
     })
     console.log(res.data.data);
     $("#form-modal").removeClass("hidden");
@@ -142,19 +154,14 @@ async function abrirCamera() {
     let stream;
 
     // Preencher os dados do formulário na seção de dados
-    const inputNome     = $("#inputNomeFuncionario").val();
-    const inputCpf      = $("#inputCpfFuncionario").val();
-    const inputRg       = $("#inputRgFuncionario").val();
-    const inputData     = $("#inputDataNascFuncionario").val();
-    const inputSenha    = $("#inputSenhaFuncionario").val()
-    const inputCelular  = $("#inputCelularFuncionario").val();
-    const inputEmail    = $("#inputEmailFuncionario").val()
+    const fillDisplay = () => {
+        displayNome.textContent = $("#inputNomeFuncionario").val();
+        displayCpf.textContent = $("#inputCpfFuncionario").val();
+        displayRg.textContent = $("#inputRgFuncionario").val();
+        displayData.textContent = $("#inputDataNascFuncionario").val();
+    };
 
-
-    displayNome.textContent = inputNome;
-    displayCpf.textContent = inputCpf;
-    displayRg.textContent = inputRg;
-    displayData.textContent = inputData;
+    fillDisplay();
 
     try {
         // Solicitar permissão para acessar a câmera
@@ -168,28 +175,45 @@ async function abrirCamera() {
         video.classList.add("hidden");
     }
 
-    // Capturar a foto ao clicar no botão "Capturar"
-    document.getElementById("btnCapturar").addEventListener("click", async function () {
-        const canvas = document.createElement("canvas");
-        const context = canvas.getContext("2d");
+    // Remover qualquer listener anterior para evitar duplicação
+    const btnCapturar = document.getElementById("btnCapturar");
+    const novoBtn = btnCapturar.cloneNode(true);
+    btnCapturar.parentNode.replaceChild(novoBtn, btnCapturar);
 
+    novoBtn.addEventListener("click", async function () {
+        if ($("#inputHoraEntrada").val() === "" || $("#inputHoraSaida").val() === "" ||
+            $("#inputHoraIntInicio").val() === "" || $("#inputHoraIntFim").val() === "") {
+            showAlert("Defina os horários de trabalho antes de continuar!", "error");
+            return;
+        }
+
+        // Captura a foto
+        const canvas = document.createElement("canvas");
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
-
+        const context = canvas.getContext("2d");
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-        // Converter a imagem para Base64
-        foto64 = canvas.toDataURL("image/png");
+        const foto64 = canvas.toDataURL("image/png");
         console.log("Foto capturada:", foto64);
 
+        // Preencher variáveis com os inputs atuais
+        const inputNome     = $("#inputNomeFuncionario").val();
+        const inputCpf      = $("#inputCpfFuncionario").val();
+        const inputRg       = $("#inputRgFuncionario").val();
+        const inputData     = $("#inputDataNascFuncionario").val();
+        const inputSenha    = $("#inputSenhaFuncionario").val();
+        const inputCelular  = $("#inputCelularFuncionario").val();
+        const inputEmail    = $("#inputEmailFuncionario").val();
 
         // Exibir mensagem de boas-vindas
         welcomeNome.textContent = inputNome;
         welcomeMessage.classList.remove("hidden");
 
-        if(dataMethod === "update") {
-            const res = await axios({
-                url: "../../../backend/backend.php",
+        let res;
+
+        if (dataMethod === "update") {
+            res = await axios({
+                url: "/backend/backend.php",
                 method: "POST",
                 data: {
                     function: "updateFuncionario",
@@ -203,26 +227,16 @@ async function abrirCamera() {
                     RG: inputRg,
                     FACEID: foto64,
                 },
-            });  
-
-            if (res.data.success) {
-                showAlert(res.data.message, "success");
-                $("#close-camera-modal").click();
-                recarregaTabela();
-                return
-            } else {
-                showAlert("Erro ao cadastrar funcionário.", "error");
-                console.log(res.data);
-            }      
+                headers: { "Content-Type": "application/json" }
+            });
         }
 
-        if(dataMethod === "insert") {
-            const res = await axios({
-                url: "../../../backend/backend.php",
+        if (dataMethod === "insert") {
+            res = await axios({
+                url: "/backend/backend.php",
                 method: "POST",
                 data: {
                     function: "applyFuncionario",
-                    ID_FUNCIONARIO: id,
                     NOME_FUNCIONARIO: inputNome,
                     CPF: inputCpf,
                     DATA_NASCIMENTO: inputData,
@@ -232,22 +246,40 @@ async function abrirCamera() {
                     RG: inputRg,
                     FACEID: foto64,
                 },
-            });  
+                headers: { "Content-Type": "application/json" }
+            });
+        }
 
-            if (res.data.success) {
-                showAlert(res.data.message, "success");
-                $("#close-camera-modal").click();
-                recarregaTabela();
-                return
-            } else {
-                showAlert("Erro ao cadastrar funcionário.", "error");
-                console.log(res.data);
-            }      
+        if (res.data.success) {
+            await salvarHorarios(
+                $("#inputHoraEntrada").val(),
+                $("#inputHoraSaida").val(),
+                $("#inputHoraIntInicio").val(),
+                $("#inputHoraIntFim").val(),
+                res.data['id_funcionario'],
+                dataMethod
+            );
+
+            $("#close-camera-modal").click();
+            recarregaTabela();
+
+            // Limpar inputs
+            $("#inputNomeFuncionario").val('');
+            $("#inputCpfFuncionario").val('');
+            $("#inputRgFuncionario").val('');
+            $("#inputDataNascFuncionario").val('');
+            $("#inputSenhaFuncionario").val('');
+            $("#inputCelularFuncionario").val('');
+            $("#inputEmailFuncionario").val('');
+
+            fillDisplay(); // Limpar display
+        } else {
+            showAlert("Erro ao cadastrar funcionário.", "error");
+            console.log(res.data);
         }
     });
+}
 
-    return stream;
-};
 
 async function preencheTabela(res) {
     const tabela = $("#tblFuncionario tbody");
@@ -309,16 +341,19 @@ async function preencheTabela(res) {
     }
 };
 
+
+
 // Modal de informações do funcionário
 $(document).on("click", ".info-icon", async function () {
     const id = $(this).data("id");
     const res = await axios({
-        url: "../../../backend/backend.php",
+        url: "/backend/backend.php",
         method: "POST",
         data: {
             function: "loadDadosFuncionario",
             ID_FUNCIONARIO: id,
         },
+        headers: { "Content-Type": "application/json"}
     });
     const f = res.data.data;
     // Remove modal anterior se existir
@@ -326,24 +361,28 @@ $(document).on("click", ".info-icon", async function () {
     // Cria modal
     const modal = `
         <div id="modal-info-funcionario" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div class="bg-slate-900 w-full h-full max-w-none rounded-none shadow-lg p-0 relative animate-fade-in overflow-hidden">
-                <button id="close-modal-info" class="absolute top-3 right-3 text-white hover:text-red-500 text-xl z-10"><i class="fas fa-times"></i></button>
-                <div class="h-full overflow-y-auto p-6">
-                    <div class="flex flex-col items-center gap-3">
-                        <div class="w-24 h-24 rounded-full border-4 border-cyan-300 bg-center bg-cover mb-2" style="background-image: url('${f.FACEID}');"></div>
-                        <h2 class="text-xl font-bold text-cyan-400 mb-1">${f.NOME_FUNCIONARIO}</h2>
-                        <div class="w-full flex flex-col gap-2 text-white">
-                            <div><i class="fas fa-id-card mr-2 text-cyan-500"></i> <b>CPF:</b> ${f.CPF}</div>
-                            <div><i class="fas fa-address-card mr-2 text-cyan-500"></i> <b>RG:</b> ${f.RG}</div>
-                            <div><i class="fas fa-calendar-alt mr-2 text-cyan-500"></i> <b>Nascimento:</b> ${f.DATA_NASCIMENTO}</div>
-                            ${f.TEL_FUNCIONARIO ? `<div><i class='fas fa-phone mr-2 text-cyan-500'></i> <b>Telefone:</b> ${f.TEL_FUNCIONARIO}</div>` : ''}
-                            ${f.EMAIL_FUNCIONARIO ? `<div><i class='fas fa-envelope mr-2 text-cyan-500'></i> <b>Email:</b> ${f.EMAIL_FUNCIONARIO}</div>` : ''}
-                        </div>
+            <div class="bg-slate-900 w-full max-w-md rounded-lg shadow-lg p-6 relative animate-fade-in overflow-y-auto max-h-[90vh]">
+                <!-- Botão fechar -->
+                <button id="close-modal-info" class="absolute top-3 right-3 text-white hover:text-red-500 text-xl z-10">
+                    <i class="fas fa-times"></i>
+                </button>
+
+                <!-- Conteúdo -->
+                <div class="flex flex-col items-center gap-3">
+                    <div class="w-24 h-24 rounded-full border-4 border-cyan-300 bg-center bg-cover mb-2" style="background-image: url('${f.FACEID}');"></div>
+                    <h2 class="text-xl font-bold text-cyan-400 mb-1">${f.NOME_FUNCIONARIO}</h2>
+                    <div class="w-full flex flex-col gap-2 text-white">
+                        <div><i class="fas fa-id-card mr-2 text-cyan-500"></i> <b>CPF:</b> ${f.CPF}</div>
+                        <div><i class="fas fa-address-card mr-2 text-cyan-500"></i> <b>RG:</b> ${f.RG}</div>
+                        <div><i class="fas fa-calendar-alt mr-2 text-cyan-500"></i> <b>Nascimento:</b> ${f.DATA_NASCIMENTO}</div>
+                        ${f.TEL_FUNCIONARIO ? `<div><i class='fas fa-phone mr-2 text-cyan-500'></i> <b>Telefone:</b> ${f.TEL_FUNCIONARIO}</div>` : ''}
+                        ${f.EMAIL_FUNCIONARIO ? `<div><i class='fas fa-envelope mr-2 text-cyan-500'></i> <b>Email:</b> ${f.EMAIL_FUNCIONARIO}</div>` : ''}
                     </div>
                 </div>
             </div>
         </div>
     `;
+
     $("body").append(modal);
 });
 
@@ -392,20 +431,75 @@ async function recarregaTabela() {
 
 async function loadFuncionariosEmpresa(){
     tabela.empty();
-    const res = await axios({
-        url: "../../../backend/backend.php",
-        method: "POST",
-        data: {
-            function: "loadPainel",
-            
-        },
-    });
+    const res = await axios.post('/backend/backend.php',
+            {
+                function: "loadPainel",
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+
         await preencheTabela(res);
         $("totalFunc").empty();
         $("#totalFunc").text(res.data.length);
         loaderM(false);
         return
 }; 
+
+async function salvarHorarios(entrada, saida, intIni, intFim, id, dataMethod){
+    const empresaId = $("#empresa-id").text();
+
+    if(dataMethod === "insert"){
+        const res = await axios({
+            url: "/backend/backend.php",
+            method: "POST",
+            data: {
+                function: "applyHorarioFuncionario",
+                ENTRADA1: entrada,
+                SAIDA1: intIni,
+                ENTRADA2: intFim,
+                SAIDA2: saida,
+                ID_FUNCIONARIO: id,
+                ID_EMPRESA: empresaId,
+            },  
+
+            headers: { "Content-Type": "application/json"}
+        });
+        if(res.data.success){
+            showAlert("Funcionário cadastrado com Sucesso!", "success");
+            inputNome  = ('')
+            inputCpf   = ('')
+            inputRg    = ('')
+            inputData  = ('')
+            inputSenha = ('')
+        }
+    }
+
+    if(dataMethod === "update"){
+        const res = await axios({
+            url: "/backend/backend.php",
+            method: "POST",
+            data: {
+                function: "updateHorarioFuncionario",
+                ENTRADA1: entrada,
+                SAIDA1: intIni,
+                ENTRADA2: intFim,
+                SAIDA2: saida,
+                ID_FUNCIONARIO: id,
+                ID_EMPRESA: empresaId,
+            },  
+
+            headers: { "Content-Type": "application/json"}
+        });
+        if(res.data.success){
+            showAlert("Funcionário cadastrado com Sucesso!", "success");
+        }
+    }
+};
+
 
 // FRONT-END
 $(document).ready(function () {
@@ -472,6 +566,5 @@ $(document).ready(function () {
         }
     });
 });
-
 //#endregion
 });

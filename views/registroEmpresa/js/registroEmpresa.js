@@ -30,10 +30,8 @@ $(document).ready(async function() {
             return;
         }
 
-            const res = await axios({
-                url: '../../../backend/backend.php',
-                method: 'POST',
-                data:{
+            const res = await axios.post('/backend/backend.php',
+                {
                     function: "applyEmpresa",
                     RAZAO_SOCIAL: nomeEmpresa,
                     RAZAO_FANTASIA: usuario,
@@ -41,7 +39,13 @@ $(document).ready(async function() {
                     CNPJ_EMPRESA: cnpjEmpresa,
                     TIPO: "E",
                 },
-            });
+                {
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                }
+            );
+
         
             if(res.data.status === "success") {
                 showAlert("Empresa cadastrada com sucesso!", "success");

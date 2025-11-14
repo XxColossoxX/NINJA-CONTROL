@@ -25,8 +25,6 @@ $('#toggleSenhaLogin').on('click', function() {
    })
    //#endregion
 
-
-
    //!FUNCOES:    
    //loginEmpresa
    //#region 
@@ -40,20 +38,22 @@ $('#toggleSenhaLogin').on('click', function() {
     }
 
     try {
-        const res = await axios({
-            url: "../../../backend/backend.php",
-            method: "POST",
-            data:{
+        const res = await axios.post('/backend/backend.php',
+            {
                 function: "loadEmpresa",
                 CNPJ_EMPRESA: cnpjEmpresa,
                 SENHA_EMPRESA: senhaEmpresa,
-
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                }
             }
-        });
+        );
 
         if (res.data.success) {
-            
-            sessionStorage.setItem('RAZAO_FANTASIA',res.data.data['RAZAO_FANTASIA']);
+            sessionStorage.setItem('RAZAO_FANTASIA', res.data.data['RAZAO_FANTASIA']);
+            sessionStorage.setItem('locEmpresa', res.data.data['LOC_EMPRESA']);
             // Redireciona para a página principal
             window.location.href = "../../views/painelPrincipal/painelPrincipal.php";
         } else {

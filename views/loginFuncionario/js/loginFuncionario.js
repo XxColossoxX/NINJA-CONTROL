@@ -42,7 +42,7 @@ $('#toggleSenhaFuncionario').on('click', function() {
 
     try {
         const res = await axios({
-            url: "../../../backend/backend.php",
+            url: "/backend/backend.php",
             method: "POST",
             withCredentials: true,
             data:{
@@ -50,7 +50,10 @@ $('#toggleSenhaFuncionario').on('click', function() {
                 CPF: usuarioFuncionario,
                 SENHA_FUNCIONARIO: senhaFuncionario,
 
-            }
+            },
+            headers: {
+                    "Content-Type": "application/json"
+                }
         });
 
         if (res.data.success) {

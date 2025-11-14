@@ -7,7 +7,7 @@ const selectedFuncionario = document.getElementById('selectedFuncionario');
 $(document).ready( async function() {    
     $("#controlador").removeClass("hidden");
     loaderM("Carregando Funcionário - Aguarde ...", true)
-
+    $("#inputLocalizacao").val(sessionStorage.getItem('locEmpresa') || 'Endereço não disponível');
 
     await carregaFuncionarios();
     loaderM("", false)
@@ -137,7 +137,7 @@ async function carregaFuncionarios() {
             function: "loadPainel",
         },
     });
-    if (res.data.length > 1) {
+    if (res.data.length >= 1) {
         funcionarios = []; // Limpa antes de popular
         for(let i = 0; i < res.data.length; i++){
             funcionarios.push({

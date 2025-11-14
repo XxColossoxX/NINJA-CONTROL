@@ -8,76 +8,6 @@ $(document).ready( async function() {
         await locAtual();
     }, 2500);
 
-
-$(document).ready(function () {
-    let cameraStream = null;
-
-    // Abas
-    $('.tab-button').on('click', function () {
-        const tabId = $(this).data('tab');
-        $('.tab-button').removeClass('active');
-        $(this).addClass('active');
-        $('.tab-content').addClass('hidden');
-        $('#' + tabId).removeClass('hidden');
-    });
-
-    // Abrir modal com câmera
-    $('#btnBaterPonto').on('click', async function () {
-        // Preenche os dados nas abas
-        $('#tab-nome').text(nomeFuncionario);
-        $('#tab-empresa').text(nomeEmpresa);
-        $('#tab-rg').text(rgFuncionario);
-        $('#tab-cpf').text(cpfFuncionario);
-        $('#tab-nascimento').text(dataNascimentoFuncionario);
-        $('#tab-localizacao').text(localizacaoEmpresa);
-        $('#inputLocalizacaoEmpresa').val(localizacaoEmpresa);
-
-        const $modalFunc = $('#modal-bater-ponto-funcionario');
-        if ($modalFunc.length) { $modalFunc.removeClass('hidden'); }
-        else { $('#modal-bater-ponto').removeClass('hidden'); }
-        $('.tab-button').first().click(); // Ativa primeira aba
-
-        // Delay para garantir que o vídeo esteja no DOM e visível
-        setTimeout(async () => {
-            try {
-                cameraStream = await navigator.mediaDevices.getUserMedia({
-                    video: {
-                        facingMode: 'user',
-                        width: { ideal: 1280 },
-                        height: { ideal: 720 }
-                    },
-                    audio: false
-                });
-
-                const videoElement = $('#video-camera')[0];
-                if (videoElement) {
-                    if ("srcObject" in videoElement) {
-                        videoElement.srcObject = cameraStream;
-                    } else {
-                        // Para navegadores antigos
-                        videoElement.src = window.URL.createObjectURL(cameraStream);
-                    }
-                    videoElement.play();
-                } else {
-                    alert("Elemento de vídeo não encontrado!");
-                }
-            } catch (err) {
-                alert('Erro ao acessar câmera: ' + err.message);
-            }
-        }, 100); // 100ms de delay
-    });
-
-    // Fechar modal e parar a câmera
-    $('#btn-fechar-ponto').on('click', function () {
-        const $modalFunc = $('#modal-bater-ponto-funcionario');
-        if ($modalFunc.length) { $modalFunc.addClass('hidden'); }
-        $('#modal-bater-ponto').addClass('hidden');
-        if (cameraStream) {
-            cameraStream.getTracks().forEach(track => track.stop());
-            cameraStream = null;
-        }
-    });
-
     // Capturar imagem e converter para base64
     $('#btn-efetuar-ponto').on('click', async function () {
         loaderM('Processando face - Aguarde ...',true)
@@ -204,41 +134,107 @@ async function comparaEndereco(){
         return
     }
 
-}
+};
 
 //!FRONT-END
 //#region
-$(function(){
-    // Fechar o modal do formulário
-    $('#close-form-modal').on('click', function(){
-        $('#form-modal').addClass('hidden');
-    });
+    $(document).ready(function () {
+        let cameraStream = null;
 
-    // Fechar o modal de captura de rosto
-    $('#close-camera-modal').on('click', function(){
-        const video = $('#register-camera')[0];
-        if (video && video.srcObject) {
-            video.srcObject.getTracks().forEach(track => track.stop());
-        }
-        $('#camera-modal').addClass('hidden');
-    });
+        // Abas
+        $('.tab-button').on('click', function () {
+            const tabId = $(this).data('tab');
+            $('.tab-button').removeClass('active');
+            $(this).addClass('active');
+            $('.tab-content').addClass('hidden');
+            $('#' + tabId).removeClass('hidden');
+        });
 
-    // Menu hambúrguer
-    $('#menu-toggle').on('click', function(){
-        $('#menu').removeClass('menu-hidden').addClass('menu-visible');
-    });
-    $('#menu-close').on('click', function(){
-        $('#menu').removeClass('menu-visible').addClass('menu-hidden');
-    });
+        // Abrir modal com câmera
+        $('#btnBaterPonto').on('click', async function () {
+            // Preenche os dados nas abas
+            $('#tab-nome').text(nomeFuncionario);
+            $('#tab-empresa').text(nomeEmpresa);
+            $('#tab-rg').text(rgFuncionario);
+            $('#tab-cpf').text(cpfFuncionario);
+            $('#tab-nascimento').text(dataNascimentoFuncionario);
+            $('#tab-localizacao').text(localizacaoEmpresa);
+            $('#inputLocalizacaoEmpresa').val(localizacaoEmpresa);
 
-    // Abrir modal de formulário de funcionário
-    $('#add-employee-btn').on('click', function(){
-        $('#form-modal').removeClass('hidden');
-    });
+            const $modalFunc = $('#modal-bater-ponto-funcionario');
+            if ($modalFunc.length) { $modalFunc.removeClass('hidden'); }
+            else { $('#modal-bater-ponto').removeClass('hidden'); }
+            $('.tab-button').first().click(); // Ativa primeira aba
 
-    $('#btnCloseModal').on('click', function(){
-        $('#modal-bater-ponto').addClass('hidden');
+            // Delay para garantir que o vídeo esteja no DOM e visível
+            setTimeout(async () => {
+                try {
+                    cameraStream = await navigator.mediaDevices.getUserMedia({
+                        video: {
+                            facingMode: 'user',
+                            width: { ideal: 1280 },
+                            height: { ideal: 720 }
+                        },
+                        audio: false
+                    });
+
+                    const videoElement = $('#video-camera')[0];
+                    if (videoElement) {
+                        if ("srcObject" in videoElement) {
+                            videoElement.srcObject = cameraStream;
+                        } else {
+                            // Para navegadores antigos
+                            videoElement.src = window.URL.createObjectURL(cameraStream);
+                        }
+                        videoElement.play();
+                    } else {
+                        alert("Elemento de vídeo não encontrado!");
+                    }
+                } catch (err) {
+                    alert('Erro ao acessar câmera: ' + err.message);
+                }
+            }, 100); // 100ms de delay
+        });
+
+            // Fechar modal e parar a câmera
+            $('#btn-fechar-ponto').on('click', function () {
+                const $modalFunc = $('#modal-bater-ponto-funcionario');
+                if ($modalFunc.length) { $modalFunc.addClass('hidden'); }
+                $('#modal-bater-ponto').addClass('hidden');
+                if (cameraStream) {
+                    cameraStream.getTracks().forEach(track => track.stop());
+                    cameraStream = null;
+                }
+                $(function(){
+            // Fechar o modal do formulário
+            $('#close-form-modal').on('click', function(){
+                $('#form-modal').addClass('hidden');
+            });
+
+            // Fechar o modal de captura de rosto
+            $('#close-camera-modal').on('click', function(){
+                const video = $('#register-camera')[0];
+                if (video && video.srcObject) {
+                    video.srcObject.getTracks().forEach(track => track.stop());
+                }
+                $('#camera-modal').addClass('hidden');
+            });
+
+            // Menu hambúrguer
+            $('#menu-toggle').on('click', function(){
+                $('#menu').removeClass('menu-hidden').addClass('menu-visible');
+            });
+            $('#menu-close').on('click', function(){
+                $('#menu').removeClass('menu-visible').addClass('menu-hidden');
+            });
+
+            // Abrir modal de formulário de funcionário
+            $('#add-employee-btn').on('click', function(){
+                $('#form-modal').removeClass('hidden');
+            });
+
+            
+        });
     });
-});
 //#endregion
 });

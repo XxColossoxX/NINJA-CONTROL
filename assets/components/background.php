@@ -40,6 +40,25 @@
     };
   </script>
   <style>
+    /* Opcional: deixa a modal centralizada e com animação suave */
+.modal-window {
+    max-height: 90vh;   /* limita altura em telas pequenas */
+    overflow-y: auto;
+    transform: translateY(0);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Para animação de entrada */
+.modal-show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.modal-hide {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
     /* Fundo azul-escuro quase preto */
     body {
       height: 100%;
@@ -111,9 +130,9 @@
   </div>
 
   <!-- Alertas -->
-  <div id="alert-box" class="hidden fixed top-4 left-0 right-0 max-w-sm sm:max-w-md mx-auto px-3 py-2 sm:px-4 sm:py-3 rounded-lg shadow-lg text-white bg-teal-600 flex items-center gap-3 z-50">
-    <i id="alert-icon" class="fas fa-info-circle text-lg md:text-2xl"></i>
-    <span id="alert-message" class="font-semibold text-xs md:text-base flex-1 leading-snug"></span>
+  <div id="alert-box" class="hidden fixed top-4 right-3 sm:right-6 w-11/12 sm:w-auto max-w-sm sm:max-w-md px-3 py-2 sm:px-4 sm:py-3 rounded-lg shadow-lg text-white bg-teal-600 flex items-center gap-3 z-50">
+    <i id="alert-icon" class="fas fa-info-circle text-sm sm:text-base md:text-2xl"></i>
+    <span id="alert-message" class="font-semibold text-xs sm:text-sm md:text-base flex-1 leading-snug"></span>
     <button id="alert-close" class="ml-2 text-white text-lg hover:text-gray-200 focus:outline-none">
       <i class="fas fa-times"></i>
     </button>

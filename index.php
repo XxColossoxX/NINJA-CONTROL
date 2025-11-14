@@ -205,7 +205,7 @@
 
 
     <!-- Seção Sobre Nós -->
-    <section class="py-24 px-6 bg-slate-900/90" style="z-index:1;">
+    <section id="sobre" class="py-24 px-6 bg-slate-900/90" style="z-index:1;">
         <div class="relative max-w-7xl mx-auto z-10">
             <!-- Título acima dos cards -->
             <h2 class="text-4xl font-bold text-cyan-400 glow-text mb-8 text-center reveal">Sobre Nós</h2>
