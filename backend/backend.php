@@ -55,6 +55,10 @@ if (isset($data['function'])) {
             getDadosFuncionario($db, $data);
             break;
 
+        case 'getLatLongFromCEP': // get dados funcionário
+            getLatLongFromCEP($db, $data);
+            break;
+
         case 'getDadosEmpresa': // get dados empresa
             getDadosEmpresa($db, $data);
             break;
@@ -116,7 +120,7 @@ function loadEmpresa($db, $data) {
 
         $stmt = $db->prepare("
             SELECT ID_EMPRESA, CNPJ_EMPRESA, SENHA_EMPRESA, RAZAO_FANTASIA, 
-                   RAZAO_SOCIAL, LOC_EMPRESA, DSC_EMPRESA, TEL_EMPRESA, EMAIL_EMPRESA
+                   RAZAO_SOCIAL, LOC_EMPRESA, LAT_EMPRESA, LONG_EMPRESA, DSC_EMPRESA, TEL_EMPRESA, EMAIL_EMPRESA
             FROM EMPRESA 
             WHERE CNPJ_EMPRESA = ? AND SENHA_EMPRESA = ?
         ");
@@ -131,6 +135,8 @@ function loadEmpresa($db, $data) {
             $_SESSION['empresa_razao_social']   = $empresa['RAZAO_SOCIAL'];
             $_SESSION['empresa_cnpj']           = $empresa['CNPJ_EMPRESA'];
             $_SESSION['empresa_loc']            = $empresa['LOC_EMPRESA'];
+            $_SESSION['empresa_lat']            = $empresa['LAT_EMPRESA'];
+            $_SESSION['empresa_long']           = $empresa['LONG_EMPRESA'];
             $_SESSION['empresa_dsc']            = $empresa['DSC_EMPRESA'];
             $_SESSION['empresa_tel']            = $empresa['TEL_EMPRESA'];
             $_SESSION['empresa_email']          = $empresa['EMAIL_EMPRESA'];
@@ -190,7 +196,7 @@ function loadFuncionario($db, $data) {
             if (!empty($funcionario['FK_EMPRESA'])) {
 
                 $stmtEmpresa = $db->prepare("
-                    SELECT RAZAO_SOCIAL, RAZAO_FANTASIA, CNPJ_EMPRESA, 
+                    SELECT ID_EMPRESA, RAZAO_SOCIAL, RAZAO_FANTASIA, CNPJ_EMPRESA, 
                            LOC_EMPRESA, DSC_EMPRESA, TEL_EMPRESA, EMAIL_EMPRESA
                     FROM EMPRESA 
                     WHERE ID_EMPRESA = ?
@@ -203,6 +209,7 @@ function loadFuncionario($db, $data) {
 
                     $nomeEmpresa = $empresaRow['RAZAO_FANTASIA'];
 
+                    $_SESSION['empresa_id']             = $empresaRow['ID_EMPRESA'];
                     $_SESSION['empresa_razao_fantasia'] = $empresaRow['RAZAO_FANTASIA'];
                     $_SESSION['empresa_razao_social']   = $empresaRow['RAZAO_SOCIAL'];
                     $_SESSION['empresa_cnpj']           = $empresaRow['CNPJ_EMPRESA'];
@@ -418,7 +425,6 @@ function applyFuncionario($db, $data) {
     }
 }
 
-
 function applyHorarioFuncionario($db, $data) {
     session_start();
 
@@ -494,6 +500,63 @@ function getNomeEmpresa($db, $data){
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
 }
 
+function getLatLongFromCEP($db, $data){
+    header("Content-Type: application/json; charset=UTF-8");
+
+    if (!isset($data['CEP']) || empty($data['CEP'])) {
+        echo json_encode([
+            "success" => false,
+            "message" => "CEP não enviado."
+        ]);
+        exit;
+    }
+
+    $cep = preg_replace('/\D/', '', $data['CEP']); // limpa caracteres não numéricos
+    $token = trim($_ENV['TOKEN_CEP']);
+
+    $curl = curl_init();
+    curl_setopt_array($curl, [
+        CURLOPT_URL => "https://www.cepaberto.com/api/v3/cep?cep={$cep}",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HTTPHEADER => [
+            "Authorization: Token token={$token}",
+            "Accept: application/json"
+        ]
+    ]);
+
+    $response = curl_exec($curl);
+    $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    curl_close($curl);
+
+    if ($response === false || $httpCode !== 200) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Erro ao acessar a API CepAberto.",
+            "http_code" => $httpCode
+        ]);
+        exit;
+    }
+
+    $json = json_decode($response, true);
+
+    if (!$json || !isset($json["latitude"])) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Coordenadas não encontradas no CEP."
+        ]);
+        exit;
+    }
+
+    echo json_encode([
+        "success" => true,
+        "data" => [
+            "lat" => $json["latitude"],
+            "lon" => $json["longitude"]
+        ]
+    ]);
+    exit;
+}
+
 function getLocaEmpresa($db, $data){
     session_start();
 
@@ -507,7 +570,7 @@ function getLocaEmpresa($db, $data){
 
     $empresaId = $_SESSION['empresa_id'];
 
-    $stmt = $db->prepare("SELECT LOC_EMPRESA FROM EMPRESA WHERE ID_EMPRESA = ?");
+    $stmt = $db->prepare("SELECT LOC_EMPRESA, LAT_EMPRESA, LONG_EMPRESA FROM EMPRESA WHERE ID_EMPRESA = ?");
     $stmt->execute([$empresaId]);
 
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
@@ -746,9 +809,11 @@ function updateLocEmpresa($db, $data){
     if ($data && $idEmpresa) {
 
         $endereco = $data['LOC_EMPRESA'];
+        $lat = $data['LAT_EMPRESA'];
+        $lon = $data['LONG_EMPRESA'];
 
-        $stmt = $db->prepare("UPDATE EMPRESA SET LOC_EMPRESA = ? WHERE ID_EMPRESA = ?");
-        $executou = $stmt->execute([$endereco, $idEmpresa]);
+        $stmt = $db->prepare("UPDATE EMPRESA SET LOC_EMPRESA = ?, LAT_EMPRESA = ?, LONG_EMPRESA = ? WHERE ID_EMPRESA = ?");
+        $executou = $stmt->execute([$endereco, $lat, $lon, $idEmpresa]);
 
         echo json_encode([
             "success" => $executou ? true : false,
@@ -773,10 +838,8 @@ function updateSenhaEmpresa($db, $data){
         $novaSenha = $data['SENHA_EMPRESA'];
         $idEmpresa = $data['ID_EMPRESA'];
 
-        $hash = password_hash($novaSenha, PASSWORD_DEFAULT);
-
         $stmt = $db->prepare("UPDATE EMPRESA SET SENHA_EMPRESA = ? WHERE ID_EMPRESA = ?");
-        $executou = $stmt->execute([$hash, $idEmpresa]);
+        $executou = $stmt->execute([$novaSenha, $idEmpresa]);
 
         echo json_encode([
             "success" => $executou ? true : false,
@@ -840,4 +903,6 @@ function deletaFuncionario($db, $data){
     }
 }
 
-?>
+
+
+

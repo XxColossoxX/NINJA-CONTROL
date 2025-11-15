@@ -1,6 +1,8 @@
 let foto64 = ""; 
 let cameraStream = null;
 let valorLocAtual = "";
+let latAtualValor = "";
+let longAtualValor = "";
 
 $(document).ready( async function() {    
     //!FUNCOES
@@ -75,66 +77,106 @@ async function locAtual() {
     }
 };
 
-function getEndereco(latitude, longitude) {
-    const apiKey = (window.APP_CONFIG && window.APP_CONFIG.googleMapsApiKey) ? window.APP_CONFIG.googleMapsApiKey : '';
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
-    let endereco = {
-        numero: '',
-        rua: '',
-        bairro: '',
-        cidade: '',
-        estado: '',
-        cep: ''
-    };
+async function latAtual() {
+    loaderM('Obtendo Endereço Atual - Permita no seu Navegador ...',true)
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                return(lat, lng);
+            },
+            (error) => {
+                console.error("Erro ao obter localização:", error.message);
+            },
+            {
+                enableHighAccuracy: true, // Força o uso do GPS com mais precisão
+                timeout: 5000, // Tempo máximo para tentar pegar a localização
+                maximumAge: 0 // Não usar dados de localização cacheados
+            }
+        );
+    }
+};
 
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-        if (data.status === "OK") {
-            endereco.numero = data.results[0].address_components[0]['long_name'];
-            endereco.rua = data.results[0].address_components[1]['short_name'];
-            endereco.bairro = data.results[0].address_components[2]['long_name'];
-            endereco.cidade = data.results[0].address_components[3]['long_name'];
-            endereco.estado = data.results[0].address_components[4]['long_name'];
-            endereco.cep = data.results[0].address_components[6]['long_name'];
+async function getEndereco(lat, lon) {
+    const apiKey = "919808c69e2e4fe9807e06972f271824"; // coloque sua chave aqui
+    const url = `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=${apiKey}&language=pt-BR`;
+    latAtualValor = lat;
+    longAtualValor = lon;
 
-            valorLocAtual = `${endereco.rua}, ${endereco.numero}, ${endereco.bairro}, ${endereco.cep}, ${endereco.cidade}, ${endereco.estado}`;
+
+    try {
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (data.results.length === 0) {
+            return null;
+        }
+
+        const info = data.results[0];
+
+        let endereco = {
+            rua: info.components.road ?? "",
+            bairro: info.components.suburb ?? "",
+            cidade: info.components.city ?? info.components.town ?? "",
+            estado: info.components.state ?? "",
+            cep: info.components.postcode ?? ""
+        };
+
+        valorLocAtual = `${endereco.rua}, ${endereco.bairro}, ${endereco.cep}, ${endereco.cidade}, ${endereco.estado}`;
             console.log('valor atual:',valorLocAtual)
             $("#inputLocalizacao").val(valorLocAtual);
+            loaderM("", false);
 
-            setTimeout(() => {
-                loaderM("", false); 
-            }, 2000)
-        } else {
-            console.error("Erro na geocodificação:", data.status);
-            setTimeout(() => {
-                loaderM("", false); 
-            }, 2000)            }
-    }).catch(error => console.error("Erro na requisição:", error));
+    } catch (err) {
+        console.error("Erro ao buscar endereço no OpenCage:", err);
+        return null;
+    }
 };
 
 async function comparaEndereco(){
-    let localizacaoEmpresa = $("#tab-localizacao").text();
-    console.log('local empresa:',localizacaoEmpresa)
-    if(valorLocAtual != localizacaoEmpresa){
+    const res = await axios({
+            url: "/backend/backend.php",
+            method: "POST",
+            data: {
+                function: "getLocaEmpresa",                
+            },  
+            headers: { "Content-Type": "application/json"}
+        });
+
+    const distancia =  await calcularDistancia(latAtualValor, longAtualValor, res.data[0].LAT_EMPRESA, res.data[0].LONG_EMPRESA);
+    if(distancia > 30){
         loaderM("", false);
-        showAlert('Você não está no local de trabalho!','error')
+        showAlert('Você está fora do raio permitido para bater o ponto!','error')
         return
-    } else{
-        // const res = await axios({
-        //     url: "../../../backend/backend.php",
-        //     method: "POST",
-        //     data: {
-        //         function: "baterPonto",
-        //         locAtual: valorLocAtual
-        //     },
-        // })
-        loaderM("", false);
-        showAlert('Ponto batido com sucesso!','success')
-        return
+    } else {
+        showAlert('Ponto Efetuado com Sucesso!','success')
     }
 
+
+    loaderM("", false);
+    showAlert('Ponto batido com sucesso!','success')
+    return
+    
+
 };
+
+async function calcularDistancia(evLatitude, evLongitude, empLatitude, empLongitude) {
+  const R = 6371e3; // Raio da Terra em metros
+  const toRad = (graus) => graus * Math.PI / 180;
+
+  const dLat = toRad(empLatitude - evLatitude);
+  const dLon = toRad(empLongitude - evLongitude);
+
+  const a = Math.sin(dLat / 2) ** 2 +
+            Math.cos(toRad(evLatitude)) * Math.cos(toRad(empLatitude)) *
+            Math.sin(dLon / 2) ** 2;
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return R * c;
+}
+
 
 //!FRONT-END
 //#region

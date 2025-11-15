@@ -54,6 +54,8 @@ $('#toggleSenhaLogin').on('click', function() {
         if (res.data.success) {
             sessionStorage.setItem('RAZAO_FANTASIA', res.data.data['RAZAO_FANTASIA']);
             sessionStorage.setItem('locEmpresa', res.data.data['LOC_EMPRESA']);
+            sessionStorage.setItem('latEmpresa', res.data.data['LAT_EMPRESA']);
+            sessionStorage.setItem('longEmpresa', res.data.data['LONG_EMPRESA']);
             // Redireciona para a página principal
             window.location.href = "../../views/painelPrincipal/painelPrincipal.php";
         } else {

@@ -141,6 +141,8 @@ $(document).ready( async function() {
                 $("#inputCidade").val(endereco.cidade);
                 $("#inputEstado").val(endereco.estado);
                 $("#inputCep").val(endereco.cep);
+                $("#inputLat").val(latitude);
+                $("#inputLong").val(longitude);
 
                 showAlert("Verifique se os dados estão corretos!","info")
 
@@ -184,6 +186,7 @@ $(document).ready( async function() {
 
     async function buscarEnderecoPorCepGoogle(cep) {
         const url = `https://viacep.com.br/ws/${cep}/json/`;
+        loaderM('Buscando endereço pelo CEP', true);
 
         try {
             const response = await axios.get(url);
@@ -203,11 +206,34 @@ $(document).ready( async function() {
                 $("#inputCep").val(endereco.cep);
                 $("#inputNro").val('');
 
+                await getLatLngByCep(cep)
+                loaderM("", false);
+
             } else {
                 showAlert("CEP não encontrado", "warning");
             }
         } catch (e) {
             showAlert("Erro ao conectar com o ViaCEP", "error");
+        }
+    };
+
+    async function getLatLngByCep(cep) {
+        try {
+            const res = await axios({
+                url: "/backend/backend.php",
+                method: "POST",
+                data: {
+                    function: "getLatLongFromCEP",
+                    CEP: cep
+                },
+                Headers: { "Content-Type": "application/json" }
+            });
+            if (res.data.success) {
+                return $("#inputLat").val(res.data.data['lat']), $("#inputLong").val(res.data.data['lon']);
+            }
+        } catch (error) {
+            console.error("Erro ao obter lat/lng do CEP:", error);
+            return null;
         }
     };
 
@@ -234,7 +260,10 @@ $(document).ready( async function() {
             data: {
                 function: "updateLocEmpresa",
                 ID_EMPRESA: sessionStorage.getItem('empresa_id'),
-                LOC_EMPRESA: enderecoString
+                LOC_EMPRESA: enderecoString,
+                LAT_EMPRESA: $("#inputLat").val(),
+                LONG_EMPRESA: $("#inputLong").val()
+
             },
         });  
         if(res.data.success){

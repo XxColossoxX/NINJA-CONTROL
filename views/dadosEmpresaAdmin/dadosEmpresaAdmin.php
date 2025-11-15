@@ -129,6 +129,8 @@ require_once('../../assets/components/headerEmpresa.php');
             <input type="text" id="inputBairro" placeholder="Bairro" class="w-full border px-3 py-2 rounded border-cyan-500/30 bg-slate-800 text-white glow-box" />
             <input type="text" id="inputCidade" placeholder="Cidade" class="w-full border px-3 py-2 rounded border-cyan-500/30 bg-slate-800 text-white glow-box" />
             <input type="text" id="inputEstado" placeholder="Estado" class="w-full border px-3 py-2 rounded border-cyan-500/30 bg-slate-800 text-white glow-box" />
+            <input type="text" id="inputLat" placeholder="Lat" class="w-full border px-3 py-2 rounded border-cyan-500/30 bg-slate-800 text-white glow-box hidden" />
+            <input type="text" id="inputLong" placeholder="Long" class="w-full border px-3 py-2 rounded border-cyan-500/30 bg-slate-800 text-white glow-box hidden" />
             <div class="text-right">
                 <button type="button" id="btnSalvarEndereco" class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded">Salvar Endereço</button>
             </div>

@@ -9,6 +9,9 @@ $(document).ready( async function() {
     carregarNomeEmpresa()
     if(sessionStorage.getItem('locEmpresa') === null || sessionStorage.getItem('locEmpresa') === "" )
         showAlert('Preencha a localização em Dados Empresa!', "warning");
+
+    if(sessionStorage.getItem('latEmpresa') === 'null' || sessionStorage.getItem('longEmpresa') === 'null' )
+        showAlert('Defina a Localização da empresa em DADOS EMPRESA!', "warning");
     
 
     Inputmask("999.999.999-99").mask("#inputCpfFuncionario");
@@ -280,7 +283,6 @@ async function abrirCamera() {
     });
 }
 
-
 async function preencheTabela(res) {
     const tabela = $("#tblFuncionario tbody");
     tabela.empty();
@@ -340,8 +342,6 @@ async function preencheTabela(res) {
         tabela.append(conteudo);
     }
 };
-
-
 
 // Modal de informações do funcionário
 $(document).on("click", ".info-icon", async function () {

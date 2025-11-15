@@ -131,11 +131,13 @@ async function carregaFuncionarios() {
     select.empty();
 
     const res = await axios({
-        url: "../../../backend/backend.php",
+        url: "/backend/backend.php",
         method: "POST",
         data: {
             function: "loadPainel",
         },
+        headers: { "Content-Type": "application/json" }
+
     });
     if (res.data.length >= 1) {
         funcionarios = []; // Limpa antes de popular
