@@ -1,0 +1,406 @@
+/* =========================
+   Core Styles & Backgrounds
+========================= */
+body {
+    background-color: #0f172a; /* fundo escuro base */
+    font-family: 'Noto Sans', sans-serif;
+    color: #fff;
+}
+
+/* Glow utilities */
+.glow-box {
+    box-shadow: 0 0 8px #00ffff33, 0 0 16px #00ffff22;
+    transition: all 0.3s ease;
+}
+.glow-text {
+    text-shadow: 0 0 4px #00ffff, 0 0 8px #00ffff66;
+}
+
+/* Glass background */
+.bg-glass {
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(6px);
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.hero-section .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.7);
+    z-index: 1;
+}
+
+/* Hero Image */
+.hero-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+/* Card hover effect */
+.card-hover:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 0 12px #00ffff88, 0 4px 20px #00ffff44;
+}
+
+/* =========================
+   Hamburger Menu Animations
+========================= */
+#menu-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+#menu-btn span {
+    display: block;
+    height: 0.5rem;
+    background-color: white;
+    border-radius: 2px;
+    transition: all 0.3s ease-in-out;
+    transform-origin: center;
+}
+
+/* Transform hamburger into X */
+#menu-btn.open span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+#menu-btn.open span:nth-child(2) {
+    opacity: 0;
+}
+#menu-btn.open span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Mobile menu transition */
+#mobile-menu {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+}
+#mobile-menu.show {
+    max-height: 500px;
+    opacity: 1;
+}
+
+/* =========================
+   Unified Fade Animations
+========================= */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOutUp {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-40px);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.fade-out-up {
+    animation: fadeOutUp 0.6s ease-in forwards;
+}
+
+/* Apply to alerts */
+.alert-animate-in {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+.alert-animate-out {
+    animation: fadeOutUp 0.6s ease-in forwards;
+}
+
+/* Apply to welcome message */
+#welcome-message {
+    opacity: 0;
+}
+#welcome-message.entrada {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+#welcome-message.saida {
+    animation: fadeOutUp 0.6s ease-in forwards;
+}
+
+/* =========================
+   Modals & Mobile Responsiveness
+========================= */
+#form-modal,
+#camera-modal {
+    background-color: #1e293b; /* bg-slate-900 */
+    border: 2px solid #06b6d4; /* ciano */
+    border-radius: 0.75rem;
+    box-shadow: 0 0 10px #06b6d4aa, 0 0 20px #06b6d422;
+    color: #fff;
+    padding: 1rem;
+}
+
+@media (min-width: 768px) {
+    .max-w-xl {
+        max-width: 600px !important;
+    }
+    .p-0 { padding: 0 !important; }
+    .p-4 { padding: 1.5rem !important; }
+}
+
+@media (max-width: 767px) {
+    .max-w-xl {
+        max-width: 95vw !important;
+    }
+    .p-4 {
+        padding: 0.75rem !important;
+    }
+
+    /* Header mobile */
+    #header-funcionario-mobile {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+    #header-funcionario-mobile img {
+        width: 64px;
+        height: 64px;
+        border-radius: 9999px;
+        object-fit: cover;
+        border: 3px solid #06b6d4;
+        box-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+    }
+    #header-funcionario-mobile .nome {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #fff;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Modal responsivo - ajustes mobile */
+    #modal-bater-ponto {
+        padding: 0.5rem;
+    }
+
+    #modal-bater-ponto > div {
+        max-width: 90%;
+        margin: 0;
+        border-radius: 1rem;
+    }
+
+    #modal-dados-funcionario > div {
+        width: 85% !important;
+        max-width: 28rem !important;
+        margin-top: 4rem !important;
+    }
+}
+
+/* =========================
+   Camera Circle Animation
+========================= */
+.camera-container {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    margin: 0 auto;
+}
+
+@media (max-width: 640px) {
+    .camera-container {
+        width: 220px;
+        height: 220px;
+    }
+}
+
+#camera-container {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #1e293b;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+}
+
+#video-camera {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transform: translate(-50%, -50%) scaleX(-1);
+    z-index: 1;
+    border-radius: 50%;
+}
+
+.video-feed {
+    clip-path: circle(50% at center);
+    -webkit-clip-path: circle(50% at center);
+    width: 100%;
+    height: 100%;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+}
+
+.circle-ring {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px #06b6d4 inset, 0 0 20px rgba(6, 182, 212, 0.5);
+    animation: pulse-ring 2.5s infinite;
+    background: transparent;
+}
+
+@keyframes pulse-ring {
+    0%, 100% {
+        box-shadow: 0 0 0 3px #06b6d4 inset, 0 0 20px rgba(6, 182, 212, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 0 5px #06b6d4 inset, 0 0 30px rgba(6, 182, 212, 0.8);
+    }
+}
+
+/* Icones */
+img.icon-color {
+    filter: brightness(0) invert(1);
+}
+
+/* =========================
+   Tab Animation
+========================= */
+.tab-button.active {
+    border-color: #14b8a6;
+    color: #14b8a6;
+}
+
+.tab-content {
+    animation: fadeInUp 0.3s ease-in-out;
+}
+
+/* =========================
+   Welcome Message Styles
+========================= */
+
+/* Animação de entrada simples */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* Responsividade */
+@media (max-width: 640px) {
+    #welcome-message div {
+        padding: 1rem;
+    }
+    #welcome-message h1 {
+        font-size: 1.8rem;
+    }
+    #welcome-message h2 {
+        font-size: 1.2rem;
+    }
+}
+
+@media (min-width: 768px) {
+    #welcome-message div {
+        padding: 1.5rem 2rem;
+    }
+}
+
+/* Melhorias de design moderno */
+@media (max-width: 640px) {
+    .camera-container {
+        margin: 1rem auto;
+    }
+}
+
+/* Transições suaves */
+#modal-bater-ponto {
+    transition: opacity 0.3s ease-in-out;
+}
+
+#modal-bater-ponto > div {
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Estilos para tabs do modal de dados do funcionário */
+.tab-func {
+    transition: all 0.3s ease;
+}
+
+.tab-func.active {
+    background-color: rgba(6, 182, 212, 0.2) !important;
+    border-color: rgba(6, 182, 212, 0.5) !important;
+}
+
+.tab-func:hover:not(.active) {
+    background-color: rgba(6, 182, 212, 0.1);
+}
+
+.tab-pane {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,239 @@
+.alert-animate-in {
+    animation: alertUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.alert-animate-out {
+    animation: alertDown 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes alertUp {
+    0% {
+        opacity: 0;
+        transform: translateY(40px) scale(0.95);
+    }
+    80% {
+        opacity: 1;
+        transform: translateY(-10px) scale(1.05);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes alertDown {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(40px) scale(0.95);
+    }
+}
+
+/* Animação para o welcome-message */
+#welcome-message {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.3s cubic-bezier(0.4,0,0.2,1), transform 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+#welcome-message.entrada {
+  opacity: 1;
+  transform: scale(1);
+}
+#welcome-message.saida {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+/* Adicione ao pontoFuncionario.css */
+#welcome-message {
+    transition: transform 0.5s linear, opacity 0.5s linear;
+    opacity: 1;
+    transform: translateX(-100vw); /* Começa fora da tela à esquerda */
+}
+#welcome-message.entrada {
+    opacity: 1;
+    transform: translateX(0); /* Entra para o centro */
+}
+#welcome-message.saida {
+    opacity: 0;
+    transform: translateX(100vw); /* Sai para a direita */
+}
+
+.tab-content {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.05); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+.animate-pulse {
+    animation: pulse 2s infinite;
+}
+
+.camera-container {
+  position: relative;
+  width: 250px;
+  height: 250px;
+  margin: 0 auto;
+}
+
+@media (max-width: 640px) {
+  .camera-container {
+    width: 220px;
+    height: 220px;
+  }
+}
+
+#camera-container {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto;
+    background-color: #1e293b;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+}
+
+#video-camera {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transform: translate(-50%, -50%) scaleX(-1);
+    transform-origin: center center;
+    z-index: 1;
+    border-radius: 50%;
+}
+
+.video-feed {
+  clip-path: circle(50% at center);
+  -webkit-clip-path: circle(50% at center);
+  width: 100%;
+  height: 100%;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+}
+
+.circle-ring {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-shadow: 
+    0 0 0 3px #06B6D4 inset,
+    0 0 20px rgba(6, 182, 212, 0.5);
+  animation: pulse-ring 2.5s infinite;
+  background: transparent;
+}
+
+@keyframes pulse-ring {
+  0%, 100% {
+    box-shadow:
+      0 0 0 3px #06B6D4 inset,
+      0 0 20px rgba(6, 182, 212, 0.5);
+  }
+  50% {
+    box-shadow:
+      0 0 0 5px #06B6D4 inset,
+      0 0 30px rgba(6, 182, 212, 0.8);
+  }
+}
+
+img.icon-color {
+  filter: brightness(0) invert(1);
+}
+
+/* Aplica hover normalmente em dispositivos que suportam hover */
+#btnBaterPonto {
+    transition: all 0.3s;
+}
+
+/* Hover original */
+#btnBaterPonto:hover {
+    background-color: #38bdf8; /* cyan-400 */
+    box-shadow: 0 0 25px #00ffff80;
+    transform: scale(1.05);
+}
+
+/* Desabilita hover em dispositivos touch (como Android) */
+@media (hover: none) and (pointer: coarse) {
+    #btnBaterPonto:hover {
+        background-color: #06b6d4; /* mantém a cor original */
+        box-shadow: 0 0 15px #00ffff40; /* mantém sombra original */
+        transform: none;
+    }
+}
+
+/* Responsividade mobile */
+@media (max-width: 767px) {
+    #modal-bater-ponto {
+        padding: 0.5rem;
+    }
+
+    #modal-bater-ponto > div {
+        max-width: 90%;
+        margin: 0;
+        border-radius: 1rem;
+        max-height: 85vh;
+    }
+
+    #modal-dados-funcionario > div {
+        width: 85% !important;
+        max-width: 28rem !important;
+        margin-top: 4rem !important;
+    }
+
+    .camera-container {
+        margin-top: 1rem;
+    }
+}
+
+/* Melhorias de design moderno */
+@media (max-width: 640px) {
+    .camera-container {
+        margin: 1rem auto;
+    }
+}
+
+/* Transições suaves */
+#modal-bater-ponto {
+    transition: opacity 0.3s ease-in-out;
+}
+
+#modal-bater-ponto > div {
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}

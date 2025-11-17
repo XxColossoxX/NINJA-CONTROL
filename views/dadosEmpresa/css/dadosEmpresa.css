@@ -1,0 +1,254 @@
+.alert-animate-in {
+    animation: alertUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.alert-animate-out {
+    animation: alertDown 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes alertUp {
+    0% {
+        opacity: 0;
+        transform: translateY(40px) scale(0.95);
+    }
+    80% {
+        opacity: 1;
+        transform: translateY(-10px) scale(1.05);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes alertDown {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(40px) scale(0.95);
+    }
+}
+
+/* Animação para o welcome-message */
+#welcome-message {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.3s cubic-bezier(0.4,0,0.2,1), transform 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+#welcome-message.entrada {
+  opacity: 1;
+  transform: scale(1);
+}
+#welcome-message.saida {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+/* Responsividade para modais em telas pequenas */
+@media (max-width: 640px) {
+  #form-modal > div,
+  #camera-modal > div {
+    width: 95vw !important;
+    min-width: unset !important;
+    max-width: 99vw !important;
+    padding: 1rem !important;
+    flex-direction: column !important;
+  }
+  #camera-modal > div {
+    padding: 0.5rem !important;
+  }
+  #camera-modal .w-1\/2,
+  #camera-modal .pl-6 {
+    width: 100% !important;
+    padding-left: 0 !important;
+    margin-bottom: 1rem;
+  }
+  #form-modal .w-1\/2 {
+    width: 100% !important;
+  }
+  #camera-modal .w-64,
+  #camera-modal .h-64 {
+    width: 60vw !important;
+    height: 60vw !important;
+    max-width: 90vw !important;
+    max-height: 90vw !important;
+  }
+  #camera-modal h2,
+  #form-modal h2 {
+    font-size: 1.1rem !important;
+  }
+}
+
+
+
+/* Adicione ao pontoFuncionario.css */
+#welcome-message {
+    transition: transform 0.5s linear, opacity 0.5s linear;
+    opacity: 1;
+    transform: translateX(-100vw); /* Começa fora da tela à esquerda */
+}
+#welcome-message.entrada {
+    opacity: 1;
+    transform: translateX(0); /* Entra para o centro */
+}
+#welcome-message.saida {
+    opacity: 0;
+    transform: translateX(100vw); /* Sai para a direita */
+}
+
+/* Modal principal - pontoFuncionario.php */
+@media (min-width: 768px) {
+  .max-w-xl {
+    max-width: 600px !important;
+  }
+  .p-0 {
+    padding: 0 !important;
+  }
+  .p-4 {
+    padding: 1.5rem !important;
+  }
+}
+@media (max-width: 767px) {
+  .max-w-xl {
+    max-width: 90vw !important;
+  }
+  .p-4 {
+    padding: 0.5rem !important;
+  }
+  /* Header responsivo: foto à esquerda, nome à direita */
+  #header-funcionario-mobile {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  #header-funcionario-mobile img {
+    width: 48px;
+    height: 48px;
+    border-radius: 9999px;
+    object-fit: cover;
+    border: 3px solid #14b8a6;
+  }
+  #header-funcionario-mobile .nome {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #334155;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  #nomeHeader {
+    font-size: 1.2rem !important;
+    font-weight: 600;
+  }
+}
+
+/* Modal mobile */
+#modal-dados-funcionario .w-80 {
+  width: 80vw !important;
+  max-width: 260px !important;
+}
+#modal-dados-funcionario .p-6 {
+  padding: 0.75rem !important;
+}
+
+/* Fonte da animação de entrada */
+#welcome-message h1 {
+  font-size: 1.6rem !important;
+}
+#welcome-message h2 {
+  font-size: 1.3rem !important;
+}
+
+.tab-button.active {
+    border-color: #14b8a6;
+    color: #14b8a6;
+}
+
+.tab-content {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.05); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+.animate-pulse {
+    animation: pulse 2s infinite;
+}
+
+.camera-container {
+  position: relative;
+  width: 200px;  /* alinhado ao círculo */
+  height: 200px;
+  margin: 0 auto; /* centraliza */
+}
+
+#camera-container {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto;
+    background-color: #ddd;
+    position: relative;
+    z-index: 2;
+}
+
+#video-camera {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: auto;
+    height: 100%;
+    object-fit: cover;
+    transform: translate(-50%, -50%) scaleX(-1) scale(1.3);
+    transform-origin: center center;
+    z-index: 1;
+}
+
+.video-feed {
+  clip-path: circle(50% at center);
+  -webkit-clip-path: circle(50% at center);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+}
+
+.circle-ring {
+  width: 200px;  /* igual ao círculo da câmera */
+  height: 200px;
+  border-radius: 50%;
+  box-shadow: 
+    0 0 0 4px #14b8a6 inset;
+  animation: pulse-ring 2.5s infinite;
+  background: transparent;
+}
+
+@keyframes pulse-ring {
+  0%, 100% {
+    box-shadow:
+      0 0 0 4px #14b8a6 inset;
+  }
+  50% {
+    box-shadow:
+      0 0 0 7px #14b8a6 inset;
+  }
+}

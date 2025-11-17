@@ -1,0 +1,17 @@
+
+
+@media (min-width: 640px) {
+  #login-empresa-container {
+    background-position: center top;
+  }
+  #login-system {
+    max-width: 420px;
+  }
+}
+
+@media (max-width: 639px) {
+  #login-system {
+    max-width: 340px;
+    padding: 1.2rem;
+  }
+}

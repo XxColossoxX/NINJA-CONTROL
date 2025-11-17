@@ -1,0 +1,19 @@
+/*! Font Awesome Free 6.0.0-beta3 by @fontawesome - https://fontawesome.com */
+@font-face {
+    font-family: "Font Awesome 6 Free";
+    font-style: normal;
+    font-weight: 900;
+    src: url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/webfonts/fa-solid-900.woff2") format("woff2"),
+         url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/webfonts/fa-solid-900.woff") format("woff");
+  }
+  .fa {
+    display: inline-block;
+    font: normal normal normal 14px/1 "Font Awesome 6 Free";
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  .fa-solid {
+    font-weight: 900;
+  }
