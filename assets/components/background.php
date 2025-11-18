@@ -124,12 +124,24 @@
   <canvas id="bg-particles"></canvas>
 
   <!-- Loader -->
-  <div id="loader-container" class="fixed inset-0 overlay-dark hidden flex flex-col items-center justify-center">
-    <div class="flex items-center space-x-4 bg-slate-900/80 px-6 py-4 rounded-lg shadow-lg">
-      <div class="loader border-4 border-cyan-500 border-t-transparent rounded-full w-8 h-8 animate-spin"></div>
-      <span id="loader-message" class="text-white font-semibold">Carregando...</span>
+  <div id="loader-container"
+      class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50
+              flex items-center justify-center p-4">
+
+    <div class="flex items-center gap-4 
+                bg-slate-900/90 px-6 py-5 rounded-2xl shadow-2xl 
+                max-w-[90%] sm:max-w-sm w-full">
+
+      <div class="w-8 h-8 sm:w-10 sm:h-10 border-4 border-cyan-500 
+                  border-t-transparent rounded-full animate-spin"></div>
+
+      <span id="loader-message"
+            class="text-white font-semibold text-base sm:text-lg">
+        Carregando...
+      </span>
     </div>
   </div>
+
 
   <!-- Alertas -->
   <div id="alert-box" style="z-index: 999999 !important;" 

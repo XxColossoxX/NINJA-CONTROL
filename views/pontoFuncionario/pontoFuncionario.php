@@ -204,27 +204,31 @@ require_once('../../assets/components/headerFuncionario.php');
                 <div class="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4">
                     <div class="bg-slate-800/80 border border-cyan-500/10 rounded-xl p-2 sm:p-3 flex flex-col items-center shadow-[0_0_10px_#00ffff10]">
                         <i class="fas fa-sign-in-alt text-green-600 text-lg sm:text-xl mb-1"></i>
-                        <span class="font-bold text-green-600 text-sm sm:text-base">08:00</span>
+                        <span id="entrada1" class="font-bold text-green-600 text-sm sm:text-base">---</span>
                         <span class="text-xs font-bold text-white">Entrada</span>
-                        <span class="text-xs text-green-500">Concluído</span>
+                        <span id="statusEntrada1" class="text-xs ">---</span>
+                        <!-- text-green-500 -->
                     </div>
                     <div class="bg-slate-800/80 border border-cyan-500/10 rounded-xl p-2 sm:p-3 flex flex-col items-center shadow-[0_0_10px_#00ffff10]">
                         <i class="fas fa-sign-out-alt text-red-600 text-lg sm:text-xl mb-1"></i>
-                        <span class="font-bold text-red-600 text-sm sm:text-base">12:00</span>
+                        <span id="saida1" class="font-bold text-red-600 text-sm sm:text-base">---</span>
                         <span class="text-xs font-bold text-white">Saída</span>
-                        <span class="text-xs text-red-500">Concluído</span>
+                        <span id="statusSaida1" class="text-xs ">---</span>
+                        <!-- text-red-500 -->
                     </div>
                     <div class="bg-slate-800/80 border border-cyan-500/10 rounded-xl p-2 sm:p-3 flex flex-col items-center shadow-[0_0_10px_#00ffff10]">
                         <i class="fas fa-sign-in-alt text-green-600 text-lg sm:text-xl mb-1"></i>
-                        <span class="font-bold text-green-600 text-sm sm:text-base">13:30</span>
+                        <span id="entrada2" class="font-bold text-green-600 text-sm sm:text-base">---</span>
                         <span class="text-xs font-bold text-white">Entrada</span>
-                        <span class="text-xs text-yellow-500">Pendente</span>
+                        <span id="statusEntrada2" class="text-xs ">---</span>
+                        <!-- text-yellow-500 -->
                     </div>
                     <div class="bg-slate-800/80 border border-cyan-500/10 rounded-xl p-2 sm:p-3 flex flex-col items-center shadow-[0_0_10px_#00ffff10]">
                         <i class="fas fa-sign-out-alt text-red-600 text-lg sm:text-xl mb-1"></i>
-                        <span class="font-bold text-red-600 text-sm sm:text-base">18:00</span>
+                        <span id="saida" class="font-bold text-red-600 text-sm sm:text-base">---</span>
                         <span class="text-xs font-bold text-white">Saída</span>
-                        <span class="text-xs text-yellow-500">Pendente</span>
+                        <span id="statusSaida2" class="text-xs ">---</span>
+                        <!-- text-yellow-500 -->
                     </div>
                 </div>
             </div>

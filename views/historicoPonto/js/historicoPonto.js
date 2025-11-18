@@ -3,8 +3,9 @@ const tabela = $("#tblFuncionario tbody");
 
 
 $(document).ready( async function() {    
-   setTimeout(() => {
     document.getElementById("bemVindo").classList.add("hidden");
+
+   setTimeout(() => {
     document.getElementById("controlador").classList.remove("hidden");
 }, 40);
 

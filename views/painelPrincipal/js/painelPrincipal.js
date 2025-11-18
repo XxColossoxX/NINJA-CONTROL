@@ -283,6 +283,8 @@ async function abrirCamera() {
         } else {
             showAlert(res.data.message, "error");
             console.log(res.data);
+             $("#close-camera-modal").click();
+            recarregaTabela();
         }
     });
 }

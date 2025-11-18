@@ -1,1 +1,1 @@
-{"function":"loadPainel"}
+{"function":"load"}
