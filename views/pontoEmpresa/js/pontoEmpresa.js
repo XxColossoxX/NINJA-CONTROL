@@ -5,9 +5,9 @@ let funcionarios = [];
 const selectedFuncionario = document.getElementById('selectedFuncionario');
 
 $(document).ready( async function() {    
+    await localizacaoAtual();
     $("#controlador").removeClass("hidden");
-    loaderM("Carregando Funcionário - Aguarde ...", true)
-    $("#inputLocalizacao").val(sessionStorage.getItem('locEmpresa') || 'Endereço não disponível');
+    loaderM("Carregando Funcionários", true)
 
     await carregaFuncionarios();
     loaderM("", false)
@@ -195,6 +195,28 @@ async function efetuarPonto(distance) {
     showAlert(`Ponto registrado com sucesso! ${precisao}% de Precisão!`, 'success');
     loaderM("", false);
 }
+
+async function localizacaoAtual() {
+    const res = await axios({
+        url: "/backend/backend.php",
+        method: "POST",
+        data: {
+            function: "getLocaEmpresa",
+        },
+        headers: { "Content-Type": "application/json" }
+    });
+    if (res.data[0]['LOC_EMPRRESA'] != 'success') {
+        $("#inputLocalizacao").val(res.data[0]['LOC_EMPRRESA']);
+        sessionStorage.setItem('locEmpresa', res.data[0]['LOC_EMPRRESA']);
+    } else {
+        showAlert('Erro ao carregar localização da empresa.',"error");
+        $("#inputLocalizacao").val('Endereço não disponível');
+        sessionStorage.setItem('locEmpresa','Endereço não disponível');
+
+        return;
+    }
+}
+
 
 // Evento para abrir/fechar dropdown
 document.getElementById('dropdownBtn').addEventListener('click', () => {

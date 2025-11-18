@@ -95,32 +95,6 @@ $emailEmpresa = isset($_SESSION['empresa_email']) ? $_SESSION['empresa_email'] :
     console.log("Data de Nascimento do Funcionário:", dataNascimentoFuncionario);
     console.log("Localização da Empresa:", localizacaoEmpresa);
 
-
-    
-    let divBemVindo = $("#bemVindo");
-    let conteudo = `
-    <div id="welcome-message" class="fixed inset-0 flex items-center justify-center z-50 text-center">
-        <div>
-            <h1 class="text-2xl text-white font-sans"><i><strong>BEM-VINDO(A) DE VOLTA</strong></i></h1>
-            <h2 id="tituloEmpresa" class="text-lg text-white font-sans underline text-center"><i><strong>${nomeFuncionario}</strong></i></h2>
-        </div>
-    </div>`;
-    divBemVindo.append(conteudo);
-
-    // Animação de entrada
-    setTimeout(() => {
-        document.getElementById("welcome-message").classList.add("entrada");
-    }, 100);
-    setTimeout(() => {
-        const el = document.getElementById("welcome-message");
-        el.classList.remove("entrada");
-        el.classList.add("saida");
-        setTimeout(() => {
-            el.remove();
-            document.getElementById("controlador")?.classList.remove("hidden");
-        }, 500);
-    }, 1500);
-
     $(document).ready(function() {
         $('#btn-mais-info').on('click', function() {
             $('#modal-dados-funcionario').removeClass('hidden');

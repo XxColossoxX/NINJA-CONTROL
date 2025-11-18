@@ -236,15 +236,6 @@
                         </li>
                     </div>
 
-                    <!-- Configurações -->
-                    <div>
-                        <li>
-                            <a href="#" id="config-link" class="flex items-center gap-2 hover:text-gray-500">
-                                <i class="fas fa-cog"></i> CONFIGURAÇÕES
-                            </a>
-                        </li>
-                    </div>
-
                 </ul>
             </div>
         </nav>

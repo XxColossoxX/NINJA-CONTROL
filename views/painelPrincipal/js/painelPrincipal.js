@@ -7,11 +7,7 @@ const tabela = $("#tblFuncionario tbody");
 $(document).ready( async function() {
     loaderM("Carregando Funcionários... Aguarde Por Favor!");
     carregarNomeEmpresa()
-    if(sessionStorage.getItem('locEmpresa') === null || sessionStorage.getItem('locEmpresa') === "" )
-        showAlert('Preencha a localização em Dados Empresa!', "warning");
-
-    if(sessionStorage.getItem('latEmpresa') === 'null' || sessionStorage.getItem('longEmpresa') === 'null' )
-        showAlert('Defina a Localização da empresa em DADOS EMPRESA!', "warning");
+    await getLocEmpresa()
     
 
     Inputmask("999.999.999-99").mask("#inputCpfFuncionario");
@@ -34,6 +30,7 @@ $(document).on('click', "#btnProximo", async function(){
         showAlert("Preencha todos os campos!", "error");
         return;
     }
+    $(".tab-admin").click();
     $("#form-modal").addClass("hidden");
     $("#camera-modal").removeClass("hidden");
     await abrirCamera();
@@ -263,7 +260,7 @@ async function abrirCamera() {
                 $("#inputHoraSaida").val(),
                 $("#inputHoraIntInicio").val(),
                 $("#inputHoraIntFim").val(),
-                id,
+                res.data.id_funcionario,
                 dataMethod
             );
 
@@ -512,6 +509,26 @@ async function salvarHorarios(entrada, saida, intIni, intFim, id, dataMethod){
         if(res.data.success){
             showAlert("Funcionário cadastrado com Sucesso!", "success");
         }
+    }
+};
+
+async function getLocEmpresa(){
+    const res =  await axios({
+        url: "/backend/backend.php",
+        method: "POST",
+        data: {
+            function: "getLocaEmpresa",
+        },
+        headers: { "Content-Type": "application/json" }
+    });
+    if (res.data[0]['LOC_EMPRRESA'] != 'null' || res.data[0]['LOC_EMPRRESA'] != null) {
+        $("#inputLocalizacao").val(res.data[0]['LOC_EMPRRESA']);
+        sessionStorage.setItem('locEmpresa', res.data[0]['LOC_EMPRRESA']);
+    } else {
+        showAlert('Erro ao carregar localização da empresa.',"error");
+        $("#inputLocalizacao").val('Endereço não disponível');  
+        sessionStorage.setItem('locEmpresa','Endereço não disponível');
+        return;
     }
 };
 

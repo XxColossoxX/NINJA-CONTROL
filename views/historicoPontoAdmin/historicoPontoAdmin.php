@@ -1,21 +1,20 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['funcionario_id'])) {
-    header('Location: ../loginFuncionario/loginFuncionario.php');
+if (!isset($_SESSION['empresa_id'])) {
+    header('Location: ../loginEmpresa/loginEmpresa.php');
     exit;
 }
 date_default_timezone_set('America/Sao_Paulo');
 require_once('../../assets/components/background.php');
-require_once('../../assets/components/headerFuncionario.php');
+require_once('../../assets/components/headerEmpresa.php');
 
-$idFuncionario = $_SESSION['funcionario_id'] ?? '';
-$nomeFuncionario = $_SESSION['funcionario_nome'] ?? '';
-$fotoFuncionario = $_SESSION['funcionario_faceid'] ?? '';
-$rgFuncionario = $_SESSION['funcionario_rg'] ?? '';
-$cpfFuncionario = $_SESSION['funcionario_cpf'] ?? '';
-$nomeEmpresa = $_SESSION['funcionario_nome_empresa'] ?? 'Nome da Empresa';
-$dataNascimentoFuncionario = $_SESSION['funcionario_data_nascimento'] ?? 'Data de Nascimento';
+$idEmpresa = $_SESSION['empresa_id'] ?? '';
+$nomeEmpresa = $_SESSION['empresa_nome'] ?? '';
+$fotoEmpresa = $_SESSION['empresa_faceid'] ?? '';
+$rgEmpresa = $_SESSION['empresa_rg'] ?? '';
+$cpfEmpresa = $_SESSION['empresa_cpf'] ?? '';
+$nomeEmpresa = $_SESSION['empresa_nome_empresa'] ?? 'Nome da Empresa';
 ?>
 
 <div class="min-h-screen flex flex-col items-center justify-center px-3 sm:px-4 py-4 sm:py-6">
@@ -25,10 +24,10 @@ $dataNascimentoFuncionario = $_SESSION['funcionario_data_nascimento'] ?? 'Data d
         <!-- Header: Foto e filtro -->
         <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 sm:gap-6">
             <div class="flex items-center gap-3 sm:gap-4 w-full md:w-auto">
-                <img src="<?php echo $fotoFuncionario; ?>" alt="Foto Funcionário" class="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full border-4 border-cyan-500 object-cover shadow-[0_0_15px_#00ffff50] flex-shrink-0">
+                <img src="<?php echo $fotoEmpresa; ?>" alt="Foto Funcionário" class="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full border-4 border-cyan-500 object-cover shadow-[0_0_15px_#00ffff50] flex-shrink-0">
                 <div class="min-w-0 flex-1">
                     <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1">Histórico de Ponto</h1>
-                    <p class="text-xs sm:text-sm md:text-base text-gray-300 truncate">Funcionário: <strong class="text-cyan-400"><?php echo htmlspecialchars($nomeFuncionario); ?></strong></p>
+                    <p class="text-xs sm:text-sm md:text-base text-gray-300 truncate">Funcionário: <strong class="text-cyan-400"><?php echo htmlspecialchars($nomeEmpresa); ?></strong></p>
                 </div>
             </div>
 

@@ -253,7 +253,7 @@ require_once('../../assets/components/headerEmpresa.php');
 
         <!-- Conteúdo das Abas -->
         <div id="info-tab" class="tab-content mb-6">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+            <div class="grid grid-cols-2 sm:grid-cols-2 gap-3 text-sm">
                 <div class="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/20">
                     <div class="text-cyan-400 text-xs mb-1"><i class="fas fa-id-badge mr-2"></i>Nome</div>
                     <div class="text-white font-semibold text-sm" id="tab-nome"></div>
@@ -297,7 +297,7 @@ require_once('../../assets/components/headerEmpresa.php');
         </div>
     </div>
 </div>
-
+<script src="https://unpkg.com/face-api.js@0.22.2/dist/face-api.min.js"></script>
 <script src="./js/pontoEmpresa.js"></script>
 <link rel="stylesheet" href="./css/pontoEmpresa.css">
 <script>

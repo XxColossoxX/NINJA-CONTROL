@@ -55,7 +55,7 @@ async function capturarRosto(fotoBanco, fotoAtual){
 };
 
 async function locAtual() {
-    loaderM('Obtendo Endereço Atual - Permita no seu Navegador ...',true)
+    loaderM('Obtendo Endereço Atual',true)
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -78,7 +78,7 @@ async function locAtual() {
 };
 
 async function latAtual() {
-    loaderM('Obtendo Endereço Atual - Permita no seu Navegador ...',true)
+    loaderM('Obtendo Endereço Atual',true)
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (position) => {

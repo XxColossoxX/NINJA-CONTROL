@@ -98,7 +98,7 @@ $(document).ready( async function() {
 
     //FUNCOES:
     async function locEmpresa() {
-        loaderM('Carregando informações da Localização',true)
+        loaderM('Carregando Localização',true)
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
@@ -108,6 +108,8 @@ $(document).ready( async function() {
                 },
                 (error) => {
                     console.error("Erro ao obter localização:", error.message);
+                    loaderM('Carregando Localização',false)
+                    showAlert("Erro ao obter localização. Verifique as permissões do navegador.","error")
                 },
                 {
                     enableHighAccuracy: true, // Força o uso do GPS com mais precisão
@@ -181,6 +183,8 @@ $(document).ready( async function() {
             $('#spanTelefone').text(empresa.TEL_EMPRESA);
             $('#spanEmail').text(empresa.EMAIL_EMPRESA);
             $('#spanDescricao').text(empresa.DSC_EMPRESA);
+        } else {
+            showAlert('Erro ao carregar dados da empresa.',"error");
         }
     };
 
@@ -210,10 +214,13 @@ $(document).ready( async function() {
                 loaderM("", false);
 
             } else {
+                loaderM('Buscando endereço pelo CEP', false);
                 showAlert("CEP não encontrado", "warning");
             }
         } catch (e) {
             showAlert("Erro ao conectar com o ViaCEP", "error");
+            loaderM('Buscando endereço pelo CEP', false);
+
         }
     };
 
