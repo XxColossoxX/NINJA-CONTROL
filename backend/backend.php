@@ -18,7 +18,6 @@ try {
     die(json_encode(["erro" => "Erro de conexão: " . $e->getMessage()]));
 }
 
-
 $raw = file_get_contents("php://input");
 file_put_contents("debug.txt", $raw);
 $data = json_decode($raw, true);
@@ -33,6 +32,14 @@ if (isset($data['function'])) {
 
         case 'loadFuncionario': // Load funcionário
             loadFuncionario($db, $data);
+            break;
+        
+        case 'loadPontoFuncionario': // Load ponto funcionário
+            loadPontoFuncionario($db, $data);
+            break;
+
+        case 'loadPontosFuncionario': // Load historico pontos funcionário
+            loadPontosFuncionario($db, $data);
             break;
 
         case 'loadDadosFuncionario': // Load dados funcionário
@@ -66,6 +73,10 @@ if (isset($data['function'])) {
         case 'getSenhaAtualEmpresa': // get senha atual Empresa
             getSenhaAtualEmpresa($db, $data);
             break;
+        
+        case 'getEnderecoFromLatLong': // get endereço from lat long
+            getEnderecoFromLatLong($db, $data);
+            break;
 
         case 'applyEmpresa': // Inserir empresa
             applyEmpresa($db, $data);
@@ -73,6 +84,10 @@ if (isset($data['function'])) {
 
         case 'applyFuncionario': // Inserir funcionário
             applyFuncionario($db, $data);
+            break;
+            
+        case 'applyPontoFuncionario': // Inserir ponto funcionário
+            applyPontoFuncionario($db, $data);
             break;
 
         case 'applyHorarioFuncionario': // Inserir Horario Funcionario
@@ -169,20 +184,17 @@ function loadFuncionario($db, $data) {
         $cpfFuncionario   = $data['CPF'];
         $senhaFuncionario = $data['SENHA_FUNCIONARIO'];
 
-        // Consulta do funcionário
         $stmt = $db->prepare("
             SELECT ID_FUNCIONARIO, NOME_FUNCIONARIO, CPF, RG, DATA_NASCIMENTO, FACEID, FK_EMPRESA
             FROM FUNCIONARIOS 
             WHERE CPF = ? AND SENHA_FUNCIONARIO = ?
         ");
-
         $stmt->execute([$cpfFuncionario, $senhaFuncionario]);
 
         $funcionario = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($funcionario) {
 
-            // Salva funcionário na sessão
             $_SESSION['funcionario_id']              = $funcionario['ID_FUNCIONARIO'];
             $_SESSION['funcionario_nome']            = $funcionario['NOME_FUNCIONARIO'];
             $_SESSION['funcionario_rg']              = $funcionario['RG'];
@@ -191,7 +203,9 @@ function loadFuncionario($db, $data) {
             $_SESSION['funcionario_faceid']          = $funcionario['FACEID'];
             $_SESSION['funcionario_fk_empresa']      = $funcionario['FK_EMPRESA'];
 
-            $nomeEmpresa = null;
+            $nomeEmpresa  = null;
+            $empresaRow   = null;
+            $horariosRow  = null;
 
             if (!empty($funcionario['FK_EMPRESA'])) {
 
@@ -201,8 +215,8 @@ function loadFuncionario($db, $data) {
                     FROM EMPRESA 
                     WHERE ID_EMPRESA = ?
                 ");
-
                 $stmtEmpresa->execute([$funcionario['FK_EMPRESA']]);
+
                 $empresaRow = $stmtEmpresa->fetch(PDO::FETCH_ASSOC);
 
                 if ($empresaRow) {
@@ -220,11 +234,33 @@ function loadFuncionario($db, $data) {
                 }
             }
 
+            if (!empty($funcionario['ID_FUNCIONARIO'])) {
+
+                $stmtHorarios = $db->prepare("
+                    SELECT ENTRADA1, SAIDA1, ENTRADA2, SAIDA2
+                    FROM HORARIOS_FUNCIONARIOS 
+                    WHERE FK_FUNCIONARIO = ?
+                ");
+                $stmtHorarios->execute([$funcionario['ID_FUNCIONARIO']]);
+
+                $horariosRow = $stmtHorarios->fetch(PDO::FETCH_ASSOC);
+
+                if ($horariosRow) {
+
+                    $_SESSION['entrada1'] = $horariosRow['ENTRADA1'];
+                    $_SESSION['saida1']   = $horariosRow['SAIDA1'];
+                    $_SESSION['entrada2'] = $horariosRow['ENTRADA2'];
+                    $_SESSION['saida2']   = $horariosRow['SAIDA2'];
+                }
+            }
+
             echo json_encode([
-                "success"     => true,
-                "message"     => "Login bem-sucedido!",
-                "data"        => $funcionario,
-                "nomeEmpresa" => $nomeEmpresa
+                "success"       => true,
+                "message"       => "Login bem-sucedido!",
+                "data"          => $funcionario,
+                "empresa"       => $empresaRow,
+                "nomeEmpresa"   => $nomeEmpresa,
+                "dadosHorarios" => $horariosRow
             ]);
         }
 
@@ -241,6 +277,69 @@ function loadFuncionario($db, $data) {
             "error"   => "Dados não fornecidos."
         ]);
     }
+}
+
+function loadPontoFuncionario($db, $data) {
+    session_start();
+
+    if (!isset($_SESSION['funcionario_id'])) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Sessão expirada. Faça login novamente."
+        ]);
+        exit;
+    }
+
+    $idFuncionarioLogado = $_SESSION['funcionario_id'];
+    $now = date('Y-m-d');
+
+    $stmt = $db->prepare("
+        SELECT DATA, ENTRADA1, STATUS_ENTRADA1, SAIDA1, STATUS_SAIDA1, ENTRADA2, STATUS_ENTRADA2, STATUS_SAIDA2, SAIDA2
+        FROM PONTO 
+        WHERE FK_FUNCIONARIO = ? AND DATA = ?
+    ");
+    
+    // CORREÇÃO AQUI
+    $stmt->execute([$idFuncionarioLogado, $now]);
+
+    $pontos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    echo json_encode([
+        "pontos" => $pontos
+    ]);
+    exit;
+}
+
+function loadPontosFuncionario($db, $data) {
+    session_start();
+
+    if (!isset($_SESSION['funcionario_id'])) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Sessão expirada. Faça login novamente."
+        ]);
+        exit;
+    }
+
+    $idFuncionarioLogado = $_SESSION['funcionario_id'];
+    $now = date('Y-m-d');
+
+    $stmt = $db->prepare("
+        SELECT DATA, ENTRADA1, STATUS_ENTRADA1, SAIDA1, STATUS_SAIDA1, ENTRADA2, STATUS_ENTRADA2, STATUS_SAIDA2, SAIDA2
+        FROM PONTO 
+        WHERE FK_FUNCIONARIO = ?
+    ");
+    
+    // CORREÇÃO AQUI
+    $stmt->execute([$idFuncionarioLogado]);
+
+    $pontos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $pontos = array_reverse($pontos);   
+    
+    echo json_encode([
+        "pontos" => $pontos
+    ]);
+    exit;
 }
 
 function loadDadosFuncionario($db, $data) {
@@ -481,6 +580,115 @@ function applyHorarioFuncionario($db, $data) {
     }
 }
 
+function applyPontoFuncionario($db, $data) {
+    session_start();
+
+    if (!isset($_SESSION['funcionario_id'])) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Sessão expirada. Faça login novamente."
+        ]);
+        exit;
+    }
+
+    $funcionarioId = $_SESSION['funcionario_id'];
+    $empresaId     = $_SESSION['funcionario_fk_empresa'];
+    $nomeFuncionario = $_SESSION['funcionario_nome'];
+
+    $stmtt = $db->prepare("
+        SELECT ENTRADA1, SAIDA1, ENTRADA2, SAIDA2 
+        FROM HORARIOS_FUNCIONARIOS
+        WHERE FK_FUNCIONARIO = ?
+    ");
+    $stmtt->execute([$funcionarioId]);
+    $horarios = $stmtt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$horarios) {
+        echo json_encode(["success" => false, "message" => "Nenhum horário encontrado para este funcionário."]);
+        exit;
+    }
+
+    $dataAtual = date("Y-m-d");
+
+    $stmtPonto = $db->prepare("
+        SELECT * FROM PONTO 
+        WHERE FK_FUNCIONARIO = ? AND DATA = ?
+    ");
+    $stmtPonto->execute([$funcionarioId, $dataAtual]);
+    $ponto = $stmtPonto->fetch(PDO::FETCH_ASSOC);
+
+    date_default_timezone_set("America/Sao_Paulo");
+    $now = date("H:i:s");
+
+    $ordemCampos = [
+        "ENTRADA1" => $horarios['ENTRADA1'],
+        "SAIDA1"   => $horarios['SAIDA1'],
+        "ENTRADA2" => $horarios['ENTRADA2'],
+        "SAIDA2"   => $horarios['SAIDA2']
+    ];
+
+    $campoAtual = null;
+    foreach ($ordemCampos as $coluna => $horaProgramada) {
+        if (!isset($ponto[$coluna]) || empty($ponto[$coluna])) {
+            $campoAtual = $coluna;
+            $horaProgramadaColuna = $horaProgramada;
+            break;
+        }
+    }
+
+    if (!$campoAtual) {
+        echo json_encode(["success" => false, "message" => "Todas as batidas do dia já foram registradas."]);
+        exit;
+    }
+
+
+    $diferenca = strtotime($now) - strtotime($horaProgramadaColuna);
+
+    if (abs($diferenca) <= 300) { // 5 minutos
+        $status = "CONCLUIDO";
+    } elseif ($diferenca > 300) {
+        $status = "ATRASADO";
+    } else {
+        $status = "ADIANTADO";
+    }
+
+    if (!$ponto) {
+        // INSERT
+        $stmtInsert = $db->prepare("
+            INSERT INTO PONTO 
+            (FK_FUNCIONARIO, FK_EMPRESA, NOME_FUNCIONARIO, $campoAtual, STATUS_$campoAtual, DATA)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ");
+
+        $ok = $stmtInsert->execute([
+            $funcionarioId,
+            $empresaId,
+            $nomeFuncionario,
+            $now,
+            $status,
+            $dataAtual
+        ]);
+
+    } else {
+        // UPDATE
+        $stmtUpdate = $db->prepare("
+            UPDATE PONTO
+            SET $campoAtual = ?, STATUS_$campoAtual = ?
+            WHERE ID_PONTO = ?
+        ");
+
+        $ok = $stmtUpdate->execute([$now, $status, $ponto['ID_PONTO']]);
+    }
+
+    echo json_encode([
+        "success" => $ok,
+        "campoRegistrado" => $campoAtual,
+        "hora" => $now,
+        "status" => $status,
+        "message" => $ok ? "Ponto registrado com sucesso!" : "Erro ao registrar o ponto."
+    ]);
+}
+
 function getNomeEmpresa($db, $data){
     session_start();
 
@@ -552,6 +760,70 @@ function getLatLongFromCEP($db, $data){
         "data" => [
             "lat" => $json["latitude"],
             "lon" => $json["longitude"]
+        ]
+    ]);
+    exit;
+}
+
+function getEnderecoFromLatLong($db, $data) {
+    header("Content-Type: application/json; charset=UTF-8");
+
+    if (!isset($data['lat']) || !isset($data['lon'])) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Latitude ou longitude não enviados."
+        ]);
+        exit;
+    }
+
+    $lat = trim($data['lat']);
+    $lon = trim($data['lon']);
+
+    // URL do Nominatim
+    $url = "https://nominatim.openstreetmap.org/reverse?format=json&lat={$lat}&lon={$lon}&addressdetails=1";
+
+    // Obrigatório: definir User-Agent para evitar bloqueio
+    $opts = [
+        "http" => [
+            "header" => "User-Agent: MeuSistema/1.0\r\n"
+        ]
+    ];
+
+    $context = stream_context_create($opts);
+
+    $response = file_get_contents($url, false, $context);
+
+    if ($response === false) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Erro ao conectar ao Nominatim."
+        ]);
+        exit;
+    }
+
+    $json = json_decode($response, true);
+
+    if (!isset($json["address"])) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Endereço não encontrado."
+        ]);
+        exit;
+    }
+
+    $a = $json["address"];
+
+    echo json_encode([
+        "success" => true,
+        "data" => [
+            "numero"  => $a["house_number"] ?? "",
+            "rua"     => $a["road"] ?? ($a["pedestrian"] ?? ($a["footway"] ?? "")),
+            "bairro"  => $a["suburb"] ?? ($a["neighbourhood"] ?? ""),
+            "cidade"  => $a["city"] ?? ($a["town"] ?? ($a["village"] ?? ($a["city_district"] ?? ""))),
+            "estado"  => $a["state"] ?? "",
+            "cep"     => $a["postcode"] ?? "",
+            "lat"     => $lat,
+            "lon"     => $lon
         ]
     ]);
     exit;
@@ -710,7 +982,8 @@ function updateFuncionario($db, $data){
 
         echo json_encode([
             "success" => $executou ? true : false,
-            "message" => $executou ? "Funcionário atualizado com sucesso!" : "Erro ao atualizar funcionário."
+            "message" => $executou ? "Funcionário atualizado com sucesso!" : "Erro ao atualizar funcionário.",
+            "id_funcionario" => $idFuncionario
         ]);
 
     } else {
@@ -726,7 +999,7 @@ function updateHorarioFuncionario($db, $data){
         exit;
     }
 
-    if ($data && isset($data['ID_FUNCIONARIO'])) {
+    if ($data && isset($data['ID_EMPRESA'])) {
 
         $idFuncionario = $data['ID_FUNCIONARIO'];
         $entrada1      = $data['ENTRADA1'];
@@ -757,7 +1030,6 @@ function updateEmpresa($db, $data){
     $idEmpresa = $_SESSION['empresa_id'] ?? null;
 
     if ($data && $idEmpresa) {
-
         $nomeFantasia = $data['RAZAO_FANTASIA'];
         $cnpj         = $data['CNPJ_EMPRESA'];
         $email        = $data['EMAIL_EMPRESA'];
@@ -836,12 +1108,6 @@ function updateSenhaEmpresa($db, $data){
 }
 
 function deletaFuncionario($db, $data){
-    // 1) Valida se ID_FUNCIONARIO existe e é numérico
-    if (!isset($data['ID_FUNCIONARIO']) || !is_numeric($data['ID_FUNCIONARIO'])) {
-        echo json_encode(["error" => "ID_FUNCIONARIO inválido."]);
-        return;
-    }
-
     $id = (int)$data['ID_FUNCIONARIO'];
 
     try {

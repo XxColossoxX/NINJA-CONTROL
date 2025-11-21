@@ -4,12 +4,16 @@ session_start();
 $idFuncionario = $_SESSION['funcionario_id'];
 $nomeFuncionario = isset($_SESSION['funcionario_nome']) ? $_SESSION['funcionario_nome'] : '';
 $faceIdFuncionario = isset($_SESSION['funcionario_faceid']) ? $_SESSION['funcionario_faceid'] : '';
-$fotoFuncionario = isset($_SESSION['funcionario_faceid']) ? $_SESSION['funcionario_faceid'] : ''; // Exemplo: usar faceId como url da foto
+$fotoFuncionario = isset($_SESSION['funcionario_faceid']) ? $_SESSION['funcionario_faceid'] : ''; //Exemplo: usar faceId como url da foto
 $rgFuncionario = isset($_SESSION['funcionario_rg']) ? $_SESSION['funcionario_rg'] : '';
 $cpfFuncionario = isset($_SESSION['funcionario_cpf']) ? $_SESSION['funcionario_cpf'] : '';
 $nomeEmpresa = isset($_SESSION['empresa_razao_fantasia']) ? $_SESSION['empresa_razao_fantasia'] : 'Nome da Empresa'; // Trocar para valor real depois
 $dataNascimentoFuncionario = isset($_SESSION['funcionario_data_nascimento']) ? $_SESSION['funcionario_data_nascimento'] : 'Data de Nascimento'; // Trocar para valor real depois
 $localizacaoEmpresa = isset($_SESSION['empresa_loc']) ? $_SESSION['empresa_loc'] : '';
+$horarioEntrada1 = isset($_SESSION['entrada1']) ? $_SESSION['entrada1'] : '-'; 
+$horarioSaida1 = isset($_SESSION['saida1']) ? $_SESSION['saida1'] : '-';
+$horarioSaida2 = isset($_SESSION['saida2']) ? $_SESSION['saida2'] : '-';
+$horarioIntEntrada2 = isset($_SESSION['entrada2']) ? $_SESSION['entrada2'] : '-';
 
 if (!isset($_SESSION['funcionario_nome'])) {
     header('Location: ../loginFuncionario/loginFuncionario.php');
@@ -119,22 +123,20 @@ require_once('../../assets/components/headerFuncionario.php');
                         <div class="grid grid-cols-2 gap-2 sm:gap-3 text-xs sm:text-sm">
                             <div class="bg-[#0d1628]/70 p-2 sm:p-3 rounded-lg border border-cyan-400/30">
                                 <span class="text-cyan-400 font-semibold block mb-1 text-xs"><i class="fas fa-sign-in-alt"></i> Entrada:</span>
-                                <span class="text-white font-bold text-xs sm:text-sm">08:00</span>
+                                <span class="text-white font-bold text-xs sm:text-sm"><?php echo htmlspecialchars($horarioEntrada1); ?></span>
                             </div>
                             <div class="bg-[#0d1628]/70 p-2 sm:p-3 rounded-lg border border-cyan-400/30">
                                 <span class="text-cyan-400 font-semibold block mb-1 text-xs"><i class="fas fa-sign-out-alt"></i> Saída:</span>
-                                <span class="text-white font-bold text-xs sm:text-sm">18:00</span>
+                                <span class="text-white font-bold text-xs sm:text-sm"><?php echo htmlspecialchars($horarioSaida1); ?></span>
                             </div>
                             <div class="bg-[#0d1628]/70 p-2 sm:p-3 rounded-lg border border-cyan-400/30 col-span-2">
                                 <span class="text-cyan-400 font-semibold block mb-1 text-xs"><i class="fas fa-coffee"></i> Intervalo:</span>
-                                <span class="text-white font-bold text-xs sm:text-sm">12:00 - 13:00</span>
+                                <span class="text-white font-bold text-xs sm:text-sm"><?php echo htmlspecialchars($horarioIntEntrada2); ?> -  <?php echo htmlspecialchars($horarioSaida2);?></span>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>       
             </div>
-
-
 
             <div class="flex flex-col items-center">
                 <img id="imgFuncionarioDesk" src="<?php echo $fotoFuncionario; ?>" alt="Foto do Funcionário"
@@ -204,30 +206,30 @@ require_once('../../assets/components/headerFuncionario.php');
                 <div class="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4">
                     <div class="bg-slate-800/80 border border-cyan-500/10 rounded-xl p-2 sm:p-3 flex flex-col items-center shadow-[0_0_10px_#00ffff10]">
                         <i class="fas fa-sign-in-alt text-green-600 text-lg sm:text-xl mb-1"></i>
-                        <span id="entrada1" class="font-bold text-green-600 text-sm sm:text-base">---</span>
+                        <span id="ENTRADA1" class="font-bold text-green-600 text-sm sm:text-base">---</span>
                         <span class="text-xs font-bold text-white">Entrada</span>
-                        <span id="statusEntrada1" class="text-xs ">---</span>
+                        <span id="statusENTRADA1" class="text-xs ">---</span>
                         <!-- text-green-500 -->
                     </div>
                     <div class="bg-slate-800/80 border border-cyan-500/10 rounded-xl p-2 sm:p-3 flex flex-col items-center shadow-[0_0_10px_#00ffff10]">
                         <i class="fas fa-sign-out-alt text-red-600 text-lg sm:text-xl mb-1"></i>
-                        <span id="saida1" class="font-bold text-red-600 text-sm sm:text-base">---</span>
+                        <span id="SAIDA1" class="font-bold text-red-600 text-sm sm:text-base">---</span>
                         <span class="text-xs font-bold text-white">Saída</span>
-                        <span id="statusSaida1" class="text-xs ">---</span>
+                        <span id="statusSAIDA1" class="text-xs ">---</span>
                         <!-- text-red-500 -->
                     </div>
                     <div class="bg-slate-800/80 border border-cyan-500/10 rounded-xl p-2 sm:p-3 flex flex-col items-center shadow-[0_0_10px_#00ffff10]">
                         <i class="fas fa-sign-in-alt text-green-600 text-lg sm:text-xl mb-1"></i>
-                        <span id="entrada2" class="font-bold text-green-600 text-sm sm:text-base">---</span>
+                        <span id="ENTRADA2" class="font-bold text-green-600 text-sm sm:text-base">---</span>
                         <span class="text-xs font-bold text-white">Entrada</span>
-                        <span id="statusEntrada2" class="text-xs ">---</span>
+                        <span id="statusENTRADA2" class="text-xs ">---</span>
                         <!-- text-yellow-500 -->
                     </div>
                     <div class="bg-slate-800/80 border border-cyan-500/10 rounded-xl p-2 sm:p-3 flex flex-col items-center shadow-[0_0_10px_#00ffff10]">
                         <i class="fas fa-sign-out-alt text-red-600 text-lg sm:text-xl mb-1"></i>
-                        <span id="saida" class="font-bold text-red-600 text-sm sm:text-base">---</span>
+                        <span id="SAIDA2" class="font-bold text-red-600 text-sm sm:text-base">---</span>
                         <span class="text-xs font-bold text-white">Saída</span>
-                        <span id="statusSaida2" class="text-xs ">---</span>
+                        <span id="statusSAIDA2" class="text-xs ">---</span>
                         <!-- text-yellow-500 -->
                     </div>
                 </div>
@@ -346,7 +348,6 @@ require_once('../../assets/components/headerFuncionario.php');
 <script src="./js/pontoFuncionario.js"></script>
 <link rel="stylesheet" href="./css/pontoFuncionario.css">
 <script>
-    
     const faceIdFuncionario         = "<?php echo isset($_SESSION['funcionario_faceid']) ? $_SESSION['funcionario_faceid'] : ''; ?>";
     const nomeFuncionario           = "<?php echo isset($_SESSION['funcionario_nome']) ? $_SESSION['funcionario_nome'] : ''; ?>";
     const cpfFuncionario            = "<?php echo isset($_SESSION['funcionario_cpf']) ? $_SESSION['funcionario_cpf'] : ''; ?>";
@@ -356,7 +357,6 @@ require_once('../../assets/components/headerFuncionario.php');
 
     const idFuncionario = "<?php echo isset($_SESSION['funcionario_id']) ? $_SESSION['funcionario_id'] : ''; ?>"
     const nomeEmpresa = "<?php echo isset($_SESSION['empresa_razao_fantasia']) ? $_SESSION['empresa_razao_fantasia'] : ''; ?>"
-    sessionStorage.setItem("idFuncionario",idFuncionario);
     sessionStorage.setItem("fotoFuncionario",faceIdFuncionario);
     sessionStorage.setItem("nomeEmpresa",nomeEmpresa);
     

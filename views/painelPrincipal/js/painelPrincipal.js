@@ -284,7 +284,7 @@ async function abrirCamera() {
             recarregaTabela();
         }
     });
-}
+};
 
 async function preencheTabela(res) {
     const tabela = $("#tblFuncionario tbody");
@@ -597,5 +597,6 @@ $(document).ready(function () {
         }
     });
 });
+
 //#endregion
 });

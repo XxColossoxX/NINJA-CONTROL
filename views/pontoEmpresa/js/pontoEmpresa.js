@@ -205,9 +205,9 @@ async function localizacaoAtual() {
         },
         headers: { "Content-Type": "application/json" }
     });
-    if (res.data[0]['LOC_EMPRRESA'] != 'success') {
-        $("#inputLocalizacao").val(res.data[0]['LOC_EMPRRESA']);
-        sessionStorage.setItem('locEmpresa', res.data[0]['LOC_EMPRRESA']);
+    if (res.data[0].LOC_EMPRESA != 'success') {
+        $("#inputLocalizacao").val(res.data[0].LOC_EMPRESA);
+        sessionStorage.setItem('locEmpresa', res.data[0].LOC_EMPRESA);
     } else {
         showAlert('Erro ao carregar localização da empresa.',"error");
         $("#inputLocalizacao").val('Endereço não disponível');

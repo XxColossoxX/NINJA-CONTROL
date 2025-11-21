@@ -1,386 +1,196 @@
-let foto64 = ""; 
-const tabela = $("#tblFuncionario tbody");
-
-
-$(document).ready( async function() {    
-    document.getElementById("bemVindo").classList.add("hidden");
-
-   setTimeout(() => {
-    document.getElementById("controlador").classList.remove("hidden");
-}, 40);
-
-
-    Inputmask("999.999.999-99").mask("#inputCpfFuncionario");
-    Inputmask("99.999.999-9").mask("#inputRgFuncionario");
-
-    Inputmask("999.999.999-99").mask("#showCpf");
-    Inputmask("99.999.999-9").mask("#showRg");
-
-    await recarregaTabela();
-
-//!BOTOES
-
-$("#btnProximo").on('click', async function(){
-    let inputNome   = $("#inputNomeFuncionario").val()
-    let inputCpf    = $("#inputCpfFuncionario").val()
-    let inputRg     = $("#inputRgFuncionario").val()
-    let inputData   = $("#inputDataNascFuncionario").val()
-
-    if(!inputNome || !inputCpf || !inputRg || !inputData) {
-        showAlert("Preencha todos os campos!", "error");
-        return;
-    }
-    $("#form-modal").addClass("hidden");
-    $("#camera-modal").removeClass("hidden");
-    await abrirCamera();
-
-})
-
-
-$(document).on("click", ".delete-icon", async function () {
-    const id = $(this).data("id");
-    if (confirm("Tem certeza que deseja excluir este funcionário?")) {
-        const res = axios({
-                url: "../../../backend/backend.php",
-                method: "POST",
-                data: {
-                    function: "deletaFuncionario",
-                    ID_FUNCIONARIO: id,
-                },
-        })
-        
-        const loadFuncionario = await axios({
-            url: "../../../backend/backend.php",
-            method: "POST",
-            data: {
-                function: "load",
-                
-            },
-        });
-
-        $(`i.delete-icon[data-id="${id}"]`).closest("tr").remove();
-        $("#totalFunc").empty()
-        $("#totalFunc").text(loadFuncionario.data.length)
-        showAlert("Funcionário deletado!","false")
-    }
+$(document).ready(async function () {
+    document.getElementById("bemVindo")?.classList.add("hidden");
+    await getPontos();
+    setTimeout(() => {
+        document.getElementById("controlador").classList.remove("hidden");
+    }, 40);
+    setTimeout(() => {
+        const tbl = document.getElementById("tblHistoricoPonto");
+        tbl.classList.remove("opacity-0", "translate-y-4");
+    }, 80);
 });
 
-$(document).on("click", ".edit-icon", function () {
-    const id = $(this).data("id");
+// ----------------------------
+// CONFIGURAÇÕES
+// ----------------------------
+let paginaAtual = 1;
+const itensPorPagina = 4;
+let dadosTabela = [];
+let dadosFiltrados = [];
 
-    const res = axios({
-        url: "../../../backend/backend.php",
-        method: "POST",
-        data: {
-            function: "loadFuncionario",
-            ID_FUNCIONARIO: id,
-        },
-    }).then((res) => {
-        console.log(res.data);
-        console.log(res.data[0]);
-        
-        $("#form-modal").removeClass("hidden");
-        $("#inputNomeFuncionario").val(res.data[0].NOME_FUNCIONARIO);
-        $("#inputCpfFuncionario").val(res.data[0].CPF);
-        $("#inputRgFuncionario").val(res.data[0].RG);
-        $("#inputDataNascFuncionario").val(res.data[0].DATA_NASCIMENTO);
-    });
+// ----------------------------
+// ICONES
+// ----------------------------
+const icones = {
+    "ADIANTADO": `<i class="fas fa-exclamation-circle text-blue-300"></i>`,
+    "CONCLUIDO": `<i class="fas fa-check text-green-400"></i>`,
+    "ATRASADO": `<i class="fas fa-triangle-exclamation text-red-400"></i>`,
+    "NAO_TRABALHADO": `<i class="fas fa-times-circle text-gray-400"></i>`
+};
 
-});
+// ----------------------------
+// STATUS
+// ----------------------------
+function determinarStatus(p) {
+    const partes = [
+        p.STATUS_ENTRADA1,
+        p.STATUS_SAIDA1,
+        p.STATUS_ENTRADA2,
+        p.STATUS_SAIDA2
+    ];
 
-//!FUNCOES
-
-
-async function cadastrarFuncionario(){
-    let inputNome   = $("#inputNomeFuncionario").val()
-    let inputCpf    = $("#inputCpfFuncionario").val()
-    let inputRg     = $("#inputRgFuncionario").val()
-    let inputData   = $("#inputDataNascFuncionario").val()
-
-    if(!inputNome || !inputCpf || !inputRg || !inputData) {
-        showAlert("Preencha todos os campos!", "error");
-        return;
+    if (partes.every(s => !s)) {
+        return { label: "Não trabalhado", class: "text-gray-400 border-gray-500", icon: icones.NAO_TRABALHADO };
     }
-
-    await abrirCamera();
-
-    // Verificar se a foto foi capturada
-    if (!foto64) {
-        showAlert("Erro ao capturar a foto. Tente novamente.", "error");
-        return;
+    if (partes.includes("ADIANTADO")) {
+        return { label: "Adiantado", class: "text-blue-300 border-blue-400", icon: icones.ADIANTADO };
     }
-
-    try {
-        const res = await axios({
-            url: "../../../backend/backend.php",
-            method: "POST",
-            data: {
-                function: "apply",
-                NOME_FUNCIONARIO: inputNome,
-                CPF: inputCpf,
-                DATA_NASCIMENTO: inputData,
-                RG: inputRg,
-                FACEID: foto64,
-            },
-        });
-
-        if (res.data.success) {
-            showAlert("Funcionário cadastrado com sucesso!", "success");
-            
-        } else {
-            showAlert("Erro ao cadastrar funcionário.", "error");
-        }
-    } catch (error) {
-        console.error("Erro ao enviar os dados:", error);
-        showAlert("Erro ao enviar os dados. Tente novamente.", "error");
+    if (partes.includes("ATRASADO")) {
+        return { label: "Atrasado", class: "text-red-300 border-red-400", icon: icones.ATRASADO };
     }
+    return { label: "Concluído", class: "text-green-300 border-green-400", icon: icones.CONCLUIDO };
 }
 
-async function abrirCamera() {
-    const video = document.getElementById("register-camera");
-    const cameraError = document.getElementById("camera-error");
-    const displayNome = document.getElementById("display-nome");
-    const displayCpf = document.getElementById("display-cpf");
-    const displayRg = document.getElementById("display-rg");
-    const displayData = document.getElementById("display-data");
-    const welcomeMessage = document.getElementById("welcome-message");
-    const welcomeNome = document.getElementById("welcome-nome");
-    let stream;
+// ----------------------------
+// MONTAR TABELA
+// ----------------------------
+function montarTabela() {
+    const tbody = document.querySelector("#tblHistoricoPonto tbody");
+    tbody.innerHTML = "";
 
-    // Preencher os dados do formulário na seção de dados
-    const inputNome     = $("#inputNomeFuncionario").val();
-    const inputCpf      = $("#inputCpfFuncionario").val();
-    const inputRg       = $("#inputRgFuncionario").val();
-    const inputData     = $("#inputDataNascFuncionario").val();
+    const totalPaginas = Math.ceil(dadosFiltrados.length / itensPorPagina) || 1;
+    if (paginaAtual > totalPaginas) paginaAtual = totalPaginas;
 
-    displayNome.textContent = inputNome;
-    displayCpf.textContent = inputCpf;
-    displayRg.textContent = inputRg;
-    displayData.textContent = inputData;
+    const inicio = (paginaAtual - 1) * itensPorPagina;
+    const fim = inicio + itensPorPagina;
 
-    try {
-        // Solicitar permissão para acessar a câmera
-        stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        video.srcObject = stream;
-        video.classList.remove("hidden");
-        cameraError.classList.add("hidden");
-    } catch (error) {
-        console.error("Erro ao acessar a câmera:", error);
-        cameraError.classList.remove("hidden");
-        video.classList.add("hidden");
-    }
+    const pagina = dadosFiltrados.slice(inicio, fim);
 
-    // Capturar a foto ao clicar no botão "Capturar"
-    document.getElementById("btnCapturar").addEventListener("click", async function () {
-        const canvas = document.createElement("canvas");
-        const context = canvas.getContext("2d");
-
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-        // Converter a imagem para Base64
-        foto64 = canvas.toDataURL("image/png");
-        console.log("Foto capturada:", foto64);
-
-
-        // Exibir mensagem de boas-vindas
-        welcomeNome.textContent = inputNome;
-        welcomeMessage.classList.remove("hidden");
-    
-        const res = await axios({
-            url: "../../../backend/backend.php",
-            method: "POST",
-            data: {
-                function: "apply",
-                NOME_FUNCIONARIO: inputNome,
-                CPF: inputCpf,
-                DATA_NASCIMENTO: inputData,
-                RG: inputRg,
-                FACEID: foto64,
-            },
-        });
-    
-        if (res.data.success) {
-            showAlert(res.data.message, "success");
-            $("#close-camera-modal").click();
-            recarregaTabela();
-            return
-        } else {
-            showAlert("Erro ao cadastrar funcionário.", "error");
-            console.log(res.data);
-        }
-    });
-
-    return stream;
-}
-
-async function preencheTabela(res) {
-    tabela.empty();
-    if(res.data.length == 0) {
-        const tabela    = $("#tblFuncionario tbody");
-        const conteudo  = `
-                    <tr class="border-b border-gray-200 hover:bg-gray-100 rounded-lg"> 
-                        <td class="px-6 py-4 rounded-lg"></td>
-                        <td class="px-6 py-4 rounded-lg"></td>
-                        <td class="px-6 py-4 rounded-lg"></td>
-                        <td class="px-6 py-4 rounded-lg"></td>
-                        <td class="px-6 py-4 rounded-lg"></td>
-                    </tr>
-            `
-        tabela.append(conteudo);
-    }   
-
-
-    for (let i = 0; i < res.data.length; i++) {
-        let idFuncionario       = res.data[i].ID_FUNCIONARIO;
-        let nomeFuncionario     = res.data[i].NOME_FUNCIONARIO;
-        let cpfFuncionario      = res.data[i].CPF;
-        let rgFuncionario       = res.data[i].RG;
-        let imagemFuncionario   = res.data[i].FACEID;
-
-        const tabela = $("#tblFuncionario tbody");
-        const conteudo = `
-            <tr class="border-b border-gray-200 hover:bg-gray-100 rounded-lg"> 
-                <td class="px-4 py-2 text-center border-r-2 border-gray-100">${idFuncionario}</td>
-                <td class="px-4 py-2 text-center border-r-2 border-gray-100 sm:rounded-tl-lg">${nomeFuncionario}</td>
-                <td class="px-4 py-2 text-center border-r-2 border-gray-100 hidden md:table-cell">${cpfFuncionario}</td>
-                <td class="px-4 py-2 text-center border-r-2 border-gray-100 hidden md:table-cell">${rgFuncionario}</td>
-                <td class="px-4 py-2 flex justify-center items-center border-r-2 border-gray-100">
-                    <img src="${imagemFuncionario}" class="w-16 h-16 rounded-full border-4 border-gray-250">
-                </td>
-                <td class="px-2 py-1 text-center border-r-2 border-gray-100 ">
-                    <i id="btnEdit" class="fas fa-edit text-blue-500 hover:text-blue-700 cursor-pointer edit-icon" data-id="${idFuncionario}" title="Editar"></i>
-                
-                </td>
-                <td class="px-2 py-1 text-center">
-                    <i class="fas fa-trash text-red-500 hover:text-red-700 cursor-pointer delete-icon" data-id="${idFuncionario}" id="btnDeletar" title="Excluir"></i>
+    if (pagina.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" class="text-center py-4 text-gray-400">
+                    Nenhum registro encontrado
                 </td>
             </tr>
         `;
-        tabela.append(conteudo);
+    } else {
+        pagina.forEach(ponto => {
+            const s = determinarStatus(ponto);
+
+            tbody.innerHTML += `
+                <tr class="bg-slate-800/50 border-b border-slate-700/30 hover:bg-slate-700/30 transition">
+                    <td class="px-4 py-3 font-medium text-white">${ponto.DATA}</td>
+                    <td class="px-4 py-3 text-center text-cyan-300">${ponto.ENTRADA1 ?? "-"}</td>
+                    <td class="px-4 py-3 text-center text-cyan-300">${ponto.SAIDA1 ?? "-"}</td>
+                    <td class="px-4 py-3 text-center text-cyan-300 hidden sm:table-cell">${ponto.ENTRADA2 ?? "-"}</td>
+                    <td class="px-4 py-3 text-center text-cyan-300 hidden sm:table-cell">${ponto.SAIDA2 ?? "-"}</td>
+                    <td class="px-4 py-3 text-center">
+                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold border ${s.class}">
+                            ${s.icon} ${s.label}
+                        </span>
+                    </td>
+                </tr>
+            `;
+        });
     }
-    if(res.data.length < 1){
-        setTimeout(() => {
-            showAlert("NÃO HÁ FUNCIONÁRIOS CADASTRADOS !", "error");
-        }, 2000);        
-    }
+
+    document.getElementById("pageInfo").innerText =
+        `Página ${paginaAtual} de ${totalPaginas}`;
 }
 
-async function recarregaTabela() {
-    const tabela = $("#tblFuncionario tbody");
-    tabela.empty();
+// ----------------------------
+// PAGINAÇÃO
+// ----------------------------
+document.getElementById("btnPrev").onclick = () => {
+    if (paginaAtual > 1) {
+        paginaAtual--;
+        montarTabela();
+    }
+};
 
+document.getElementById("btnNext").onclick = () => {
+    const total = Math.ceil(dadosFiltrados.length / itensPorPagina);
+    if (paginaAtual < total) {
+        paginaAtual++;
+        montarTabela();
+    }
+};
 
-    await loadEmpresa()
-    return
-}
+// ----------------------------
+// EXPORT CSV
+// ----------------------------
+document.getElementById("btnExportCSV").onclick = () => {
+    let csv = "DATA,ENTRADA1,SAIDA1,ENTRADA2,SAIDA2,STATUS\n";
 
-async function loadEmpresa(){
-    tabela.empty();
-    const res = await axios({
-        url: "../../../backend/backend.php",
-        method: "POST",
-        data: {
-            function: "load",
-            
-        },
+    dadosFiltrados.forEach(p => {
+        const s = determinarStatus(p).label;
+        csv += `${p.DATA},${p.ENTRADA1 || "-"},${p.SAIDA1 || "-"},${p.ENTRADA2 || "-"},${p.SAIDA2 || "-"},${s}\n`;
     });
-        await preencheTabela(res);
-        $("totalFunc").empty();
-        $("#totalFunc").text(res.data.length);
-        return
+
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+
+    a.href = url;
+    a.download = "historico_pontos.csv";
+    a.click();
+
+    URL.revokeObjectURL(url);
+};
+
+// ----------------------------
+// EXPORT PDF
+// ----------------------------
+document.getElementById("btnExportPDF").onclick = () => {
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = "pdf/gerarpdf.php";
+    form.target = "_blank";
+
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "dados";
+    input.value = JSON.stringify(dadosFiltrados);
+
+    form.appendChild(input);
+    document.body.appendChild(form);
+
+    form.submit();
+    form.remove();
+};
+
+// ----------------------------
+// CARREGAR DO BACKEND
+// ----------------------------
+async function getPontos() {
+    try {
+        const res = await axios.post("/backend/backend.php", {
+            function: "loadPontosFuncionario"
+        });
+
+        dadosTabela = res.data.pontos || [];
+        dadosFiltrados = [...dadosTabela];
+
+        montarTabela();
+    } catch (e) {
+        console.error("Erro ao carregar pontos:", e);
+    }
 }
 
-function showAlert(message, type = "error") {
-        const alertBox = document.getElementById("alert-box");
-        const alertMessage = document.getElementById("alert-message");
-    
-        if (!alertBox || !alertMessage) {
-            console.error("Elementos de alerta não encontrados no DOM.");
-            return;
-        }
-    
-        // Define a mensagem
-        alertMessage.textContent = message;
-    
-        // Limpa classes antigas e aplica a cor conforme o tipo
-        alertBox.classList.remove("hidden", "alert-hide", "bg-red-500", "bg-green-500");
-    
-        if (type === "success") {
-            alertBox.classList.add("bg-green-500");
-        } else {
-            alertBox.classList.add("bg-red-500");
-        }
-    
-        // Adiciona a animação de entrada
-        alertBox.classList.add("alert-show");
-    
-        // Remove a animação de entrada após 3 segundos e adiciona a de saída
-        setTimeout(() => {
-            alertBox.classList.remove("alert-show");
-            alertBox.classList.add("alert-hide");
-    
-            // Oculta o alerta após a animação de saída
-            setTimeout(() => {
-                alertBox.classList.add("hidden");
-            }, 500); // Aguarda a animação de saída terminar
-        }, 3000);
-}      
+// ----------------------------
+// FILTRO
+// ----------------------------
+document.getElementById("btnFiltrar").addEventListener("click", () => {
+    const inicio = document.getElementById("dataInicio").value;
+    const fim = document.getElementById("dataFim").value;
 
-//!FRONT-END
-//#region
-// Botões de fechar os modais
-const closeFormModalBtn     = document.getElementById('close-form-modal');
-const closeCameraModalBtn   = document.getElementById('close-camera-modal');
+    dadosFiltrados = dadosTabela.filter(p => {
+        if (inicio && p.DATA < inicio) return false;
+        if (fim && p.DATA > fim) return false;
+        return true;
+    });
 
-// Fechar o modal do formulário
-closeFormModalBtn.addEventListener('click', () => {
-    formModal.classList.add('hidden');
-});
-
-// Fechar o modal de captura de rosto
-closeCameraModalBtn.addEventListener('click', () => {
-    cameraModal.classList.add('hidden');
-});
-
-document.getElementById("close-camera-modal").addEventListener("click", function () {
-    const cameraModal = document.getElementById("camera-modal");
-    const video = document.getElementById("register-camera");
-
-    // Parar o stream da câmera
-    if (video.srcObject) {
-        video.srcObject.getTracks().forEach((track) => track.stop());
-    }
-
-    cameraModal.classList.add("hidden");
-});
-
-const menuToggle    = document.getElementById("menu-toggle");
-const menuClose     = document.getElementById("menu-close");
-const menu          = document.getElementById("menu");
-
-menuToggle.addEventListener("click", () => {
-    menu.classList.remove("menu-hidden");
-    menu.classList.add("menu-visible");
-});
-
-menuClose.addEventListener("click", () => {
-    menu.classList.remove("menu-visible");
-    menu.classList.add("menu-hidden");
-});
-
-const addEmployeeBtn    = document.getElementById('add-employee-btn');
-const formModal         = document.getElementById('form-modal');
-const cameraModal       = document.getElementById('camera-modal');
-const nextToCameraBtn   = document.getElementById('next-to-camera');
-const video             = document.getElementById('video');
-const captureBtn        = document.getElementById('capture-btn');
-
-addEmployeeBtn.addEventListener('click', () => {
-    formModal.classList.remove('hidden');
-});
-//#endregion
-
+    paginaAtual = 1;
+    montarTabela();
 });

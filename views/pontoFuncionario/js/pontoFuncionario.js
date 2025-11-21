@@ -8,6 +8,7 @@ $(document).ready( async function() {
     //!FUNCOES
     setTimeout(async () => {
         await locAtual();
+        await getPontos();
     }, 2500);
 
     // Capturar imagem e converter para base64
@@ -29,12 +30,12 @@ $(document).ready( async function() {
             const fotoBanco = $("#imgFuncionario")[0]; // DOM element
             const fotoAtual = img; // Agora está carregada
 
-            await capturarRosto(fotoBanco, fotoAtual);
+            await capturarRosto(fotoBanco, fotoAtual, base64Image);
         };
     });
 });
 
-async function capturarRosto(fotoBanco, fotoAtual){
+async function capturarRosto(fotoBanco, fotoAtual, base64Image) {
     await faceapi.nets.ssdMobilenetv1.loadFromUri('/backend/faceId/ssd_mobilenetv1')
     await faceapi.nets.faceLandmark68Net.loadFromUri('/backend/faceId/face_landmark_68')
     await faceapi.nets.faceRecognitionNet.loadFromUri('/backend/faceId/face_recognition')
@@ -49,9 +50,10 @@ async function capturarRosto(fotoBanco, fotoAtual){
     }
 
     const distance = faceapi.euclideanDistance(det1.descriptor, det2.descriptor)
-    distance <= 0.35 ? await comparaEndereco() : (showAlert('Rosto não reconhecido!','error'), loaderM("", false));
+    distance <= 0.35 ? await comparaEndereco(base64Image) : (showAlert('Rosto não reconhecido!','error'), loaderM("", false));
 
     $('#btn-fechar-ponto').click(); // Fecha o modal
+    loaderM("", false);
 };
 
 async function locAtual() {
@@ -134,7 +136,30 @@ async function getEndereco(lat, lon) {
     }
 };
 
-async function comparaEndereco(){
+async function getPontos(){
+    const res = await axios({
+        url: "/backend/backend.php",
+        method: "POST",
+        data: {
+            function: "loadPontoFuncionario",
+        },
+        headers: { "Content-Type": "application/json"}
+    });
+    return await atualizarPontos(res.data);
+};
+
+async function atualizarPontos(pontos){
+    $("#ENTRADA1").text(pontos.pontos[0].ENTRADA1 != null ? pontos.pontos[0].ENTRADA1 : '---');
+    $("#SAIDA1").text(pontos.pontos[0].SAIDA1 != null ? pontos.pontos[0].SAIDA1 : '---');
+    $("#ENTRADA2").text(pontos.pontos[0].ENTRADA2 != null ? pontos.pontos[0].ENTRADA2 : '---');
+    $("#SAIDA2").text(pontos.pontos[0].SAIDA2 != null ? pontos.pontos[0].SAIDA2 : '---');
+    await atualizarStatus(pontos.pontos[0].STATUS_ENTRADA1, $("#statusENTRADA1"));
+    await atualizarStatus(pontos.pontos[0].STATUS_SAIDA1, $("#statusSAIDA1"));
+    await atualizarStatus(pontos.pontos[0].STATUS_ENTRADA2, $("#statusENTRADA2"));
+    await atualizarStatus(pontos.pontos[0].STATUS_SAIDA2, $("#statusSAIDA2"));
+};
+
+async function comparaEndereco(base64Image){
     const res = await axios({
             url: "/backend/backend.php",
             method: "POST",
@@ -155,19 +180,12 @@ async function comparaEndereco(){
         showAlert('Você está fora do raio permitido para bater o ponto!','error')
         return
     } else {
-        showAlert('Ponto Efetuado com Sucesso!','success')
-    }
-
-
-    loaderM("", false);
-    showAlert('Ponto batido com sucesso!','success')
-    return
-    
-
+        await baterPonto(base64Image);
+    }    
 };
 
 async function calcularDistancia(evLatitude, evLongitude, empLatitude, empLongitude) {
-  const R = 6371e3; // Raio da Terra em metros
+  const R = 6371e3; 
   const toRad = (graus) => graus * Math.PI / 180;
 
   const dLat = toRad(empLatitude - evLatitude);
@@ -180,8 +198,52 @@ async function calcularDistancia(evLatitude, evLongitude, empLatitude, empLongit
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
   return R * c;
-}
+};
 
+async function baterPonto(base64Image) {
+    const res = await axios({
+        url: "/backend/backend.php",
+        method: "POST",
+        data: {
+            function: "applyPontoFuncionario",
+            faceId: base64Image,
+        },  
+        headers: { "Content-Type": "application/json"}
+    });
+
+    if (res.data.success) {
+        showAlert('Ponto registrado com sucesso!','success')
+        $(`#${res.data.campoRegistrado}`).text(res.data.hora);
+        await atualizarStatus(res.data.status, $(`#status${res.data.campoRegistrado}`));
+        loaderM("", false);
+        $('#btnCloseModal').click();
+        return;
+    } else {
+        showAlert('Erro ao registrar ponto: ' + res.data.message,'error')
+        loaderM("", false);
+        return;
+    }
+};
+
+async function atualizarStatus(status, statusElementId) {
+    switch (status) {
+        case "CONCLUIDO":
+            statusElementId.addClass("text-green-500").removeClass("text-red-500 text-blue-500 text-gray-500");
+            statusElementId.text("CONCLUÍDO");
+            break;
+        case "ATRASADO":
+            statusElementId.addClass("text-red-500").removeClass("text-green-500 text-blue-500 text-gray-500");
+            statusElementId.text("ATRASADO");
+            break;
+        case "ADIANTADO":
+            statusElementId.addClass("text-blue-500").removeClass("text-green-500 text-red-500 text-gray-500");
+            statusElementId.text("ADIANTADO");           
+            break;
+        default:
+            statusElementId.addClass("text-gray-500").removeClass("text-green-500 text-red-500 text-blue-500");
+            statusElementId.text("---");           
+    }
+};
 
 //!FRONT-END
 //#region

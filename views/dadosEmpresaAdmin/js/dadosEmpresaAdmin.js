@@ -26,9 +26,9 @@ $(document).ready( async function() {
         $('#modal-editar-empresa').addClass('hidden');
     });
 
-    $("#btnLoc").on('click', function(){
-        locEmpresa();
-    })
+    $("#btnLoc").on('click', async function(){
+        await locEmpresa();
+    });
 
     $("#btnSalvar").on('click', async function() {
         const nome = $('#inputNomeFantasia').val();
@@ -64,13 +64,13 @@ $(document).ready( async function() {
 
     $("#btnSalvarEndereco").on('click', function(){
         updateDadosLoc();
-    })
+    });
 
     $("#fechar-modal-edicao").on('click', function(){
         setTimeout(() => {
             location.reload();
         }, 10);
-    })
+    });
 
     $("#inputCep").on('input',function(){
         let cep = $(this).val();
@@ -82,7 +82,7 @@ $(document).ready( async function() {
 
     $("#abrir-modal-endereco").on('click',function(){
         verificaLoc();
-    })
+    });
 
     const abrirModalEndereco = $("#abrir-modal-endereco");
     const modalEndereco = $("#modal-endereco");
@@ -101,10 +101,10 @@ $(document).ready( async function() {
         loaderM('Carregando Localização',true)
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
-                (position) => {
+                async (position) => {
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
-                    getEndereco(lat, lng);
+                    await getEndereco(lat, lng);
                 },
                 (error) => {
                     console.error("Erro ao obter localização:", error.message);
@@ -120,43 +120,44 @@ $(document).ready( async function() {
         }
     };
 
-    function getEndereco(latitude, longitude) {
-       const apiKey = 'AIzaSyDwpxfS7AptP74paz0S889G-uy4hE9bJV4';
+    async function getEndereco(lat, lon) {
+        loaderM("Buscando endereço...", true);
 
-        const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
-        console.log(latitude,longitude)
+        try {
+            const res = await axios({
+                url: "../../../backend/backend.php",
+                method: "POST",
+                data: {
+                    function: "getEnderecoFromLatLong",
+                    lat: lat,
+                    lon: lon
+                }
+            });
 
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-            if (data.status === "OK") {
-                endereco.numero = data.results[0].address_components[0]['long_name'];
-                endereco.rua = data.results[0].address_components[1]['short_name'];
-                endereco.bairro = data.results[0].address_components[2]['long_name'];
-                endereco.cidade = data.results[0].address_components[3]['long_name'];
-                endereco.estado = data.results[0].address_components[4]['long_name'];
-                endereco.cep = data.results[0].address_components[6]['long_name'];
+            if (res.data.success) {
+                const e = res.data.data;
 
-                $("#inputRua").val(endereco.rua);
-                $("#inputNro").val(endereco.numero);
-                $("#inputBairro").val(endereco.bairro);
-                $("#inputCidade").val(endereco.cidade);
-                $("#inputEstado").val(endereco.estado);
-                $("#inputCep").val(endereco.cep);
-                $("#inputLat").val(latitude);
-                $("#inputLong").val(longitude);
+                $("#inputRua").val(e.rua);
+                $("#inputNro").val(e.numero);
+                $("#inputBairro").val(e.bairro);
+                $("#inputCidade").val(e.cidade);
+                $("#inputEstado").val(e.estado);
+                $("#inputCep").val(e.cep);
+                $("#inputLat").val(e.lat);
+                $("#inputLong").val(e.lon);
 
-                showAlert("Verifique se os dados estão corretos!","info")
+                showAlert("Verifique se os dados estão corretos!", "info");
 
-                setTimeout(() => {
-                    loaderM("", false); 
-                }, 2000)
             } else {
-                console.error("Erro na geocodificação:", data.status);
-                setTimeout(() => {
-                    loaderM("", false); 
-                }, 2000)            }
-        }).catch(error => console.error("Erro na requisição:", error));
+                showAlert(res.data.message, "error");
+            }
+
+        } catch (err) {
+            console.error(err);
+            showAlert("Erro ao buscar endereço!", "error");
+        } finally {
+            loaderM("", false);
+        }
     };
 
     async function getDadosEmpresa(){

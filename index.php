@@ -446,272 +446,272 @@
     </footer>
 
     <!-- Service Worker Registration -->
-  <script>
-let deferredPrompt;
-let isPWAInstalled = false;
+<script>
+  let deferredPrompt;
+  let isPWAInstalled = false;
 
-// Detectar iOS
-function isIOS() {
-  return /iphone|ipad|ipod/i.test(navigator.userAgent);
-}
-
-// Detectar se está instalado (iOS + Android)
-function isInStandaloneMode() {
-  return (window.matchMedia('(display-mode: standalone)').matches) ||
-         (window.navigator.standalone === true);
-}
-
-// Bloquear tudo no iOS (APPLE não permite PWA instalar via JS)
-const isIOSDevice = isIOS();
-if (isIOSDevice && !isInStandaloneMode()) {
-  console.log("📱 iOS detectado — instalação via beforeinstallprompt bloqueada.");
-} else {
-
-  // --- ANDROID NORMAL ---
-
-  // beforeinstallprompt → pode instalar
-  window.addEventListener('beforeinstallprompt', (e) => {
-    console.log('PWA pode ser instalado');
-    e.preventDefault();
-    deferredPrompt = e;
-    showInstallPrompt();
-  });
-}
-
-// Evento quando já estiver instalado
-window.addEventListener('appinstalled', () => {
-  console.log('PWA foi instalado');
-  isPWAInstalled = true;
-  hideInstallPrompt();
-});
-
-// Detectar standalone
-if (isInStandaloneMode()) {
-  console.log('Rodando como PWA');
-  isPWAInstalled = true;
-}
-
-function showInstallPrompt() {
-  if (isPWAInstalled || isIOSDevice) return;
-
-  setTimeout(() => {
-    const installModal = document.getElementById('installModal');
-    if (installModal && !isPWAInstalled) {
-      installModal.classList.remove('hidden');
-      installModal.classList.add('animate-fadeInDown');
-    }
-  }, 5000);
-}
-
-function hideInstallPrompt() {
-  const installModal = document.getElementById('installModal');
-  if (installModal) {
-    installModal.classList.add('animate-fadeOutUp');
-    setTimeout(() => {
-      installModal.classList.add('hidden');
-    }, 300);
-  }
-}
-
-async function installPWA() {
-  if (!deferredPrompt) {
-    console.log('PWA não pode ser instalado');
-    return;
+  // Detectar iOS
+  function isIOS() {
+    return /iphone|ipad|ipod/i.test(navigator.userAgent);
   }
 
-  deferredPrompt.prompt();
-
-  const { outcome } = await deferredPrompt.userChoice;
-  console.log(`PWA instalação: ${outcome}`);
-
-  deferredPrompt = null;
-  hideInstallPrompt();
-}
-
-function dismissInstallPrompt() {
-  hideInstallPrompt();
-  localStorage.setItem('pwa-install-dismissed', Date.now());
-}
-
-// Teste manual
-function testModal() {
-  if (isIOSDevice) {
-    console.log("❌ No iOS o modal nunca aparecerá.");
-    return;
+  // Detectar se está instalado (iOS + Android)
+  function isInStandaloneMode() {
+    return (window.matchMedia('(display-mode: standalone)').matches) ||
+          (window.navigator.standalone === true);
   }
 
-  const installModal = document.getElementById('installModal');
-  if (installModal) {
-    installModal.classList.remove('hidden');
-    installModal.classList.add('animate-fadeInDown');
-  }
-}
-
-function clearPWAStorage() {
-  localStorage.removeItem('pwa-install-dismissed');
-  console.log('🗑️ localStorage limpo - modal aparecerá novamente');
-}
-
-window.testModal = testModal;
-window.clearPWAStorage = clearPWAStorage;
-
-// Ao carregar página
-window.addEventListener('load', () => {
-  console.log('🚀 Página carregada');
-
+  // Bloquear tudo no iOS (APPLE não permite PWA instalar via JS)
+  const isIOSDevice = isIOS();
   if (isIOSDevice && !isInStandaloneMode()) {
-    console.log("📱 iOS — Modal de instalação bloqueado");
-    return;
+    console.log("📱 iOS detectado — instalação via beforeinstallprompt bloqueada.");
+  } else {
+
+    // --- ANDROID NORMAL ---
+
+    // beforeinstallprompt → pode instalar
+    window.addEventListener('beforeinstallprompt', (e) => {
+      console.log('PWA pode ser instalado');
+      e.preventDefault();
+      deferredPrompt = e;
+      showInstallPrompt();
+    });
   }
 
-  if (isPWAInstalled) return;
+  // Evento quando já estiver instalado
+  window.addEventListener('appinstalled', () => {
+    console.log('PWA foi instalado');
+    isPWAInstalled = true;
+    hideInstallPrompt();
+  });
 
-  // Verificar se rejeitado recentemente
-  const dismissed = localStorage.getItem('pwa-install-dismissed');
-  if (dismissed) {
-    const diff = (Date.now() - parseInt(dismissed)) / (1000 * 60 * 60);
-    if (diff < 24) {
+  // Detectar standalone
+  if (isInStandaloneMode()) {
+    console.log('Rodando como PWA');
+    isPWAInstalled = true;
+  }
+
+  function showInstallPrompt() {
+    if (isPWAInstalled || isIOSDevice) return;
+
+    setTimeout(() => {
+      const installModal = document.getElementById('installModal');
+      if (installModal && !isPWAInstalled) {
+        installModal.classList.remove('hidden');
+        installModal.classList.add('animate-fadeInDown');
+      }
+    }, 5000);
+  }
+
+  function hideInstallPrompt() {
+    const installModal = document.getElementById('installModal');
+    if (installModal) {
+      installModal.classList.add('animate-fadeOutUp');
+      setTimeout(() => {
+        installModal.classList.add('hidden');
+      }, 300);
+    }
+  }
+
+  async function installPWA() {
+    if (!deferredPrompt) {
+      console.log('PWA não pode ser instalado');
       return;
     }
+
+    deferredPrompt.prompt();
+
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`PWA instalação: ${outcome}`);
+
+    deferredPrompt = null;
+    hideInstallPrompt();
   }
 
-  // Mostrar depois de 5s (ANDROID)
-  setTimeout(() => {
+  function dismissInstallPrompt() {
+    hideInstallPrompt();
+    localStorage.setItem('pwa-install-dismissed', Date.now());
+  }
+
+  // Teste manual
+  function testModal() {
+    if (isIOSDevice) {
+      console.log("❌ No iOS o modal nunca aparecerá.");
+      return;
+    }
+
     const installModal = document.getElementById('installModal');
-    if (installModal && !isPWAInstalled) {
+    if (installModal) {
       installModal.classList.remove('hidden');
       installModal.classList.add('animate-fadeInDown');
     }
-  }, 5000);
-});
+  }
 
-  </script>
+  function clearPWAStorage() {
+    localStorage.removeItem('pwa-install-dismissed');
+    console.log('🗑️ localStorage limpo - modal aparecerá novamente');
+  }
 
-  <script>
-    // Reveal on scroll com IntersectionObserver
-    (function(){
-      var els = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
-      if (!('IntersectionObserver' in window) || els.length === 0) {
-        // Fallback: mostra tudo
-        els.forEach(function(el){ el.classList.add('in-view'); });
-        return;
-      }
-      var io = new IntersectionObserver(function(entries){
-        entries.forEach(function(entry){
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in-view');
-            io.unobserve(entry.target);
-          }
-        });
-      }, { rootMargin: '0px 0px -10% 0px', threshold: 0.12 });
-      els.forEach(function(el){ io.observe(el); });
-    })();
-    // Partículas ciano leves e animadas
-    (function(){
-      var canvas = document.getElementById('bg-particles');
-      if (!canvas) return;
-      var ctx = canvas.getContext('2d');
-      var width, height, dpr, particles, lastTs;
+  window.testModal = testModal;
+  window.clearPWAStorage = clearPWAStorage;
 
-      function rand(min, max){ return Math.random() * (max - min) + min; }
+  // Ao carregar página
+  window.addEventListener('load', () => {
+    console.log('🚀 Página carregada');
 
-      function resize(){
-        dpr = Math.min(window.devicePixelRatio || 1, 2);
-        width = canvas.clientWidth;
-        height = canvas.clientHeight;
-        canvas.width = Math.floor(width * dpr);
-        canvas.height = Math.floor(height * dpr);
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        initParticles();
-      }
-
-      function initParticles(){
-        var area = width * height;
-        var density = Math.min(120, Math.max(35, Math.floor(area / 22000)));
-        particles = Array(density).fill(0).map(function(){
-          return {
-            x: rand(0, width),
-            y: rand(0, height),
-            r: rand(0.8, 2.0),
-            vx: rand(-0.08, 0.08),
-            vy: rand(-0.08, 0.08),
-            alpha: rand(0.35, 0.85),
-            alphaSpeed: rand(0.002, 0.006)
-          };
-        });
-      }
-
-      function step(ts){
-        var dt = lastTs ? Math.min((ts - lastTs) / 16.666, 2) : 1;
-        lastTs = ts;
-        ctx.clearRect(0, 0, width, height);
-
-        var g = ctx.createRadialGradient(width*0.7, height*0.1, 100, width*0.5, height*0.5, Math.max(width, height));
-        g.addColorStop(0, 'rgba(0, 255, 255, 0.04)');
-        g.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        ctx.fillStyle = g;
-        ctx.fillRect(0,0,width,height);
-
-        ctx.save();
-        ctx.shadowColor = 'rgba(0,255,255,0.5)';
-        ctx.shadowBlur = 6;
-        for (var i=0;i<particles.length;i++){
-          var p = particles[i];
-          p.x += p.vx * dt * 1.2;
-          p.y += p.vy * dt * 1.2;
-          p.alpha += p.alphaSpeed * dt;
-          if (p.alpha > 0.9 || p.alpha < 0.3) p.alphaSpeed *= -1;
-
-          if (p.x < -5) p.x = width + 5;
-          if (p.x > width + 5) p.x = -5;
-          if (p.y < -5) p.y = height + 5;
-          if (p.y > height + 5) p.y = -5;
-
-          ctx.beginPath();
-          ctx.fillStyle = 'rgba(0, 255, 255, ' + p.alpha + ')';
-          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          ctx.fill();
-
-          ctx.beginPath();
-          ctx.strokeStyle = 'rgba(0, 255, 255, ' + (p.alpha * 0.35) + ')';
-          ctx.lineWidth = Math.max(0.5, p.r * 0.6);
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(p.x - p.vx * 10, p.y - p.vy * 10);
-          ctx.stroke();
-        }
-        ctx.restore();
-
-        requestAnimationFrame(step);
-      }
-
-      window.addEventListener('resize', resize);
-      resize();
-      requestAnimationFrame(step);
-    })();
-    // Inicializa SimpleLightbox
-    var lightbox = new SimpleLightbox('a', { captionsData: 'alt', captionDelay: 250 });
-
-    // Registrar Service Worker
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/service-worker.js')
-        .then(() => console.log('Service Worker registrado'))
-        .catch(err => console.error('Erro no SW:', err));
+    if (isIOSDevice && !isInStandaloneMode()) {
+      console.log("📱 iOS — Modal de instalação bloqueado");
+      return;
     }
 
-    // Script AES: execute **após SW registrar**
-    window.addEventListener('load', () => {
-      // slowAES.js deve estar em /aes.js
-      if (typeof slowAES !== 'undefined') {
-        function toNumbers(d){var e=[];d.replace(/(..)/g,function(d){e.push(parseInt(d,16))});return e}
-        function toHex(){for(var d=[],d=1==arguments.length&&arguments[0].constructor==Array?arguments[0]:arguments,e="",f=0;f<d.length;f++)e+=(16>d[f]?"0":"")+d[f].toString(16);return e.toLowerCase()}
-        var a=toNumbers("f655ba9d09a112d4968c63579db590b4"),
-            b=toNumbers("98344c2eee86c3994890592585b49f80"),
-            c=toNumbers("4e3e639fc310e64a1f63d033f8dac706");
-        document.cookie="__test="+toHex(slowAES.decrypt(c,2,a,b))+"; max-age=21600; expires=Thu, 31-Dec-37 23:55:55 GMT; path=/";
-        location.href="/backend/backend.php";
+    if (isPWAInstalled) return;
+
+    // Verificar se rejeitado recentemente
+    const dismissed = localStorage.getItem('pwa-install-dismissed');
+    if (dismissed) {
+      const diff = (Date.now() - parseInt(dismissed)) / (1000 * 60 * 60);
+      if (diff < 24) {
+        return;
       }
-    });
-  </script>
+    }
+
+    // Mostrar depois de 5s (ANDROID)
+    setTimeout(() => {
+      const installModal = document.getElementById('installModal');
+      if (installModal && !isPWAInstalled) {
+        installModal.classList.remove('hidden');
+        installModal.classList.add('animate-fadeInDown');
+      }
+    }, 5000);
+  });
+
+</script>
+
+<script>
+  // Reveal on scroll com IntersectionObserver
+  (function(){
+    var els = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+    if (!('IntersectionObserver' in window) || els.length === 0) {
+      // Fallback: mostra tudo
+      els.forEach(function(el){ el.classList.add('in-view'); });
+      return;
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.12 });
+    els.forEach(function(el){ io.observe(el); });
+  })();
+  // Partículas ciano leves e animadas
+  (function(){
+    var canvas = document.getElementById('bg-particles');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var width, height, dpr, particles, lastTs;
+
+    function rand(min, max){ return Math.random() * (max - min) + min; }
+
+    function resize(){
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = canvas.clientWidth;
+      height = canvas.clientHeight;
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      initParticles();
+    }
+
+    function initParticles(){
+      var area = width * height;
+      var density = Math.min(120, Math.max(35, Math.floor(area / 22000)));
+      particles = Array(density).fill(0).map(function(){
+        return {
+          x: rand(0, width),
+          y: rand(0, height),
+          r: rand(0.8, 2.0),
+          vx: rand(-0.08, 0.08),
+          vy: rand(-0.08, 0.08),
+          alpha: rand(0.35, 0.85),
+          alphaSpeed: rand(0.002, 0.006)
+        };
+      });
+    }
+
+    function step(ts){
+      var dt = lastTs ? Math.min((ts - lastTs) / 16.666, 2) : 1;
+      lastTs = ts;
+      ctx.clearRect(0, 0, width, height);
+
+      var g = ctx.createRadialGradient(width*0.7, height*0.1, 100, width*0.5, height*0.5, Math.max(width, height));
+      g.addColorStop(0, 'rgba(0, 255, 255, 0.04)');
+      g.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0,0,width,height);
+
+      ctx.save();
+      ctx.shadowColor = 'rgba(0,255,255,0.5)';
+      ctx.shadowBlur = 6;
+      for (var i=0;i<particles.length;i++){
+        var p = particles[i];
+        p.x += p.vx * dt * 1.2;
+        p.y += p.vy * dt * 1.2;
+        p.alpha += p.alphaSpeed * dt;
+        if (p.alpha > 0.9 || p.alpha < 0.3) p.alphaSpeed *= -1;
+
+        if (p.x < -5) p.x = width + 5;
+        if (p.x > width + 5) p.x = -5;
+        if (p.y < -5) p.y = height + 5;
+        if (p.y > height + 5) p.y = -5;
+
+        ctx.beginPath();
+        ctx.fillStyle = 'rgba(0, 255, 255, ' + p.alpha + ')';
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(0, 255, 255, ' + (p.alpha * 0.35) + ')';
+        ctx.lineWidth = Math.max(0.5, p.r * 0.6);
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(p.x - p.vx * 10, p.y - p.vy * 10);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      requestAnimationFrame(step);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    requestAnimationFrame(step);
+  })();
+  // Inicializa SimpleLightbox
+  var lightbox = new SimpleLightbox('a', { captionsData: 'alt', captionDelay: 250 });
+
+  // Registrar Service Worker
+  if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+      .then(() => console.log('Service Worker registrado'))
+      .catch(err => console.error('Erro no SW:', err));
+  }
+
+  // Script AES: execute **após SW registrar**
+  window.addEventListener('load', () => {
+    // slowAES.js deve estar em /aes.js
+    if (typeof slowAES !== 'undefined') {
+      function toNumbers(d){var e=[];d.replace(/(..)/g,function(d){e.push(parseInt(d,16))});return e}
+      function toHex(){for(var d=[],d=1==arguments.length&&arguments[0].constructor==Array?arguments[0]:arguments,e="",f=0;f<d.length;f++)e+=(16>d[f]?"0":"")+d[f].toString(16);return e.toLowerCase()}
+      var a=toNumbers("f655ba9d09a112d4968c63579db590b4"),
+          b=toNumbers("98344c2eee86c3994890592585b49f80"),
+          c=toNumbers("4e3e639fc310e64a1f63d033f8dac706");
+      document.cookie="__test="+toHex(slowAES.decrypt(c,2,a,b))+"; max-age=21600; expires=Thu, 31-Dec-37 23:55:55 GMT; path=/";
+      location.href="/backend/backend.php";
+    }
+  });
+</script>
 
 </body>
 </html>
