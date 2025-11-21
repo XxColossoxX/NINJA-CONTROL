@@ -120,43 +120,47 @@ $(document).ready( async function() {
         }
     };
 
+
     async function getEndereco(lat, lon) {
-        loaderM("Buscando endereço...", true);
+        const apiKey = "919808c69e2e4fe9807e06972f271824"; // coloque sua chave aqui
+        const url = `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=${apiKey}&language=pt-BR`;
+        latAtualValor = lat;
+        longAtualValor = lon;
+
 
         try {
-            const res = await axios({
-                url: "../../../backend/backend.php",
-                method: "POST",
-                data: {
-                    function: "getEnderecoFromLatLong",
-                    lat: lat,
-                    lon: lon
-                }
-            });
+            const res = await fetch(url);
+            const data = await res.json();
 
-            if (res.data.success) {
-                const e = res.data.data;
-
-                $("#inputRua").val(e.rua);
-                $("#inputNro").val(e.numero);
-                $("#inputBairro").val(e.bairro);
-                $("#inputCidade").val(e.cidade);
-                $("#inputEstado").val(e.estado);
-                $("#inputCep").val(e.cep);
-                $("#inputLat").val(e.lat);
-                $("#inputLong").val(e.lon);
-
-                showAlert("Verifique se os dados estão corretos!", "info");
-
-            } else {
-                showAlert(res.data.message, "error");
+            if (data.results.length === 0) {
+                return null;
             }
 
+            const info = data.results[0];
+
+            let endereco = {
+                rua: info.components.road ?? "",
+                bairro: info.components.suburb ?? "",
+                cidade: info.components.city ?? info.components.town ?? "",
+                estado: info.components.state ?? "",
+                numero: info.components.house_number ?? "",
+                cep: info.components.postcode ?? ""
+            };
+
+            valorLocAtual = `${endereco.rua}, ${endereco.bairro}, ${endereco.cep}, ${endereco.cidade}, ${endereco.estado}`;
+                $("#inputRua").val(endereco.rua);
+                $("#inputNro").val(endereco.numero);
+                $("#inputBairro").val(endereco.bairro);
+                $("#inputCidade").val(endereco.cidade);
+                $("#inputEstado").val(endereco.estado);
+                $("#inputCep").val(endereco.cep);
+                $("#inputLat").val(lat);
+                $("#inputLong").val(lon);
+                loaderM("", false);
+
         } catch (err) {
-            console.error(err);
-            showAlert("Erro ao buscar endereço!", "error");
-        } finally {
-            loaderM("", false);
+            console.error("Erro ao buscar endereço no OpenCage:", err);
+            return null;
         }
     };
 

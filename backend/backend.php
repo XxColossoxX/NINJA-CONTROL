@@ -776,22 +776,24 @@ function getEnderecoFromLatLong($db, $data) {
         exit;
     }
 
-    $lat = trim($data['lat']);
-    $lon = trim($data['lon']);
+    // Corrige vírgula em coordenadas (muito comum no celular)
+    $lat = str_replace(",", ".", trim($data['lat']));
+    $lon = str_replace(",", ".", trim($data['lon']));
 
     // URL do Nominatim
     $url = "https://nominatim.openstreetmap.org/reverse?format=json&lat={$lat}&lon={$lon}&addressdetails=1";
 
-    // Obrigatório: definir User-Agent para evitar bloqueio
+    // User-Agent obrigatório: precisa ter nome, versão e contato
     $opts = [
         "http" => [
-            "header" => "User-Agent: MeuSistema/1.0\r\n"
+            "header" => 
+                "User-Agent: MeuSistemaPonto/1.0 (contato: suporte@seudominio.com)\r\n",
+            "timeout" => 8 // celular pode demorar mais
         ]
     ];
 
     $context = stream_context_create($opts);
-
-    $response = file_get_contents($url, false, $context);
+    $response = @file_get_contents($url, false, $context);
 
     if ($response === false) {
         echo json_encode([

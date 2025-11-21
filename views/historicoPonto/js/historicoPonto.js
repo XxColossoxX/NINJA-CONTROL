@@ -14,7 +14,7 @@ $(document).ready(async function () {
 // CONFIGURAÇÕES
 // ----------------------------
 let paginaAtual = 1;
-const itensPorPagina = 4;
+const itensPorPagina = 3;
 let dadosTabela = [];
 let dadosFiltrados = [];
 
