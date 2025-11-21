@@ -69,16 +69,17 @@ $dataNascimentoFuncionario = $_SESSION['funcionario_data_nascimento'] ?? 'Data d
       </div>
 
       <!-- FILTROS DE DATA -->
-      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto mt-2 sm:mt-0">
-          <input type="date" id="dataInicio"
-                 class="flex-1 border border-cyan-500/30 rounded-lg px-2 py-1.5 bg-slate-800/80 text-white text-xs focus:ring-2 focus:ring-cyan-500/50">
-          <span class="text-gray-400 text-xs hidden sm:inline">até</span>
-          <input type="date" id="dataFim"
-                 class="flex-1 border border-cyan-500/30 rounded-lg px-2 py-1.5 bg-slate-800/80 text-white text-xs focus:ring-2 focus:ring-cyan-500/50">
-          <button class="btn-filtrar bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white px-3 py-2 rounded-lg text-xs font-semibold flex items-center gap-2">
-              <i class="fas fa-filter"></i> Filtrar
-          </button>
-      </div>
+    <div class="flex items-center gap-2 w-full">
+        <input type="date" id="dataInicio"
+               class="flex-1 border border-cyan-500/30 rounded-lg px-2 py-1.5 bg-slate-800/80 text-white text-xs focus:ring-2 focus:ring-cyan-500/50">
+        <span class="text-gray-400 text-xs">até</span>
+        <input type="date" id="dataFim"
+               class="flex-1 border border-cyan-500/30 rounded-lg px-2 py-1.5 bg-slate-800/80 text-white text-xs focus:ring-2 focus:ring-cyan-500/50">
+        <button class="btn-filtrar bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white px-3 py-2 rounded-lg text-xs font-semibold flex items-center gap-2">
+            <i class="fas fa-filter"></i> Filtrar
+        </button>
+    </div>
+
   </div>
 
   <!-- EXPORTAÇÃO PDF -->
@@ -136,6 +137,9 @@ $dataNascimentoFuncionario = $_SESSION['funcionario_data_nascimento'] ?? 'Data d
 
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("bemVindo")?.classList.add("hidden");
+     setTimeout(() => {
+        document.getElementById("controlador").classList.remove("hidden");
+    }, 40);
     init();
 });
 
